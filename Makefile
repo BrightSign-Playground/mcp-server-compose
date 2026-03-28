@@ -28,8 +28,11 @@ restart: $(BINARY) ## Restart all services
 status: $(BINARY) ## Show service status
 	$(BINARY) --config $(CONFIG) status
 
-ingest: $(BINARY) ## Run docs2vector ingestion (ARGS="--docs-dir /path/to/docs")
+ingest: $(BINARY) ## Drop and reingest docs (ARGS="--docs-dir /path/to/docs")
 	$(BINARY) --config $(CONFIG) ingest $(ARGS)
+
+ingest-add: $(BINARY) ## Add/upsert docs without dropping existing data (ARGS="--docs-dir /path/to/docs")
+	$(BINARY) --config $(CONFIG) ingest --no-drop $(ARGS)
 
 logs: $(BINARY) ## Tail logs (COMPONENT= to filter)
 	$(BINARY) --config $(CONFIG) logs $(COMPONENT)
