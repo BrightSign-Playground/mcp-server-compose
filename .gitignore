@@ -1,3 +1,4 @@
+models/
 stack.toml
 .stack/
 keycloak-testing/.env
