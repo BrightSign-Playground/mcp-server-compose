@@ -11,6 +11,9 @@ help: ## Show available targets
 $(BINARY): $(shell find cmd internal -name '*.go') go.mod go.sum
 	go build -o $(BINARY) ./cmd/stack
 
+submodules: ## Initialize and update all git submodules
+	git submodule update --init --recursive
+
 build: $(BINARY) ## Build the stack CLI tool
 
 test: ## Run unit tests for the stack tool
@@ -58,6 +61,7 @@ endif
 	KEYCLOAK_ISSUER=http://localhost:$(KC_PORT)/realms/$(KC_REALM) \
 	KEYCLOAK_CLIENT_ID=$(KC_CLIENT_ID) \
 	KEYCLOAK_CLIENT_SECRET=$(KC_CLIENT_SECRET) \
+	EVAL_LIMIT=${EVAL_LIMIT:-20} \
 	./rag-mcp-server/scripts/eval.sh $(ARGS) $(EVAL_FILE)
 
 prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgres
@@ -65,7 +69,15 @@ prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgre
 	psql postgres -c "CREATE DATABASE ragdb OWNER raguser;"
 	psql ragdb   -c "CREATE EXTENSION IF NOT EXISTS vector;"
 
-llama-server: ## Run llama-server with mxbai-embed-large-v1 on port 16000
+llama-server: ## Run llama-server with nomic-embed-text-v1.5 on port 16000
+	llama-server \
+		--model ./models/nomic-embed-text-v1.5.Q8_0.gguf \
+		--embeddings --pooling mean \
+		--host 0.0.0.0 --port 16000 \
+		--ctx-size 8192 \
+		--n-gpu-layers 99
+
+llama-server-mxbai: ## Run llama-server with mxbai-embed-large-v1 on port 16000 (legacy)
 	llama-server \
 		--model ./models/mxbai-embed-large-v1.Q8_0.gguf \
 		--embeddings --pooling cls \
@@ -78,6 +90,19 @@ reranker-server: ## Run llama-server with bge-reranker-v2-m3 on port 16001
 		--reranking \
 		--host 0.0.0.0 --port 16001 \
 		--n-gpu-layers 99
+
+download-nomic-model: ## Download nomic-embed-text-v1.5 GGUF model into ./models
+	@if ! command -v hf >/dev/null 2>&1; then \
+		echo "Error: hf (Hugging Face CLI) is not installed."; \
+		echo ""; \
+		echo "Install it with:"; \
+		echo "  uv tool install \"huggingface_hub[cli]\""; \
+		exit 1; \
+	fi
+	mkdir -p ./models
+	hf download nomic-ai/nomic-embed-text-v1.5-GGUF \
+		nomic-embed-text-v1.5.Q8_0.gguf \
+		--local-dir ./models
 
 download-reranker-model: ## Download bge-reranker-v2-m3 GGUF model into ./models
 	@if ! command -v hf >/dev/null 2>&1; then \
