@@ -52,6 +52,9 @@ KC_REALM          := $(shell awk '/^\[keycloak\]/{f=1} f && /^realm/{gsub(/"/, "
 KC_CLIENT_ID      := $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_id/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
 KC_CLIENT_SECRET  := $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_secret/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
 
+eval-stability: ## Run evals N times and report pass-rate stats (EVAL_FILE=..., RUNS=25)
+	./scripts/eval-stability.sh $(RUNS) $(EVAL_FILE)
+
 eval: ## Run RAG evals (EVAL_FILE=path/to/evals.json, optional ARGS="--verbose")
 ifndef EVAL_FILE
 	$(error EVAL_FILE is required: make eval EVAL_FILE=path/to/evals.json)
