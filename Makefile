@@ -72,6 +72,26 @@ llama-server: ## Run llama-server with mxbai-embed-large-v1 on port 16000
 		--host 0.0.0.0 --port 16000 \
 		--n-gpu-layers 99
 
+reranker-server: ## Run llama-server with bge-reranker-v2-m3 on port 16001
+	llama-server \
+		--model ./models/bge-reranker-v2-m3-Q8_0.gguf \
+		--reranking \
+		--host 0.0.0.0 --port 16001 \
+		--n-gpu-layers 99
+
+download-reranker-model: ## Download bge-reranker-v2-m3 GGUF model into ./models
+	@if ! command -v hf >/dev/null 2>&1; then \
+		echo "Error: hf (Hugging Face CLI) is not installed."; \
+		echo ""; \
+		echo "Install it with:"; \
+		echo "  uv tool install \"huggingface_hub[cli]\""; \
+		exit 1; \
+	fi
+	mkdir -p ./models
+	hf download gpustack/bge-reranker-v2-m3-GGUF \
+		bge-reranker-v2-m3-Q8_0.gguf \
+		--local-dir ./models
+
 download-model: ## Download mxbai-embed-large-v1 GGUF model into ./models
 	@if ! command -v hf >/dev/null 2>&1; then \
 		echo "Error: hf (Hugging Face CLI) is not installed."; \
