@@ -38,6 +38,11 @@ generate: build ## Generate component configs without starting
 validate: build ## Validate stack.toml
 	$(BINARY) --config $(CONFIG) validate
 
+prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgres
+	psql postgres -c "CREATE ROLE raguser WITH LOGIN PASSWORD 'xP9#mQv7rL2kNw4J';"
+	psql postgres -c "CREATE DATABASE ragdb OWNER raguser;"
+	psql ragdb   -c "CREATE EXTENSION IF NOT EXISTS vector;"
+
 llama-server: ## Run llama-server with mxbai-embed-large-v1 on port 16000
 	llama-server \
 		--model ./models/mxbai-embed-large-v1.Q8_0.gguf \
