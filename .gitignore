@@ -1,5 +1,7 @@
 models/
+stack
 stack.toml
+.claude/
 .stack/
 keycloak-testing/.env
 logto-testing/.env
