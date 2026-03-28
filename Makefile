@@ -40,8 +40,22 @@ generate: $(BINARY) ## Generate component configs without starting
 validate: $(BINARY) ## Validate stack.toml
 	$(BINARY) --config $(CONFIG) validate
 
+MCP_PORT          := $(shell awk '/^\[rag_mcp_server\]/{f=1} f && /^port/{print $$3; exit}' $(CONFIG))
+KC_PORT           := $(shell awk '/^\[keycloak\]/{f=1} f && /^port/{print $$3; exit}' $(CONFIG))
+KC_REALM          := $(shell awk '/^\[keycloak\]/{f=1} f && /^realm/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
+KC_CLIENT_ID      := $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_id/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
+KC_CLIENT_SECRET  := $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_secret/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
+
 eval: ## Run RAG evals (EVAL_FILE=path/to/evals.json, optional ARGS="--verbose")
-	$(MAKE) -C rag-mcp-server eval EVAL_FILE=$(EVAL_FILE) ARGS="$(ARGS)"
+ifndef EVAL_FILE
+	$(error EVAL_FILE is required: make eval EVAL_FILE=path/to/evals.json)
+endif
+	MCP_SERVER_URL=http://localhost:$(MCP_PORT) \
+	OIDC_PROVIDER=keycloak \
+	KEYCLOAK_ISSUER=http://localhost:$(KC_PORT)/realms/$(KC_REALM) \
+	KEYCLOAK_CLIENT_ID=$(KC_CLIENT_ID) \
+	KEYCLOAK_CLIENT_SECRET=$(KC_CLIENT_SECRET) \
+	./rag-mcp-server/scripts/eval.sh $(ARGS) $(EVAL_FILE)
 
 prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgres
 	psql postgres -c "CREATE ROLE raguser WITH LOGIN PASSWORD 'xP9#mQv7rL2kNw4J';"
