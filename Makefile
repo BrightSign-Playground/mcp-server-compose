@@ -40,6 +40,9 @@ generate: $(BINARY) ## Generate component configs without starting
 validate: $(BINARY) ## Validate stack.toml
 	$(BINARY) --config $(CONFIG) validate
 
+eval: ## Run RAG evals (EVAL_FILE=path/to/evals.json, optional ARGS="--verbose")
+	$(MAKE) -C rag-mcp-server eval EVAL_FILE=$(EVAL_FILE) ARGS="$(ARGS)"
+
 prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgres
 	psql postgres -c "CREATE ROLE raguser WITH LOGIN PASSWORD 'xP9#mQv7rL2kNw4J';"
 	psql postgres -c "CREATE DATABASE ragdb OWNER raguser;"
