@@ -64,6 +64,12 @@ endif
 	EVAL_LIMIT=$${EVAL_LIMIT:-20} \
 	./rag-mcp-server/scripts/eval.sh $(ARGS) $(EVAL_FILE)
 
+install-postgres: ## Install PostgreSQL and pgvector (macOS or Linux)
+	./scripts/install-postgres.sh
+
+build-llama: ## Build llama-server from the llama.cpp submodule and install to /usr/local/bin
+	./scripts/build-llama.sh
+
 prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgres
 	psql postgres -c "CREATE ROLE raguser WITH LOGIN PASSWORD 'xP9#mQv7rL2kNw4J';"
 	psql postgres -c "CREATE DATABASE ragdb OWNER raguser;"
