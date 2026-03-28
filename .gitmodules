@@ -1,0 +1,18 @@
+[submodule "docs2vector"]
+	path = docs2vector
+	url = git@github.com:BrightSign-Playground/docs2vector.git
+[submodule "logto-testing"]
+	path = logto-testing
+	url = git@github.com:BrightSign-Playground/logto-testing.git
+[submodule "rag-mcp-server"]
+	path = rag-mcp-server
+	url = git@github.com:BrightSign-Playground/rag-mcp-server.git
+[submodule "keycloak-testing"]
+	path = keycloak-testing
+	url = git@github.com:BrightSign-Playground/keycloak-testing.git
+[submodule "bs-ai-support-model"]
+	path = bs-ai-support-model
+	url = git@github.com:BrightSign-Playground/bs-ai-support-model.git
+[submodule "llama.cpp"]
+	path = llama.cpp
+	url = ssh://git@github.com/ggml-org/llama.cpp

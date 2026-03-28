@@ -1,0 +1,10 @@
+stack.toml
+.stack/
+keycloak-testing/.env
+logto-testing/.env
+rag-mcp-server/.env
+rag-mcp-server/config.toml
+docs2vector/.env
+docs2vector/config.toml
+bin/
+*~
