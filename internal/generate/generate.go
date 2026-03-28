@@ -231,10 +231,9 @@ func docs2vectorEnvVars(cfg *config.Config, d derived) map[string]string {
 
 func ragConfigTOML(cfg *config.Config, d derived) string {
 	rag := cfg.RagMCP
-	port := rag.Port
-	if port == 0 {
-		port = 15080
-	}
+	// The internal container port is always 15080; the host-side port is
+	// controlled by MCP_PORT in the .env and the compose port mapping.
+	const port = 15080
 	logLevel := rag.LogLevel
 	if logLevel == "" {
 		logLevel = "info"
