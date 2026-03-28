@@ -61,7 +61,7 @@ endif
 	KEYCLOAK_ISSUER=http://localhost:$(KC_PORT)/realms/$(KC_REALM) \
 	KEYCLOAK_CLIENT_ID=$(KC_CLIENT_ID) \
 	KEYCLOAK_CLIENT_SECRET=$(KC_CLIENT_SECRET) \
-	EVAL_LIMIT=${EVAL_LIMIT:-20} \
+	EVAL_LIMIT=$${EVAL_LIMIT:-20} \
 	./rag-mcp-server/scripts/eval.sh $(ARGS) $(EVAL_FILE)
 
 prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgres
@@ -75,6 +75,7 @@ llama-server: ## Run llama-server with nomic-embed-text-v1.5 on port 16000
 		--embeddings --pooling mean \
 		--host 0.0.0.0 --port 16000 \
 		--ctx-size 8192 \
+		--ubatch-size 2048 \
 		--n-gpu-layers 99
 
 llama-server-mxbai: ## Run llama-server with mxbai-embed-large-v1 on port 16000 (legacy)
