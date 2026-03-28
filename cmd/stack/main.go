@@ -138,30 +138,15 @@ func parseGlobals(args []string) (globals, []string, error) {
 	fs.StringVar(&g.engine, "engine", "", "container engine: podman|docker (overrides config)")
 	fs.BoolVar(&g.dryRun, "dry-run", false, "print compose commands without executing")
 
-	// We need to stop parsing at the first non-flag argument (the subcommand).
-	// flag.FlagSet does not support interspersed flags by default; we parse
-	// only the leading flags.
-	leadingFlags := []string{}
-	rest := []string{}
-	seenNonFlag := false
-	for _, arg := range args {
-		if seenNonFlag {
-			rest = append(rest, arg)
-		} else if len(arg) > 0 && arg[0] == '-' {
-			leadingFlags = append(leadingFlags, arg)
-		} else {
-			seenNonFlag = true
-			rest = append(rest, arg)
-		}
-	}
-
-	if err := fs.Parse(leadingFlags); err != nil {
+	// flag.Parse stops at the first non-flag argument and returns the rest
+	// via fs.Args(), which is exactly what we want for subcommand parsing.
+	if err := fs.Parse(args); err != nil {
 		return globals{}, nil, err
 	}
 	g.configPath = fs.Lookup("config").Value.String()
 	g.engine = fs.Lookup("engine").Value.String()
 
-	return g, rest, nil
+	return g, fs.Args(), nil
 }
 
 // repoRootFromConfig derives the repository root from the config file path.
