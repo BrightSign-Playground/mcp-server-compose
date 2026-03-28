@@ -102,15 +102,15 @@ func Up(cfg *config.Config, eng engine.Engine, repoRoot string, dryRun bool) err
 		if !dryRun {
 			switch p.name {
 			case "stack-postgres":
-				if err := waitHealthy(eng, p.name+"-stack-postgres-1", healthTimeout); err != nil {
+				if err := waitHealthy(eng, p.name+"_postgres_1", healthTimeout); err != nil {
 					return fmt.Errorf("postgres health: %w", err)
 				}
 			case "stack-keycloak":
-				if err := waitHealthy(eng, p.name+"-keycloak-1", healthTimeout); err != nil {
+				if err := waitHealthy(eng, p.name+"_keycloak_1", healthTimeout); err != nil {
 					return fmt.Errorf("keycloak health: %w", err)
 				}
 			case "stack-logto":
-				if err := waitHealthy(eng, p.name+"-logto-1", healthTimeout); err != nil {
+				if err := waitHealthy(eng, p.name+"_logto_1", healthTimeout); err != nil {
 					return fmt.Errorf("logto health: %w", err)
 				}
 			}
