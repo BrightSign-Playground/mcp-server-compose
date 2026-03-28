@@ -106,6 +106,14 @@ func cmdIngest(cfg *config.Config, eng engine.Engine, repoRoot string, args []st
 		return err
 	}
 
+	effective := *docsDir
+	if effective == "" {
+		effective = cfg.Docs2Vector.DocsDir
+	}
+	if effective == "" {
+		return fmt.Errorf("no docs directory specified\n\nUsage:\n  make ingest ARGS=\"--docs-dir /path/to/docs\"\n  stack ingest --docs-dir /path/to/docs")
+	}
+
 	opts := ingest.Options{
 		Drop:    !*noDrop,
 		DocsDir: *docsDir,

@@ -8,34 +8,36 @@ help: ## Show available targets
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | \
 	  awk 'BEGIN {FS = ":.*##"}; {printf "  %-12s %s\n", $$1, $$2}'
 
-build: ## Build the stack CLI tool
+$(BINARY): $(shell find cmd internal -name '*.go') go.mod go.sum
 	go build -o $(BINARY) ./cmd/stack
+
+build: $(BINARY) ## Build the stack CLI tool
 
 test: ## Run unit tests for the stack tool
 	go test ./...
 
-up: build ## Start all enabled services
+up: $(BINARY) ## Start all enabled services
 	$(BINARY) --config $(CONFIG) up
 
-down: build ## Stop all services
+down: $(BINARY) ## Stop all services
 	$(BINARY) --config $(CONFIG) down
 
-restart: build ## Restart all services
+restart: $(BINARY) ## Restart all services
 	$(BINARY) --config $(CONFIG) restart
 
-status: build ## Show service status
+status: $(BINARY) ## Show service status
 	$(BINARY) --config $(CONFIG) status
 
-ingest: build ## Run docs2vector ingestion
-	$(BINARY) --config $(CONFIG) ingest
+ingest: $(BINARY) ## Run docs2vector ingestion (ARGS="--docs-dir /path/to/docs")
+	$(BINARY) --config $(CONFIG) ingest $(ARGS)
 
-logs: build ## Tail logs (COMPONENT= to filter)
+logs: $(BINARY) ## Tail logs (COMPONENT= to filter)
 	$(BINARY) --config $(CONFIG) logs $(COMPONENT)
 
-generate: build ## Generate component configs without starting
+generate: $(BINARY) ## Generate component configs without starting
 	$(BINARY) --config $(CONFIG) generate
 
-validate: build ## Validate stack.toml
+validate: $(BINARY) ## Validate stack.toml
 	$(BINARY) --config $(CONFIG) validate
 
 prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgres

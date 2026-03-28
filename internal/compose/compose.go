@@ -123,6 +123,10 @@ func Up(cfg *config.Config, eng engine.Engine, repoRoot string, dryRun bool) err
 
 // Down stops all active compose projects in reverse order.
 func Down(cfg *config.Config, eng engine.Engine, repoRoot string, dryRun bool) error {
+	// Regenerate env files so --env-file args are present even after make clean.
+	if _, err := generate.All(cfg, eng, repoRoot); err != nil {
+		return fmt.Errorf("generating configs: %w", err)
+	}
 	projects := activeProjects(cfg, repoRoot)
 	for i := len(projects) - 1; i >= 0; i-- {
 		if err := projectDown(eng, projects[i], dryRun); err != nil {

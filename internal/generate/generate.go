@@ -207,8 +207,13 @@ func logtoEnvVars(cfg *config.Config) map[string]string {
 }
 
 func ragEnvVars(cfg *config.Config, d derived) map[string]string {
+	port := cfg.RagMCP.Port
+	if port == 0 {
+		port = 15080
+	}
 	vars := map[string]string{
 		"DATABASE_URL": d.DatabaseURLContainer,
+		"MCP_PORT":     fmt.Sprintf("%d", port),
 	}
 	if cfg.Secrets.AnthropicAPIKey != "" {
 		vars["ANTHROPIC_API_KEY"] = cfg.Secrets.AnthropicAPIKey
