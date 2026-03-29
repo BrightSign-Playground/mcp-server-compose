@@ -222,31 +222,40 @@ llama-server: ## Run llama-server with nomic-embed-text-v1.5 on port 16000
 		echo "Model not found, downloading..."; \
 		$(MAKE) download-nomic-model; \
 	fi
+	@eval $$(./scripts/detect-gpu.sh); \
+	echo "starting embed server: parallel=$${LLAMA_PARALLEL} batch=$${LLAMA_BATCH} ubatch=$${LLAMA_UBATCH}"; \
 	llama-server \
 		--model ./models/nomic-embed-text-v1.5.Q8_0.gguf \
 		--embeddings --pooling mean \
 		--host 0.0.0.0 --port 16000 \
 		--ctx-size 8192 \
-		--ubatch-size 2048 \
-		--n-gpu-layers 99
+		--n-gpu-layers 99 \
+		$${LLAMA_GPU_FLAGS}
 
 llama-server-mxbai: ## Run llama-server with mxbai-embed-large-v1 on port 16000 (legacy)
+	@eval $$(./scripts/detect-gpu.sh); \
 	llama-server \
 		--model ./models/mxbai-embed-large-v1.Q8_0.gguf \
 		--embeddings --pooling cls \
 		--host 0.0.0.0 --port 16000 \
-		--n-gpu-layers 99
+		--ctx-size 8192 \
+		--n-gpu-layers 99 \
+		$${LLAMA_GPU_FLAGS}
 
 reranker-server: ## Run llama-server with bge-reranker-v2-m3 on port 16001
 	@if [ ! -f ./models/bge-reranker-v2-m3-Q8_0.gguf ]; then \
 		echo "Model not found, downloading..."; \
 		$(MAKE) download-reranker-model; \
 	fi
+	@eval $$(./scripts/detect-gpu.sh); \
+	echo "starting reranker: parallel=$${LLAMA_PARALLEL} batch=$${LLAMA_BATCH} ubatch=$${LLAMA_UBATCH}"; \
 	llama-server \
 		--model ./models/bge-reranker-v2-m3-Q8_0.gguf \
 		--reranking \
 		--host 0.0.0.0 --port 16001 \
-		--n-gpu-layers 99
+		--ctx-size 8192 \
+		--n-gpu-layers 99 \
+		$${LLAMA_GPU_FLAGS}
 
 download-nomic-model: ## Download nomic-embed-text-v1.5 GGUF model into ./models
 	@if ! command -v hf >/dev/null 2>&1; then \
