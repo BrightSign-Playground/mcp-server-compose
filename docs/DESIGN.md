@@ -47,7 +47,7 @@ exits 1 on any non-nil error from handlers.
 
 Two public functions:
 - `Load(path string) (*Config, error)` — decodes stack.toml via BurntSushi/toml.
-- `Validate(cfg *Config) error` — applies all 8 validation rules from REQUIREMENTS.md.
+- `Validate(cfg *Config) error` — applies all 9 validation rules from REQUIREMENTS.md.
 
 ### 3.3 internal/engine
 
@@ -124,8 +124,8 @@ podman network create stack-net
 
 ### 5.3 Startup order
 
-1. `stack-postgres` → health poll (max 120 s)
-2. `stack-keycloak` or `stack-logto` → health poll (max 180 s / 120 s)
+1. `stack-postgres` → health poll (max 180 s)
+2. `stack-keycloak` or `stack-logto` → health poll (max 180 s)
 3. `stack-llama` (no blocking wait)
 4. `stack-rag` (always last)
 

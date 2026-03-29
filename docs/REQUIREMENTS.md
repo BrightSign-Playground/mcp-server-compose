@@ -234,12 +234,12 @@ For Podman, the compose command is `podman compose`. For Docker, it is `docker c
 
 ### Configuration Generation (`generate` step)
 
-The `up` and `generate` commands must write the following files before starting containers. All generated files must be treated as ephemeral and are listed in `.gitignore`. They must never be committed.
+The `up` and `generate` commands must write the following files before starting containers. All files are generated regardless of which profiles are active — inactive component files are harmless and simplify the implementation. All generated files must be treated as ephemeral and are listed in `.gitignore`. They must never be committed.
 
 | Generated file | Description |
 |---|---|
 | `keycloak-testing/.env` | Env vars for keycloak compose, populated from `[keycloak]` |
-| `logto-testing/.env` | Env vars for logto compose, populated from `[logto]` |
+| `logto-testing/.env` | Env vars for logto compose: port, admin_port, db_port, endpoint, admin_endpoint (app credentials are configured manually via admin console) |
 | `rag-mcp-server/.env` | Env vars for rag-mcp-server compose (DATABASE_URL, ANTHROPIC_API_KEY) |
 | `rag-mcp-server/config.toml` | Full config.toml for rag-mcp-server, generated from `[rag_mcp_server]` |
 | `docs2vector/.env` | Env vars for docs2vector (DATABASE_URL) |
@@ -258,15 +258,21 @@ The `embed.host` in generated configs must account for the container network:
 
 ### Compose Orchestration
 
-The tool must produce a unified compose invocation, not simply shell out to each component's compose file independently. It does this by passing multiple `-f` flags (or `--file`) to the compose command, one per active component:
+Each component runs as a **separate compose project** (`-p stack-<name>`) rather than a unified multi-file invocation. This avoids service name collisions — both `keycloak-testing` and `logto-testing` define their own `postgres` service internally, which would conflict if merged into a single project.
 
+| Project name      | Compose file                   | Active when            |
+|-------------------|--------------------------------|------------------------|
+| `stack-postgres`  | `.stack/compose.postgres.yml`  | `postgres` in profiles |
+| `stack-keycloak`  | `keycloak-testing/compose.yml` | `keycloak` in profiles |
+| `stack-logto`     | `logto-testing/compose.yml`    | `logto` in profiles    |
+| `stack-llama`     | `.stack/compose.llama.yml`     | `llama` in profiles    |
+| `stack-rag`       | `rag-mcp-server/compose.yaml`  | always                 |
+
+Each project is started with its own compose invocation:
 ```
-podman compose \
-  -f .stack/compose.postgres.yml \
-  -f keycloak-testing/compose.yml \
-  -f rag-mcp-server/compose.yaml \
-  -f .stack/compose.llama.yml \
-  up -d
+podman compose -p stack-postgres --env-file .stack/postgres.env -f .stack/compose.postgres.yml up -d
+podman compose -p stack-keycloak --env-file keycloak-testing/.env -f keycloak-testing/compose.yml up -d
+podman compose -p stack-rag --env-file rag-mcp-server/.env -f rag-mcp-server/compose.yaml up -d
 ```
 
 The tool synthesizes compose files for components that do not have their own (shared postgres, llama-server):
@@ -280,11 +286,11 @@ Each component's existing compose file is used as-is where it exists. The tool m
 Service startup must respect these dependencies:
 
 1. `postgres` (if profile active) → all other services
-2. `keycloak` or `logto` → keycloak-init (already handled internally in keycloak compose) → `rag-mcp-server`
+2. `keycloak` or `logto` → `rag-mcp-server`
 3. `llama-server` → `rag-mcp-server`, `docs2vector`
 4. `rag-mcp-server` — last to start
 
-These are expressed via compose `depends_on` in the generated/merged compose files.
+These are enforced by starting compose projects **sequentially** and health-polling between steps. After starting `stack-postgres`, the orchestrator polls the container health status (via `<engine> inspect --format '{{.State.Health.Status}}'`) with a 180-second timeout before proceeding to the next project. The same applies after `stack-keycloak` or `stack-logto`. `stack-llama` is started without a blocking health wait. `stack-rag` is always started last.
 
 ### Shared Network
 
@@ -314,7 +320,7 @@ volumes:
   stack-pgdata:
 
 services:
-  postgres:
+  stack-postgres:
     image: ${POSTGRES_IMAGE}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -350,16 +356,20 @@ services:
       - "127.0.0.1:${LLAMA_HOST_PORT}:8080"
     volumes:
       - ${LLAMA_MODELS_DIR}:/models:ro
-    command: >
-      --model /models/${LLAMA_EMBED_MODEL}
-      --host 0.0.0.0
-      --port 8080
-      --embeddings
-      ${LLAMA_EXTRA_FLAGS}
+    command:
+      - "--model"
+      - "/models/${LLAMA_EMBED_MODEL}"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8080"
+      - "--embeddings"
     networks:
       - stack-net
     restart: unless-stopped
 ```
+
+When `llama.extra_flags` is non-empty, the tool splits it on whitespace and appends each token as a separate array element to the `command` list. This avoids shell interpolation.
 
 ---
 
@@ -389,21 +399,21 @@ The following derivations must be implemented in the `stack` tool. They produce 
 
 When `postgres` profile is active:
 ```
-postgres://<postgres.user>:<postgres.password>@postgres:<internal_port>/<postgres.database>?sslmode=disable
+postgres://<postgres.user>:<postgres.password>@stack-postgres:5432/<postgres.database>?sslmode=disable
 ```
-The hostname is the compose service name `postgres` (for container-to-container). For tools run from the host (like `docs2vector` in non-container mode), the hostname is `localhost` with the configured host port.
+The hostname is the compose service name `stack-postgres` on the shared `stack-net` network (for container-to-container). The port is always 5432 (the internal container port). For the host-side URL (used in `docs2vector/.env`), the hostname is `localhost` with the configured host port.
 
 When `postgres` profile is inactive, `DATABASE_URL` is derived directly from `[postgres]` host/port/user/password/database.
 
 ### Keycloak auth fields
 
 ```
-jwks_url  = http://keycloak:<KC_PORT>/realms/<realm>/protocol/openid-connect/certs
-issuer    = http://<hostname>:<KC_PORT>/realms/<realm>
+jwks_url  = http://keycloak:8080/realms/<realm>/protocol/openid-connect/certs
+issuer    = http://<hostname>:<keycloak.port>/realms/<realm>
 audience  = <api_client_id>
 ```
 
-Note: `jwks_url` uses the compose service name `keycloak` (container-to-container), but `issuer` uses the configured hostname (what the JWT iss claim will contain, which is validated against what clients see).
+Note: `jwks_url` uses the compose service name `keycloak` with the **internal** container port (8080), since this URL is resolved container-to-container over `stack-net`. The `issuer` uses the configured hostname and host-mapped port (what the JWT `iss` claim will contain, which is validated against what clients see).
 
 ### Logto auth fields
 
@@ -428,14 +438,15 @@ When `llama` profile is inactive:
 ## Ingest Command
 
 `stack ingest` runs docs2vector as a one-shot container. It must:
-1. Ensure the `postgres` service is running and healthy (or that `DATABASE_URL` is reachable).
-2. Ensure the llama-server is running and reachable.
-3. Build the docs2vector image if not already built.
-4. Run the container with `--drop` flag (recreates tables) unless `--no-drop` is passed.
-5. Mount the configured `docs_dir` into the container at `/docs`.
-6. Pass the generated `docs2vector/config.toml` and `docs2vector/.env` to the container.
-7. Stream container logs to stdout until the container exits.
-8. Report success or failure with the exit code.
+1. Validate that the configured `docs_dir` exists and is a directory.
+2. Generate (or refresh) all component config files.
+3. Ensure the llama-server is running and reachable (HTTP health check with 5-second timeout).
+4. Build the docs2vector image if not already built.
+5. Run the container with `--drop` flag (recreates tables) unless `--no-drop` is passed.
+6. Mount the configured `docs_dir` into the container at `/docs`.
+7. Pass the generated `docs2vector/config.toml` to the container via volume mount.
+8. Stream container logs to stdout until the container exits.
+9. Report success or failure with the exit code.
 
 ```
 stack ingest [--no-drop] [--docs-dir /path/override]
@@ -450,7 +461,7 @@ stack ingest [--no-drop] [--docs-dir /path/override]
 1. `profiles` contains at most one of `keycloak`, `logto`.
 2. If `postgres` profile is inactive, `postgres.host`, `postgres.port`, `postgres.user`, `postgres.password`, `postgres.database` are all non-empty.
 3. If `llama` profile is active, `llama.models_dir` exists on the host and `llama.embed_model` is non-empty.
-4. If `llama` profile is inactive, `rag_mcp_server` embed host override or the llama host_port must be provided via config (or the orchestrator assumes the host provides llama-server on the default port).
+4. If `llama` profile is inactive, the orchestrator defaults to `llama.host_port = 16000` for the embed host when not explicitly set. No validation error is raised.
 5. If `rag_mcp_server.hyde.enabled = true`, `secrets.anthropic_api_key` is non-empty.
 6. If `auth_provider` refers to a profile not in `profiles`, the override fields (`auth_jwks_url`, `auth_issuer`, `auth_audience`) must all be non-empty.
 7. `keycloak.m2m_client_secret` must not equal `"changeme-dev-secret"` when a future `strict` mode flag is added (warn but do not fail in default mode).

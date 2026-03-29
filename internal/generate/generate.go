@@ -275,7 +275,7 @@ func docs2vectorConfigTOML(cfg *config.Config, d derived) string {
 	dv := cfg.Docs2Vector
 	chunkSize := dv.ChunkSize
 	if chunkSize == 0 {
-		chunkSize = 256
+		chunkSize = 512
 	}
 	embedModel := dv.EmbedModel
 	if embedModel == "" {
