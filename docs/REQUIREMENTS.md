@@ -169,20 +169,29 @@ docs_dir = "/path/to/docs"
 chunk_size = 512
 # embedding model name (must match what llama-server has loaded)
 embed_model = "mxbai-embed-large-v1"
+# Embedding vector dimension. Auto-resolved from embed_model for known models.
+# Set explicitly only when using an unknown/custom model.
+# embed_dim = 1024
 # query and passage instruction prefixes (model-specific)
 query_prefix   = ""
 passage_prefix = ""
-
-# ── Secrets ──────────────────────────────────────────────────────────────────────
-[secrets]
-# Anthropic API key — required only when rag_mcp_server.hyde.enabled = true
-anthropic_api_key = ""
 
 # ── bs-ai-support-model (optional chatbot) ────────────────────────────────────
 # [bs_ai_support_model]
 # enabled = false
 # port = 18080
 ```
+
+### Secrets
+
+**API keys and other secrets must never be stored in `stack.toml`.** They are read from environment variables at runtime. The recommended approach is to use a `.envrc` file (loaded by [direnv](https://direnv.net/)):
+
+```bash
+# .envrc — gitignored; never commit this file
+export ANTHROPIC_API_KEY="sk-ant-..."   # required when rag_mcp_server.hyde.enabled = true
+```
+
+The stack tool reads `ANTHROPIC_API_KEY` from the environment and writes it into the generated `rag-mcp-server/.env` file (which is also gitignored). If `rag_mcp_server.hyde.enabled = true` and the variable is not set, `stack validate` will fail with a descriptive error.
 
 ---
 
@@ -446,6 +455,7 @@ stack ingest [--no-drop] [--docs-dir /path/override]
 6. If `auth_provider` refers to a profile not in `profiles`, the override fields (`auth_jwks_url`, `auth_issuer`, `auth_audience`) must all be non-empty.
 7. `keycloak.m2m_client_secret` must not equal `"changeme-dev-secret"` when a future `strict` mode flag is added (warn but do not fail in default mode).
 8. `postgres.password` must not equal `"changeme"` in strict mode (warn in default mode).
+9. The resolved embedding dimension must be a positive integer. If `docs2vector.embed_model` is not in the known-model lookup table and `docs2vector.embed_dim` is not explicitly set, validation must fail with a descriptive error naming the unknown model and instructing the user to set `embed_dim` explicitly.
 
 ---
 
@@ -508,6 +518,8 @@ The following must be added to `/mcp-servers/.gitignore` (create if absent):
 
 ```
 stack.toml
+.env
+.envrc
 .stack/
 keycloak-testing/.env
 logto-testing/.env
@@ -518,6 +530,46 @@ docs2vector/config.toml
 bin/
 *~
 ```
+
+---
+
+## Embedding Dimension Resolution
+
+The embedding vector dimension used by `docs2vector` and `rag-mcp-server` must match the output of the configured embedding model. A mismatch causes all insert operations to fail at the database level with a dimension error.
+
+### Known Model Lookup Table
+
+The `stack` tool maintains a lookup table mapping known embedding model names to their output dimensions. This table lives in the stack tool's config or generate package. Both the bare model name and its GGUF filename variant must be recognized:
+
+| Model name | Dimension |
+|---|---|
+| `nomic-embed-text-v1.5` | 768 |
+| `nomic-embed-text-v1.5.Q8_0.gguf` | 768 |
+| `mxbai-embed-large-v1` | 1024 |
+| `mxbai-embed-large-v1-f16.gguf` | 1024 |
+
+New models are added to this table as they are adopted.
+
+### Resolution Logic
+
+During `stack generate` (and `stack validate`), the embedding dimension is resolved as follows:
+
+1. If `docs2vector.embed_dim` is explicitly set in `stack.toml` → use it (explicit override always wins).
+2. Else if `docs2vector.embed_model` matches an entry in the known-model lookup table → use the looked-up dimension.
+3. Else → fail validation with: `unknown embedding model %q — set docs2vector.embed_dim explicitly`.
+
+### Generated Output
+
+The resolved dimension is written into both generated config files:
+
+- `docs2vector/config.toml` — `[embed] embed_dim = <N>`
+- `rag-mcp-server/config.toml` — `[embed] embed_dim = <N>`
+
+`docs2vector` reads this value from its config file and uses it to:
+- Generate the `CREATE TABLE` DDL with `vector(<N>)` instead of a hardcoded dimension.
+- Record the dimension in `build_metadata`.
+
+The `docs2vector` codebase must not contain any hardcoded dimension constant.
 
 ---
 

@@ -76,8 +76,6 @@ docs_dir   = "/docs"
 chunk_size = 512
 embed_model = "mxbai-embed-large-v1"
 
-[secrets]
-anthropic_api_key = ""
 `
 
 func writeTempTOML(t *testing.T, content string) string {
@@ -171,9 +169,10 @@ func TestValidate_postgresInactiveFieldsMissing(t *testing.T) {
 
 func TestValidate_postgresInactiveAllSet(t *testing.T) {
 	cfg := &Config{
-		Profiles: []string{},
-		Postgres: PostgresConfig{Host: "db.local", Port: 5432, User: "u", Password: "p", Database: "d"},
-		RagMCP:   RagMCPConfig{AuthProvider: "keycloak", AuthJWKSURL: "x", AuthIssuer: "x", AuthAudience: "x"},
+		Profiles:    []string{},
+		Postgres:    PostgresConfig{Host: "db.local", Port: 5432, User: "u", Password: "p", Database: "d"},
+		RagMCP:      RagMCPConfig{AuthProvider: "keycloak", AuthJWKSURL: "x", AuthIssuer: "x", AuthAudience: "x"},
+		Docs2Vector: Docs2VectorConfig{EmbedModel: "mxbai-embed-large-v1"},
 	}
 	if err := Validate(cfg); err != nil {
 		t.Fatalf("unexpected validation error: %v", err)
@@ -207,8 +206,9 @@ func TestValidate_authProviderNotInProfiles(t *testing.T) {
 
 func TestValidate_authProviderOverridesProvided(t *testing.T) {
 	cfg := &Config{
-		Profiles: []string{"postgres"},
-		Postgres: PostgresConfig{Host: "h", Port: 1, User: "u", Password: "p", Database: "d"},
+		Profiles:    []string{"postgres"},
+		Postgres:    PostgresConfig{Host: "h", Port: 1, User: "u", Password: "p", Database: "d"},
+		Docs2Vector: Docs2VectorConfig{EmbedModel: "mxbai-embed-large-v1"},
 		RagMCP: RagMCPConfig{
 			AuthProvider: "keycloak",
 			AuthJWKSURL:  "https://kc/jwks",

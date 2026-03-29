@@ -114,8 +114,19 @@ type Docs2VectorConfig struct {
 	DocsDir       string
 	ChunkSize     int
 	EmbedModel    string
+	EmbedDim      int // 0 = auto-resolve from EmbedModel via KnownEmbedDims
 	QueryPrefix   string
 	PassagePrefix string
+}
+
+// KnownEmbedDims maps known embedding model names (and their GGUF filename
+// variants) to the output vector dimension. Used to auto-resolve embed_dim
+// when it is not explicitly set in stack.toml.
+var KnownEmbedDims = map[string]int{
+	"nomic-embed-text-v1.5":           768,
+	"nomic-embed-text-v1.5.Q8_0.gguf": 768,
+	"mxbai-embed-large-v1":            1024,
+	"mxbai-embed-large-v1-f16.gguf":   1024,
 }
 
 type SecretsConfig struct {
@@ -202,12 +213,10 @@ type fileConfig struct {
 		DocsDir       string `toml:"docs_dir"`
 		ChunkSize     int    `toml:"chunk_size"`
 		EmbedModel    string `toml:"embed_model"`
+		EmbedDim      int    `toml:"embed_dim"`
 		QueryPrefix   string `toml:"query_prefix"`
 		PassagePrefix string `toml:"passage_prefix"`
 	} `toml:"docs2vector"`
-	Secrets struct {
-		AnthropicAPIKey string `toml:"anthropic_api_key"`
-	} `toml:"secrets"`
 }
 
 // Load reads and parses the stack.toml file at path.
@@ -299,11 +308,12 @@ func Load(path string) (*Config, error) {
 			DocsDir:       fc.Docs2Vector.DocsDir,
 			ChunkSize:     fc.Docs2Vector.ChunkSize,
 			EmbedModel:    fc.Docs2Vector.EmbedModel,
+			EmbedDim:      fc.Docs2Vector.EmbedDim,
 			QueryPrefix:   fc.Docs2Vector.QueryPrefix,
 			PassagePrefix: fc.Docs2Vector.PassagePrefix,
 		},
 		Secrets: SecretsConfig{
-			AnthropicAPIKey: fc.Secrets.AnthropicAPIKey,
+			AnthropicAPIKey: os.Getenv("ANTHROPIC_API_KEY"),
 		},
 	}
 
@@ -404,6 +414,18 @@ func Validate(cfg *Config) error {
 		if err := validatePort(pc.name, pc.value); err != nil {
 			return err
 		}
+	}
+
+	// Rule 9: resolve embed_dim from model name if not explicitly set.
+	if cfg.Docs2Vector.EmbedDim == 0 {
+		dim, ok := KnownEmbedDims[cfg.Docs2Vector.EmbedModel]
+		if !ok {
+			return fmt.Errorf("unknown embedding model %q — set docs2vector.embed_dim explicitly", cfg.Docs2Vector.EmbedModel)
+		}
+		cfg.Docs2Vector.EmbedDim = dim
+	}
+	if cfg.Docs2Vector.EmbedDim < 1 {
+		return fmt.Errorf("docs2vector.embed_dim must be a positive integer, got %d", cfg.Docs2Vector.EmbedDim)
 	}
 
 	// Rule 7 (warnings only).

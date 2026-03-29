@@ -1,0 +1,242 @@
+[
+  {
+    "prompt": "What wireless module do Series 5 and Series 6 BrightSign players use?",
+    "label": "good",
+    "notes": "Answer must name the WD-105 and associate it specifically with Series 5 and Series 6.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What wireless module do Series 3 and Series 4 BrightSign players use?",
+    "label": "good",
+    "notes": "Answer must name the WD-104 and associate it specifically with Series 3 and Series 4.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "When will BSN and brightAuthor classic shut down?",
+    "label": "good",
+    "notes": "Answer must state March 2027 as the shutdown date for BSN and brightAuthor classic.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "When will BSNEE reach end of support?",
+    "label": "good",
+    "notes": "Answer must state December 2026 as the end-of-support date for BSNEE. Software updates stop December 2025; end of support is December 2026.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What happens when a BrightSign player powered on with a blank storage device and internet connection has no existing provisioning record?",
+    "label": "good",
+    "notes": "Answer must state that the player displays the Player Activation page showing a QR code and an Activation Code.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What does it mean when a player shows as inactive in BSN.cloud?",
+    "label": "good",
+    "notes": "Answer must state that inactive means the player has not successfully checked in with BSN.cloud for over 36 minutes.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What ports must be enabled on the network for Local File Networking publishing to work?",
+    "label": "good",
+    "notes": "Answer must mention port 8080 and port 8008, and that they must allow HTTP transfers.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How do I reprovision a player from the Local Diagnostic Web Server?",
+    "label": "good",
+    "notes": "Answer must include: login via IP address, delete autorun.brs from the SD tab, then select Factory Reset from the Control tab.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What are the two ways to create a bsn.cloud account?",
+    "label": "good",
+    "notes": "Answer must mention signing up directly at bsn.cloud and creating an account through BA:Connected by selecting the 'New User?' option.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What does a lock icon on content in bsn.Content indicate?",
+    "label": "good",
+    "notes": "Answer must state that a lock icon means the content is currently used in an active presentation and cannot be deleted or modified until removed from the presentation.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What SSD connector type do BrightSign players use, and what NVMe sizes are supported on Series 4, 5, and 6?",
+    "label": "good",
+    "notes": "Answer must state M-keyed M.2 connector, and that Series 4, 5, and 6 support NVMe SSDs in 2242 and 2280 sizes.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "After a player is activated on a bsn.cloud network, what setup does it download by default?",
+    "label": "good",
+    "notes": "Answer must state the player downloads the Default Setup, which is set to LFN (Local File Networking) by default.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How do I change the Wi-Fi SSID and password on a player that is already provisioned?",
+    "label": "good",
+    "notes": "Answer must state: update the Setup in Admin > Setup Library, then reprovision from the Control tab of the Remote Diagnostic Web Server.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How do I set up a proxy on a BrightSign player?",
+    "label": "good",
+    "notes": "Answer must state that a proxy is configured in the player setup record in bsn.cloud under Network Options > Player > Host Configuration > Use Proxy.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How do I configure a player to communicate with a TV using CEC commands in BA:Connected?",
+    "label": "good",
+    "notes": "Answer must mention BrightControl and that CEC commands such as turn on/off are available through the BrightControl option in advanced commands for BA:connected.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What steps do I follow to reprovision a device from a Partner Network to a bsn.Content network?",
+    "label": "good",
+    "notes": "Answer must include: create bsn.cloud network, purchase bsn.Content subscriptions, create a setup file, apply it via provisioning tab, remove and format the SD card in exFAT, factory reset the device, reinsert blank SD card, and power on.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "If a player's serial number is already registered on another network and I cannot contact the previous admin, what options do I have?",
+    "label": "good",
+    "notes": "Answer must state the player can only be used in standalone or local mode (not cloud mode) if the previous admin cannot be reached.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "Is Player Activation required for player provisioning in bsn.cloud?",
+    "label": "good",
+    "notes": "Answer must clearly state Player Activation is optional. If a provisioning record is already assigned in bsn.cloud, activation is not necessary.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How do I put a new Setup file on a device that is already on my BSN.cloud network?",
+    "label": "good",
+    "notes": "Answer must include: create the new setup file, link it to the player's serial number in the Provisioning tab, then go to the Control tab in the rDWS and click Reprovision.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "Do BrightSign players support native PowerPoint files?",
+    "label": "good",
+    "notes": "Answer must state BrightSign players do not support native PPT files, and that workarounds include exporting to BMP/JPEG images or MPEG4 MP4.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What is the monthly subscription cost for a bsn.Content plan?",
+    "label": "bad",
+    "notes": "The document does not contain pricing information. It only directs users to contact sales@brightsign.biz for subscriptions.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How many players can be managed on a single bsn.cloud network?",
+    "label": "bad",
+    "notes": "The document contains no information about player limits or maximum network capacity.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What is the default admin username and password for the Local Diagnostic Web Server?",
+    "label": "bad",
+    "notes": "The document mentions logging in with a username and password but does not state any default credentials.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "Can BrightSign players play native PDF files?",
+    "label": "bad",
+    "notes": "The document does not address PDF playback. It covers PowerPoint but not PDF.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What is the maximum media file size that can be uploaded to bsn.Content?",
+    "label": "bad",
+    "notes": "The document describes how to upload media but states no file size limits.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How do I update the BrightSign OS firmware to the latest version?",
+    "label": "bad",
+    "notes": "The document does not cover OS firmware updates. It covers provisioning, setup files, and network configuration.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What HDMI version do Series 6 BrightSign players support?",
+    "label": "bad",
+    "notes": "The document contains no information about HDMI specifications for any player series.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "Can I use a USB drive instead of a micro-SD card to provision a BrightSign player?",
+    "label": "bad",
+    "notes": "The document consistently references SD cards for provisioning and does not mention USB drives as an alternative.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What is the BrightSign technical support phone number?",
+    "label": "bad",
+    "notes": "The document only provides email addresses (support@brightsign.biz, sales@brightsign.biz, orders@brightsign.biz). No phone number is mentioned.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How long does a factory reset take on a BrightSign player?",
+    "label": "bad",
+    "notes": "The document describes how to perform a factory reset but gives no timing or duration information.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What video codecs does the BrightSign Series 5 player support?",
+    "label": "bad",
+    "notes": "The document references a Video Formats and Codecs page on docs.brightsign.biz but does not list any codecs itself.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "Is the WD-105 wireless module compatible with Series 3 players?",
+    "label": "bad",
+    "notes": "The document explicitly states WD-105 is for Series 5 and 6, and WD-104 is for Series 3 and 4. The WD-105 is not compatible with Series 3.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "When will Series 3 BrightSign players reach end of software support, and what is the last supported OS branch?",
+    "label": "good",
+    "notes": "Answer must state April 2026 as the end of software support for Series 3, and that the last supported OS branch is 9.1.x.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What email address should I contact to purchase bsn.Content subscriptions?",
+    "label": "good",
+    "notes": "Answer must state orders@brightsign.biz and mention providing network name, number of subscriptions, and administrator email.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How can I verify that an LFN device is reachable from my computer before reprovisioning?",
+    "label": "good",
+    "notes": "Answer must mention checking http://playerIPaddress:8080/GetID in a web browser to confirm a response is received, and confirming the computer is on the same subnet.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "When publishing to bsn.Content, how do I choose which group receives the published presentation?",
+    "label": "good",
+    "notes": "Answer must state that on the publishing/scheduling page, under Destination on the left side, the user selects the Group dropdown to choose the bsn.Content group.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What does bsn.control store locally on a computer, and what does that mean when switching computers?",
+    "label": "good",
+    "notes": "Answer must state that bsn.control presentations and files are stored locally on the computer where they were created, so they will not appear when logging in from a different computer. A .bpfx file and copies of all media are needed to work on a different machine.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "How do BrightSign players released after July 30, 2025 interact with BSN and BSNEE?",
+    "label": "good",
+    "notes": "Answer must state that players released after the EOL announcement on 7/30/2025 will be incompatible with BSN and BSNEE.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "What does the lock icon on a bsn.Content presentation (as opposed to content) indicate?",
+    "label": "good",
+    "notes": "Answer must state that a lock icon on a presentation means the presentation is currently scheduled to a player.",
+    "file": "ClaudeReformatedQAMarkdown"
+  },
+  {
+    "prompt": "Can BrightSign support remove a player from another company's network on a customer's behalf?",
+    "label": "good",
+    "notes": "Answer must state that BrightSign does not have the ability to remove players from networks or reset passwords for security and privacy reasons — only the previous admin can do this.",
+    "file": "ClaudeReformatedQAMarkdown"
+  }
+]

@@ -16,6 +16,25 @@ See [docs/DESIGN.md](docs/DESIGN.md) for full architecture. In brief:
 
 Only dependency outside the Go standard library: `github.com/BurntSushi/toml`.
 
+## Prerequisites
+
+The stack requires the following tools installed on your system:
+
+- **Go** — to build the stack CLI
+- **Podman** (or Docker) — container engine
+- **uv** — Python tool installer ([install](https://docs.astral.sh/uv/getting-started/installation/))
+
+Once `uv` is installed, run:
+
+```sh
+make prereqs
+```
+
+This installs:
+
+- `huggingface_hub[cli]` — used to download GGUF model files
+- `podman-compose` — required for container orchestration with Podman
+
 ## Build
 
 ```sh
@@ -34,6 +53,16 @@ $EDITOR stack.toml
 ```
 
 `stack.toml` is gitignored. See `stack.toml.example` for all fields and their defaults.
+
+**Secrets must never be stored in `stack.toml`.** Use environment variables instead,
+preferably via a `.envrc` file loaded by [direnv](https://direnv.net/):
+
+```sh
+# .envrc — create this file; it is gitignored
+export ANTHROPIC_API_KEY="sk-ant-..."   # required only when hyde is enabled
+```
+
+Then run `direnv allow` to activate it. Both `.env` and `.envrc` are in `.gitignore`.
 
 Key fields:
 
@@ -126,3 +155,45 @@ make up             # build + generate + start
 make down           # stop
 make status         # show container status
 ```
+
+## Troubleshooting
+
+### Keycloak crash-loops with "Killed" on first start
+
+If `podman logs stack-keycloak_keycloak_1` shows repeated lines like:
+
+```
+Updating the configuration and installing your custom providers, if any. Please wait.
+/opt/keycloak/bin/kc.sh: line 169:    74 Killed   'java' ...
+```
+
+Keycloak's JVM is being OOM-killed by the container memory limit. This typically happens
+on the first start when Keycloak runs its Quarkus augmentation/build phase, which is more
+memory-intensive than normal operation.
+
+**Fix:** Increase the memory limit in `keycloak-testing/compose.yml`:
+
+```yaml
+deploy:
+  resources:
+    limits:
+      memory: 2g    # increase from 1g
+```
+
+Then restart:
+
+```sh
+make down
+make up
+```
+
+### `make up` hangs after containers start
+
+On older versions of podman (< 5.x), `podman-compose up -d` may not detach properly
+when containers have health checks with dependencies. The containers are running — check
+with `make status` or `podman ps` in another terminal. Press `Ctrl+C` to return to
+your prompt; the containers will continue running in the background.
+
+### `make ingest` fails with "network not found"
+
+The `stack-net` network is created by `make up`. Run `make up` first, then `make ingest`.

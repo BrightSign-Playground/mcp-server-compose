@@ -1,0 +1,2002 @@
+[
+  {
+    "index": 0,
+    "prompt": "What BrightScript object and method do you call to perform a",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/08-fetching-remote-content.md",
+    "line": 77,
+    "found_text": "if urlTransfer.AsyncGetToFile(destination) then",
+    "correction": null
+  },
+  {
+    "index": 1,
+    "prompt": "What registry section and key do you write to enable SSH on",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 115,
+    "found_text": "reg.write(\"ssh\",\"22\")",
+    "correction": null
+  },
+  {
+    "index": 2,
+    "prompt": "What registry section and key do you write to enable the Loc",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 148,
+    "found_text": "reg.write(\"dwse\", \"yes\")",
+    "correction": null
+  },
+  {
+    "index": 3,
+    "prompt": "What roHtmlWidget configuration key enables Node.js for an H",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/02-javascript-node-programs.md",
+    "line": 38,
+    "found_text": "nodejs_enabled: true",
+    "correction": null
+  },
+  {
+    "index": 4,
+    "prompt": "What JavaScript module path do you require() to send message",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 393,
+    "found_text": "var MESSAGE_PORT = require(\"@brightsign/messageport\");",
+    "correction": null
+  },
+  {
+    "index": 5,
+    "prompt": "What method on the messageport object do you call in JavaScr",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 397,
+    "found_text": "bsMessage.PostBSMessage({",
+    "correction": null
+  },
+  {
+    "index": 6,
+    "prompt": "What event name does the JavaScript messageport emit when it",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 434,
+    "found_text": "bsMessage.addEventListener('bsmessage', function(msg) {",
+    "correction": null
+  },
+  {
+    "index": 7,
+    "prompt": "What BrightScript method on roHtmlWidget sends a message to ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 426,
+    "found_text": "htmlWidget.PostJSMessage({command: \"play\", videoId: \"video1\"})",
+    "correction": null
+  },
+  {
+    "index": 8,
+    "prompt": "What BrightScript video event code indicates that a video fi",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/02-first-brightscript-application.md",
+    "line": 142,
+    "found_text": "if eventCode = 8 then",
+    "correction": null
+  },
+  {
+    "index": 9,
+    "prompt": "What BrightScript video event code indicates a playback fail",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/02-first-brightscript-application.md",
+    "line": 148,
+    "found_text": "else if eventCode = 15 then",
+    "correction": null
+  },
+  {
+    "index": 10,
+    "prompt": "What BrightScript object and method sets the message port on",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": 46,
+    "found_text": "videoPlayer.SetPort(msgPort)",
+    "correction": null
+  },
+  {
+    "index": 11,
+    "prompt": "What BrightScript method enables loop mode on a video player",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/02-first-brightscript-application.md",
+    "line": 125,
+    "found_text": "videoPlayer.SetLoopMode(true)",
+    "correction": null
+  },
+  {
+    "index": 12,
+    "prompt": "What BrightScript object is created to read and write player",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 93,
+    "found_text": "reg = CreateObject(\"roRegistrySection\", \"networking\")",
+    "correction": null
+  },
+  {
+    "index": 13,
+    "prompt": "What method do you call on roRegistrySection to persist writ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 652,
+    "found_text": "reg.Flush()",
+    "correction": null
+  },
+  {
+    "index": 14,
+    "prompt": "What BrightScript object is used to perform async and sync H",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 557,
+    "found_text": "url.AsyncGetToString()  ' Non-blocking",
+    "correction": null
+  },
+  {
+    "index": 15,
+    "prompt": "What BrightScript debugger command prints the current call s",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 212,
+    "found_text": "- `bt` - Print backtrace of function calls",
+    "correction": null
+  },
+  {
+    "index": 16,
+    "prompt": "What BrightScript debugger command displays local variables ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 213,
+    "found_text": "- `var` - Display local variables and values",
+    "correction": null
+  },
+  {
+    "index": 17,
+    "prompt": "What BrightScript debugger command runs the garbage collecto",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 913,
+    "found_text": "- `gc` - Run garbage collector and show stats",
+    "correction": null
+  },
+  {
+    "index": 18,
+    "prompt": "What BrightScript object and method do you use to get the cu",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 59,
+    "found_text": "print \"[\" + timestamp.ToISOString() + \"] \"",
+    "correction": null
+  },
+  {
+    "index": 19,
+    "prompt": "What BrightScript object and method measure elapsed time in ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 375,
+    "found_text": "if startTime.TotalMilliseconds() > timeoutMs then",
+    "correction": null
+  },
+  {
+    "index": 20,
+    "prompt": "What BrightScript function runs the garbage collector and re",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 575,
+    "found_text": "gc = RunGarbageCollector()",
+    "correction": null
+  },
+  {
+    "index": 21,
+    "prompt": "What roHtmlWidget configuration key and value enables the we",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 234,
+    "found_text": "inspector_server: { port: 2999 }",
+    "correction": null
+  },
+  {
+    "index": 22,
+    "prompt": "What Chrome browser URL do you navigate to in order to conne",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/03-debugging-javascript.md",
+    "line": 39,
+    "found_text": "2. Navigate to `chrome://inspect/#devices`",
+    "correction": null
+  },
+  {
+    "index": 23,
+    "prompt": "What registry section and key do you write to enable the Bri",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 198,
+    "found_text": "reg.write(\"debug\",\"1\")",
+    "correction": null
+  },
+  {
+    "index": 24,
+    "prompt": "What HTML video attribute routes BrightSign video directly t",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 343,
+    "found_text": "<video src=\"video.mp4\" hwz=\"z-index:-1\" autoplay>",
+    "correction": null
+  },
+  {
+    "index": 25,
+    "prompt": "What BrightScript method on roHtmlWidget enables hardware vi",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 356,
+    "found_text": "htmlWidget.SetHWZDefault(\"on\")",
+    "correction": null
+  },
+  {
+    "index": 26,
+    "prompt": "What HTML video attribute controls the stream timeout in mil",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 300,
+    "found_text": "<video src=\"udp://239.192.1.1:5004\" x-bs-stream-timeout=\"5000\">",
+    "correction": null
+  },
+  {
+    "index": 27,
+    "prompt": "What JavaScript require() path provides access to BrightSign",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 563,
+    "found_text": "var DeviceInfoClass = require(\"@brightsign/deviceinfo\");",
+    "correction": null
+  },
+  {
+    "index": 28,
+    "prompt": "What JavaScript require() path provides GPIO control on a Br",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 601,
+    "found_text": "var ControlPortClass = require(\"@brightsign/controlport\");",
+    "correction": null
+  },
+  {
+    "index": 29,
+    "prompt": "What BrightScript object and method configure a serial port ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 212,
+    "found_text": "serial.SetLineEventPort(msgPort)",
+    "correction": null
+  },
+  {
+    "index": 30,
+    "prompt": "What BrightScript method sets the line terminator character ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 213,
+    "found_text": "serial.SetReceiveEol(chr(13))  ' CR line terminator",
+    "correction": null
+  },
+  {
+    "index": 31,
+    "prompt": "What BrightScript object and method configure GPIO pin 2 as ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 41,
+    "found_text": "port.EnableOutput(2)",
+    "correction": null
+  },
+  {
+    "index": 32,
+    "prompt": "What BrightScript method sets the output state (high/low) of",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 42,
+    "found_text": "port.SetOutputState(2, true)  ' Turn on (3.3V)",
+    "correction": null
+  },
+  {
+    "index": 33,
+    "prompt": "What BrightScript event type is received when a GPIO pin con",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 84,
+    "found_text": "if msgType = \"roControlDown\" then",
+    "correction": null
+  },
+  {
+    "index": 34,
+    "prompt": "What BrightScript method on roControlPort configures PWM pul",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 129,
+    "found_text": "gpioPort.SetPulseParams({ milliseconds: 500, slices: 2 })",
+    "correction": null
+  },
+  {
+    "index": 35,
+    "prompt": "What BrightScript extension control script filename is requi",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/01-intro-to-extensions.md",
+    "line": 44,
+    "found_text": "\u251c\u2500\u2500 bsext_init          # Control script (required)",
+    "correction": null
+  },
+  {
+    "index": 36,
+    "prompt": "What directory path are BrightSign native extensions mounted",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/01-intro-to-extensions.md",
+    "line": 40,
+    "found_text": "Extensions are installed to `/var/volatile/bsext/${extension_name}` on the player.",
+    "correction": null
+  },
+  {
+    "index": 37,
+    "prompt": "What shell command creates a squashfs archive for a BrightSi",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/01-intro-to-extensions.md",
+    "line": 181,
+    "found_text": "mksquashfs hello-ext hello-ext.squashfs -noappend",
+    "correction": null
+  },
+  {
+    "index": 38,
+    "prompt": "What shell command reads system logs on a BrightSign player ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/02-advanced-extensions.md",
+    "line": 575,
+    "found_text": "logread -f",
+    "correction": null
+  },
+  {
+    "index": 39,
+    "prompt": "What SDK environment script must be sourced before cross-com",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/02-advanced-extensions.md",
+    "line": 79,
+    "found_text": "source /opt/brightsign-sdk/environment-setup-cortexa72-brightsign-linux",
+    "correction": null
+  },
+  {
+    "index": 40,
+    "prompt": "What file format (extension) are signed BrightSign extension",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/02-advanced-extensions.md",
+    "line": 524,
+    "found_text": "Signed extensions are distributed as `.bsfw` files (BrightSign FirmWare format).",
+    "correction": null
+  },
+  {
+    "index": 41,
+    "prompt": "What HTTP header value does a BrightSign player send in its ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/02-automated-provisioning.md",
+    "line": 86,
+    "found_text": "### Mode 1: Override (`recoverymode: override`)",
+    "correction": null
+  },
+  {
+    "index": 42,
+    "prompt": "What HTTP header value does a BrightSign player send when it",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/02-automated-provisioning.md",
+    "line": 124,
+    "found_text": "### Mode 3: Last Resort (`recoverymode: last_resort`)",
+    "correction": null
+  },
+  {
+    "index": 43,
+    "prompt": "What HTTP response status does a recovery server return to t",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/02-automated-provisioning.md",
+    "line": 94,
+    "found_text": "If the handler responds with HTTP 204, or HTTP 200 with an empty body, the player executes the pre-existing local autorun as normal.",
+    "correction": null
+  },
+  {
+    "index": 44,
+    "prompt": "What HTTP response header does the recovery server use to co",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/02-automated-provisioning.md",
+    "line": 114,
+    "found_text": "the server can control this via a `Retry-After` header in the response (value in seconds).",
+    "correction": null
+  },
+  {
+    "index": 45,
+    "prompt": "What registry key in the 'networking' section stores the rec",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/02-automated-provisioning.md",
+    "line": 26,
+    "found_text": "The primary registry key for recovery is **`ru`**",
+    "correction": null
+  },
+  {
+    "index": 46,
+    "prompt": "What DHCP option number is used to deliver the recovery URL ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/02-automated-provisioning.md",
+    "line": 44,
+    "found_text": "1. **DHCP Option 43** -- if a recovery URL is found via DHCP Option 43",
+    "correction": null
+  },
+  {
+    "index": 47,
+    "prompt": "What mDNS hostname does a BrightSign player automatically ch",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/02-automated-provisioning.md",
+    "line": 47,
+    "found_text": "4. **mDNS** -- the player automatically checks `http://brightsign.b-deploy.local/`",
+    "correction": null
+  },
+  {
+    "index": 48,
+    "prompt": "What npm package provides the BSC CLI tool for communicating",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/01-setting-up-development-environment.md",
+    "line": 179,
+    "found_text": "npm install -g @brightsign/bsc",
+    "correction": null
+  },
+  {
+    "index": 49,
+    "prompt": "What BSC CLI command uploads a file to a BrightSign player?",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/01-setting-up-development-environment.md",
+    "line": 191,
+    "found_text": "bsc put ./index.html /storage/sd/",
+    "correction": null
+  },
+  {
+    "index": 50,
+    "prompt": "What BSC CLI command takes a screenshot from a BrightSign pl",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/01-setting-up-development-environment.md",
+    "line": 200,
+    "found_text": "bsc screenshot ./screenshot.png",
+    "correction": null
+  },
+  {
+    "index": 51,
+    "prompt": "What BrightScript type suffix denotes a String variable?",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/01-brightscript-language-reference.md",
+    "line": 200,
+    "found_text": "name$ = \"John\"          ' String ($ suffix)",
+    "correction": null
+  },
+  {
+    "index": 52,
+    "prompt": "What BrightScript type suffix denotes an Integer variable?",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/01-brightscript-language-reference.md",
+    "line": 201,
+    "found_text": "count% = 100           ' Integer (% suffix)",
+    "correction": null
+  },
+  {
+    "index": 53,
+    "prompt": "What BrightScript statement includes an external .brs librar",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/01-brightscript-language-reference.md",
+    "line": 1050,
+    "found_text": "Library \"filename.brs\"",
+    "correction": null
+  },
+  {
+    "index": 54,
+    "prompt": "What BrightScript keyword is used in place of 'this' or 'sel",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/01-brightscript-language-reference.md",
+    "line": 590,
+    "found_text": "**The `m` variable is BrightScript's \"self\" reference**",
+    "correction": null
+  },
+  {
+    "index": 55,
+    "prompt": "What BrightScript built-in function checks whether a storage",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/01-brightscript-language-reference.md",
+    "line": 480,
+    "found_text": "du = CreateObject(\"roStorageInfo\", deviceName$)\n    if type(du) = \"roStorageInfo\" then",
+    "correction": null
+  },
+  {
+    "index": 56,
+    "prompt": "What naming convention do BrightScript plugin factory functi",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/05-plugin-architecture.md",
+    "line": 41,
+    "found_text": "Plugins are created using factory functions with a consistent \"new\" prefix naming convention:",
+    "correction": null
+  },
+  {
+    "index": 57,
+    "prompt": "What BrightScript method on an roTimer sets the interval bef",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/02-first-brightscript-application.md",
+    "line": 216,
+    "found_text": "timer.SetElapsed(5, 0)  ' Fire every 5 seconds",
+    "correction": null
+  },
+  {
+    "index": 58,
+    "prompt": "What BrightScript method on roTimer retrieves the timer's un",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/05-plugin-architecture.md",
+    "line": 162,
+    "found_text": "stri(msg.GetSourceIdentity()) = stri(m.networking.checkAlarm.GetIdentity())",
+    "correction": null
+  },
+  {
+    "index": 59,
+    "prompt": "What BrightScript method on an roUrlEvent returns the HTTP r",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/05-plugin-architecture.md",
+    "line": 198,
+    "found_text": "if msg.GetResponseCode() = 200 then",
+    "correction": null
+  },
+  {
+    "index": 60,
+    "prompt": "What BrightScript event type is received when a URL transfer",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 363,
+    "found_text": "if type(msg) = \"roUrlEvent\" then",
+    "correction": null
+  },
+  {
+    "index": 61,
+    "prompt": "What BrightScript event type is delivered from an roSyncPool",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/05-plugin-architecture.md",
+    "line": 157,
+    "found_text": "else if (type(msg) = \"roSyncPoolEvent\") then",
+    "correction": null
+  },
+  {
+    "index": 62,
+    "prompt": "What BrightScript event type is received when an roHtmlWidge",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 412,
+    "found_text": "if type(msg) = \"roHtmlWidgetEvent\" then",
+    "correction": null
+  },
+  {
+    "index": 63,
+    "prompt": "What field in the roHtmlWidgetEvent data object indicates wh",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 414,
+    "found_text": "if data.reason = \"message\" then",
+    "correction": null
+  },
+  {
+    "index": 64,
+    "prompt": "What roHtmlWidget configuration key specifies the URL to loa",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 406,
+    "found_text": "htmlWidget = CreateObject(\"roHtmlWidget\", rect, {url: \"file:///index.html\"})",
+    "correction": null
+  },
+  {
+    "index": 65,
+    "prompt": "What roHtmlWidget configuration key enables mouse/touch inpu",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 1301,
+    "found_text": "mouse_enabled: true,",
+    "correction": null
+  },
+  {
+    "index": 66,
+    "prompt": "What roHtmlWidget configuration key sets the local storage p",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 504,
+    "found_text": "storage_path: \"SD:/html-storage\",",
+    "correction": null
+  },
+  {
+    "index": 67,
+    "prompt": "What roHtmlWidget configuration key sets the storage quota, ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": 505,
+    "found_text": "storage_quota: \"1073741824\" ' 1GB in bytes (use string for >2GB)",
+    "correction": null
+  },
+  {
+    "index": 68,
+    "prompt": "What Node.js version is the built-in embedded Node.js runtim",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/02-javascript-node-programs.md",
+    "line": 27,
+    "found_text": "| OS 8.5.x, OS 9.0.x | Chromium 87 | **14.17.6** | **14.17.6** |",
+    "correction": null
+  },
+  {
+    "index": 69,
+    "prompt": "What roHtmlWidget configuration key must be set to disable c",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/02-javascript-node-programs.md",
+    "line": 89,
+    "found_text": "security_params: { websecurity: false }",
+    "correction": null
+  },
+  {
+    "index": 70,
+    "prompt": "What JavaScript code sets the working directory for Node.js ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/02-javascript-node-programs.md",
+    "line": 116,
+    "found_text": "process.chdir(\"/storage/sd\");",
+    "correction": null
+  },
+  {
+    "index": 71,
+    "prompt": "What JavaScript property array do you push to in order to ad",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/02-javascript-node-programs.md",
+    "line": 128,
+    "found_text": "module.paths.push(\"/storage/sd/\");",
+    "correction": null
+  },
+  {
+    "index": 72,
+    "prompt": "What BrightSign shell command measures HTTP download perform",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 618,
+    "found_text": "httpgetperf <url>           # Measure download performance",
+    "correction": null
+  },
+  {
+    "index": 73,
+    "prompt": "What BrightSign shell command displays the current network i",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 610,
+    "found_text": "ifconfig                    # Configure network",
+    "correction": null
+  },
+  {
+    "index": 74,
+    "prompt": "What curl command reboots a BrightSign player via the Local ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 164,
+    "found_text": "curl -u admin:serialnumber -X PUT \\",
+    "correction": null
+  },
+  {
+    "index": 75,
+    "prompt": "What Local DWS REST API path retrieves player information?",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 156,
+    "found_text": "curl -u admin:serialnumber http://192.168.1.100/api/v1/info/player",
+    "correction": null
+  },
+  {
+    "index": 76,
+    "prompt": "What registry section and key do you write to configure a re",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 215,
+    "found_text": "registry.Write(\"syslog\", syslogServer)",
+    "correction": null
+  },
+  {
+    "index": 77,
+    "prompt": "What BrightScript object is used to write messages to the sy",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 167,
+    "found_text": "m.syslog.SendLine(logMsg)",
+    "correction": null
+  },
+  {
+    "index": 78,
+    "prompt": "What BrightScript object and method are used to write to an ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 250,
+    "found_text": "file.SendLine(logEntry)",
+    "correction": null
+  },
+  {
+    "index": 79,
+    "prompt": "What roUrlTransfer method enables retaining the response bod",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 327,
+    "found_text": "transfer.RetainBodyOnError(true)",
+    "correction": null
+  },
+  {
+    "index": 80,
+    "prompt": "What BrightScript method on roUrlTransfer cancels an in-prog",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 376,
+    "found_text": "transfer.AsyncCancel()",
+    "correction": null
+  },
+  {
+    "index": 81,
+    "prompt": "What BrightScript method enables download resume capability ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 266,
+    "found_text": "url.EnableResume(true)  ' Allow resume on failure",
+    "correction": null
+  },
+  {
+    "index": 82,
+    "prompt": "What roTouchScreen method defines a rectangular interactive ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 640,
+    "found_text": "touch.AddRectangleRegion(100, 100, 300, 200, 1)   ' Button 1",
+    "correction": null
+  },
+  {
+    "index": 83,
+    "prompt": "What BrightScript event type is received from roTouchScreen ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 648,
+    "found_text": "if type(msg) = \"roTouchEvent\" then",
+    "correction": null
+  },
+  {
+    "index": 84,
+    "prompt": "What BrightScript object and method are used to create a TCP",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 750,
+    "found_text": "server.SetBindAddress(\"0.0.0.0\", 8080)",
+    "correction": null
+  },
+  {
+    "index": 85,
+    "prompt": "What BrightScript event type is received when a new TCP clie",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 757,
+    "found_text": "if type(msg) = \"roTCPConnectEvent\" then",
+    "correction": null
+  },
+  {
+    "index": 86,
+    "prompt": "What BrightScript object and method create a UDP socket and ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": 791,
+    "found_text": "udp.SetSendToAddress(\"255.255.255.255\", 5000)  ' Broadcast",
+    "correction": null
+  },
+  {
+    "index": 87,
+    "prompt": "What BrightScript object creates an asset pool for managing ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 255,
+    "found_text": "pool = CreateObject(\"roAssetPool\", \"SD:/pool\")",
+    "correction": null
+  },
+  {
+    "index": 88,
+    "prompt": "What registry section and key enables Prometheus node export",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 1071,
+    "found_text": "reg.Write(\"prometheus-node-exporter-port\", \"9100\")",
+    "correction": null
+  },
+  {
+    "index": 89,
+    "prompt": "What registry section and key enables remote snapshots on a ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 1086,
+    "found_text": "reg.Write(\"enableremotesnapshot\", \"true\")",
+    "correction": null
+  },
+  {
+    "index": 90,
+    "prompt": "What BrightScript method on roNetworkConfiguration sets the ",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": 118,
+    "found_text": "n.SetLoginPassword(\"password\")",
+    "correction": null
+  },
+  {
+    "index": 91,
+    "prompt": "What BrightScript method on roNetworkConfiguration configure",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/01-setting-up-development-environment.md",
+    "line": 56,
+    "found_text": "CreateObject('roNetworkConfiguration', 0).SetupDWS({port:\"80\", open:\"none\"})",
+    "correction": null
+  },
+  {
+    "index": 92,
+    "prompt": "What C signal must a BrightSign native extension handle to s",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/01-intro-to-extensions.md",
+    "line": 88,
+    "found_text": "signal(SIGTERM, handle_signal);",
+    "correction": null
+  },
+  {
+    "index": 93,
+    "prompt": "What shell daemon management tool is used in bsext_init scri",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/01-intro-to-extensions.md",
+    "line": 128,
+    "found_text": "start-stop-daemon --start --background \\",
+    "correction": null
+  },
+  {
+    "index": 94,
+    "prompt": "What C function reads the path to the current executable, wh",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/02-advanced-extensions.md",
+    "line": 636,
+    "found_text": "readlink(\"/proc/self/exe\", exe_dir, sizeof(exe_dir));",
+    "correction": null
+  },
+  {
+    "index": 95,
+    "prompt": "What GDB command on the BrightSign player starts the GDB ser",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/02-advanced-extensions.md",
+    "line": 587,
+    "found_text": "gdbserver :2345 /var/volatile/bsext/my-ext/my-app",
+    "correction": null
+  },
+  {
+    "index": 96,
+    "prompt": "What BrightScript try/catch syntax is used for exception han",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": 81,
+    "found_text": "try ... catch e ... end try",
+    "correction": null
+  },
+  {
+    "index": 97,
+    "prompt": "What roVideoMode method sets the video output resolution and",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": 39,
+    "found_text": "videoMode.SetMode(\"1920x1080x60p\")",
+    "correction": null
+  },
+  {
+    "index": 98,
+    "prompt": "What roVideoPlayer method seeks to a position specified in m",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": 129,
+    "found_text": "videoPlayer.Seek(30000)  ' Jump to 30 seconds",
+    "correction": null
+  },
+  {
+    "index": 99,
+    "prompt": "What roVideoPlayer method retrieves the current playback pos",
+    "label": "good",
+    "status": "CONFIRMED",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": 132,
+    "found_text": "position = videoPlayer.GetPlaybackPosition()",
+    "correction": null
+  },
+  {
+    "index": 100,
+    "prompt": "What BrightScript method on roUrlTransfer configures a proxy",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/08-fetching-remote-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 101,
+    "prompt": "What BrightScript method on roVideoPlayer queries whether a ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 102,
+    "prompt": "What BrightScript method configures the HDMI CEC device name",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 103,
+    "prompt": "What registry key controls the maximum number of concurrent ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/08-fetching-remote-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 104,
+    "prompt": "What BrightScript method on roVideoPlayer sets a custom ICC ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 105,
+    "prompt": "What BrightScript object and method perform a DNS lookup and",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 106,
+    "prompt": "What JavaScript method on the BrightSign messageport object ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 107,
+    "prompt": "What BrightScript function returns the player's current CPU ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 108,
+    "prompt": "What BrightScript method pauses the plugin event loop withou",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/05-plugin-architecture.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 109,
+    "prompt": "What BrightScript object and method enumerate all connected ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 110,
+    "prompt": "What JavaScript API on BrightSign returns the player's curre",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/02-javascript-node-programs.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 111,
+    "prompt": "What BrightScript function base64-encodes a string for use i",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/08-fetching-remote-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 112,
+    "prompt": "What roUrlTransfer method sets a rate limit in kilobytes per",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/08-fetching-remote-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 113,
+    "prompt": "What BrightScript method on roVideoPlayer enables hardware v",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 114,
+    "prompt": "What BrightScript registry key configures the maximum number",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 115,
+    "prompt": "What BrightScript object creates a named pipe for inter-proc",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/01-intro-to-extensions.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 116,
+    "prompt": "What BrightSign JavaScript API method returns the list of al",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/02-advanced-extensions.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 117,
+    "prompt": "What BSN.cloud REST endpoint returns real-time CPU usage sta",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/01-integrating-with-bsn-cloud.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 118,
+    "prompt": "What BrightScript method on roVideoPlayer configures the pla",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 119,
+    "prompt": "What BrightScript exception class name is thrown when an roU",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 120,
+    "prompt": "What BrightScript method configures TLS 1.3 as the minimum a",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/19-secure-deployment-practices.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 121,
+    "prompt": "What BrightScript object and method programmatically trigger",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 122,
+    "prompt": "What BrightSign roNodeJs constructor parameter sets the memo",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/01-setting-up-development-environment.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 123,
+    "prompt": "What BrightScript function converts a Unix timestamp integer",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/01-brightscript-language-reference.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 124,
+    "prompt": "What BrightScript method on roControlPort reads the analog v",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 125,
+    "prompt": "What BrightScript method on roVideoPlayer configures the num",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 126,
+    "prompt": "What BrightScript method extracts a zip archive to a specifi",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 127,
+    "prompt": "What JavaScript require() path provides Bluetooth device dis",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 128,
+    "prompt": "What BrightScript registry key sets the IP multicast TTL (ti",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 129,
+    "prompt": "What BrightScript method on roDatagramSocket joins an IP mul",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 130,
+    "prompt": "What BrightScript object reads I2C sensor values directly fr",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 131,
+    "prompt": "What BrightScript method on roVideoPlayer retrieves the tota",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 132,
+    "prompt": "What BrightScript method configures SNMPv3 authentication cr",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 133,
+    "prompt": "What extension packaging flag in mksquashfs sets the block s",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/02-advanced-extensions.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 134,
+    "prompt": "What JavaScript API method on BrightSign configures HDCP out",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 135,
+    "prompt": "What BrightScript method on roUrlTransfer configures a SOCKS",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/08-fetching-remote-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 136,
+    "prompt": "What BrightScript function applies a CSS transform matrix to",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 137,
+    "prompt": "What registry key controls the automatic restart interval fo",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/02-automated-provisioning.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 138,
+    "prompt": "What BrightScript object creates a shared memory segment acc",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/02-javascript-node-programs.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 139,
+    "prompt": "What BrightScript method on roAssetPool sets the maximum cac",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 140,
+    "prompt": "What BrightScript object and method subscribe to BSN.cloud p",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/01-integrating-with-bsn-cloud.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 141,
+    "prompt": "What BrightScript method on roVideoPlayer enables hardware-a",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 142,
+    "prompt": "What Node.js module do you require() on BrightSign to access",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/19-secure-deployment-practices.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 143,
+    "prompt": "What BrightScript method programmatically ejects a USB stora",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 144,
+    "prompt": "What BrightScript method compresses a string using gzip and ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/01-brightscript-language-reference.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 145,
+    "prompt": "What BSN.cloud API endpoint retrieves the full playback hist",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/01-integrating-with-bsn-cloud.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 146,
+    "prompt": "What BrightScript method on roVideoPlayer configures the out",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 147,
+    "prompt": "What BrightScript event type is delivered when a BrightSign ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 148,
+    "prompt": "What BrightScript object manages the player's internal certi",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/19-secure-deployment-practices.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 149,
+    "prompt": "What BrightSign shell command exports the complete registry ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 150,
+    "prompt": "What BrightScript method on roVideoPlayer enables synchroniz",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 151,
+    "prompt": "What BrightScript function returns the number of CPU cores a",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 152,
+    "prompt": "What JavaScript event name does a BrightSign GPIO control po",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 153,
+    "prompt": "What BrightScript method on roTouchScreen sets the minimum s",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 154,
+    "prompt": "What BrightScript method on roRegistrySection encrypts the s",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/19-secure-deployment-practices.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 155,
+    "prompt": "What BrightScript event type is raised when the SD card stor",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 156,
+    "prompt": "What BrightScript method on roVideoPlayer queries the curren",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 157,
+    "prompt": "What TypeScript decorator from the @brightsign/bscore packag",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/16-building-custom-extensions.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 158,
+    "prompt": "What BrightScript object and method enable VLAN tagging on t",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 159,
+    "prompt": "What BrightScript method on roHtmlWidget preloads a secondar",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 160,
+    "prompt": "What is the name of the BrightScript function that returns t",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 161,
+    "prompt": "What BrightScript method on roVideoPlayer enables dolby visi",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 162,
+    "prompt": "What bsext_init lifecycle command triggers a rolling restart",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/01-intro-to-extensions.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 163,
+    "prompt": "What BrightScript method configures the player to publish ON",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 164,
+    "prompt": "What JavaScript API on BrightSign configures the Wi-Fi 802.1",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/01-setting-up-development-environment.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 165,
+    "prompt": "What BrightScript method on roVideoPlayer captures a JPEG th",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 166,
+    "prompt": "What BrightScript event type is raised when the player succe",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/02-automated-provisioning.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 167,
+    "prompt": "What BrightScript method sets the RTSP buffer jitter toleran",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 168,
+    "prompt": "What BrightScript function converts a color value in ARGB fo",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/01-brightscript-language-reference.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 169,
+    "prompt": "What BrightScript method enables the player's built-in SIP s",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 170,
+    "prompt": "What roHtmlWidget property returns the current scroll positi",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 171,
+    "prompt": "What BrightScript method on roControlPort sets an individual",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 172,
+    "prompt": "What BrightScript object and method enumerate available audi",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 173,
+    "prompt": "What BSN.cloud registry key controls the maximum number of c",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/01-integrating-with-bsn-cloud.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 174,
+    "prompt": "What BrightScript method on roFileInfo calculates an MD5 che",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/19-secure-deployment-practices.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 175,
+    "prompt": "What BrightScript method on roVideoPlayer configures the asp",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 176,
+    "prompt": "What JavaScript method on the BrightSign serialport module s",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 177,
+    "prompt": "What BrightScript object subscribes to player health alerts ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 178,
+    "prompt": "What gopurple CLI tool command pushes a new presentation fil",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/01-setting-up-development-environment.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 179,
+    "prompt": "What BrightScript method on roHtmlWidget sets the user agent",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 180,
+    "prompt": "What BrightScript method configures a client-side TLS certif",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/19-secure-deployment-practices.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 181,
+    "prompt": "What BrightScript event type is delivered when the player's ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 182,
+    "prompt": "What roHtmlWidget method returns the currently active URL th",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 183,
+    "prompt": "What BrightScript method on roControlPort reads back the cur",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 184,
+    "prompt": "What BrightScript object and method add an entry to the play",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 185,
+    "prompt": "What BrightScript method on roVideoPlayer returns the decode",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 186,
+    "prompt": "What BrightScript function opens a UNIX domain socket for in",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/02-advanced-extensions.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 187,
+    "prompt": "What BSN.cloud B-Deploy configuration key specifies the grou",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/01-integrating-with-bsn-cloud.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 188,
+    "prompt": "What BrightScript method configures the DRM license server U",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 189,
+    "prompt": "What Node.js module on BrightSign provides access to the pla",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/19-secure-deployment-practices.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 190,
+    "prompt": "What BrightScript function returns a list of all .brs files ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/01-brightscript-language-reference.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 191,
+    "prompt": "What BrightScript object and method add a callback invoked w",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/03-debugging-brightscript.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 192,
+    "prompt": "What BrightScript method on roNetworkConfiguration sets a st",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 193,
+    "prompt": "What BrightScript object and method configure SSH public key",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-2-brightscript-development/02-practical-development.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 194,
+    "prompt": "What BrightScript method on roVideoPlayer sets the video out",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/howto-articles/04-playing-video-content.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 195,
+    "prompt": "What JavaScript API on BrightSign configures the Content Sec",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/01-javascript-playback.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 196,
+    "prompt": "What BrightScript function returns the current battery level",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/04-hardware-integrations.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 197,
+    "prompt": "What Node.js module path on BrightSign provides access to MQ",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-3-javascript-development/02-javascript-node-programs.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 198,
+    "prompt": "What bsext_init lifecycle command waits for the extension da",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-4-advanced-topics/01-intro-to-extensions.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  },
+  {
+    "index": 199,
+    "prompt": "What BSN.cloud REST endpoint accepts a batch POST request to",
+    "label": "bad",
+    "status": "CONFIRMED_ABSENT",
+    "file": "data/techdocs/technical-documentation/documentation/part-5-bsn-cloud/01-integrating-with-bsn-cloud.md",
+    "line": null,
+    "found_text": null,
+    "correction": null
+  }
+]

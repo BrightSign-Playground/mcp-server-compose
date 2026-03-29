@@ -3,6 +3,8 @@ stack
 *.toml
 .claude/
 .stack/
+.env
+.envrc
 keycloak-testing/.env
 logto-testing/.env
 rag-mcp-server/.env

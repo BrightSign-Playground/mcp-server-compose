@@ -89,7 +89,7 @@ Config
 │                 app_secret, audience, mgmt_app_id, mgmt_app_secret)
 ├── RagMCP       (port, log_level, auth_provider, auth_jwks_url, auth_issuer,
 │                 auth_audience, Search, Reranker, Guardrails, HyDE)
-├── Docs2Vector  (docs_dir, chunk_size, embed_model, query_prefix, passage_prefix)
+├── Docs2Vector  (docs_dir, chunk_size, embed_model, embed_dim, query_prefix, passage_prefix)
 └── Secrets      (anthropic_api_key)
 ```
 
@@ -200,3 +200,73 @@ audience = <logto.audience>
 6. auth_provider must be "keycloak" or "logto".
 7. Warn (not fail) on default secrets (m2m_client_secret, postgres password).
 8. extra_flags must not contain shell metacharacters.
+9. Resolved embed_dim must be > 0; unknown models without explicit embed_dim are rejected.
+
+---
+
+## 10. Embedding Dimension Resolution
+
+### Problem
+
+The pgvector column dimension must match the embedding model's output dimension.
+A mismatch causes silent failures (inserts rejected by Postgres). Previously the
+dimension was hardcoded as a Go constant, creating a manual coupling between model
+choice and code.
+
+### Design
+
+The dimension is resolved at config generation time by the stack tool, not at runtime
+by docs2vector. This keeps docs2vector simple (reads config, trusts it) and ensures
+both docs2vector and rag-mcp-server always agree on the dimension.
+
+### Lookup table
+
+A package-level map in `internal/config` maps known model names (both bare names and
+GGUF filenames) to their output dimensions:
+
+```go
+var KnownEmbedDims = map[string]int{
+    "nomic-embed-text-v1.5":           768,
+    "nomic-embed-text-v1.5.Q8_0.gguf": 768,
+    "mxbai-embed-large-v1":            1024,
+    "mxbai-embed-large-v1-f16.gguf":   1024,
+}
+```
+
+### Resolution order (in config.Load or config.Validate)
+
+1. `docs2vector.embed_dim` explicitly set in stack.toml → use it.
+2. `docs2vector.embed_model` found in `KnownEmbedDims` → use looked-up value.
+3. Neither → `Validate` returns error: `"unknown embedding model %q; set docs2vector.embed_dim explicitly"`.
+
+The resolved dimension is stored in `Config.Docs2Vector.EmbedDim` after Load/Validate.
+
+### Config pipeline
+
+```
+stack.toml [docs2vector]
+  embed_model = "nomic-embed-text-v1.5"
+  # embed_dim omitted → resolved to 768 from lookup
+        │
+        ▼
+  Config.Docs2Vector.EmbedDim = 768
+        │
+        ├─→ docs2vector/config.toml    [embed] embed_dim = 768
+        │       │
+        │       ▼
+        │   docs2vector reads embed_dim from config
+        │   → DDL uses fmt.Sprintf("vector(%d)", embedDim)
+        │   → build_metadata records "embedding_dimension" = "768"
+        │
+        └─→ rag-mcp-server/config.toml  [embed] embed_dim = 768
+                (informational; rag-mcp-server is read-only against the schema)
+```
+
+### docs2vector changes
+
+- `store.EmbeddingDimension` constant is removed.
+- `NewPostgresStore` accepts an `embedDim int` parameter.
+- The DDL string is built with `fmt.Sprintf` using the dimension.
+- `Config.EmbedDim` is wired through from the TOML `[embed] embed_dim` field.
+- `cmd/ingest/main.go` passes `cfg.EmbedDim` to `NewPostgresStore` and uses it
+  for the `embedding_dimension` metadata entry.

@@ -1,0 +1,77 @@
+10 Questions from the Document 
+
+How do I reprovision my device from a Partner Network to a bsn.content network? 
+
+How do I setup my new out of the box device for Local File networking? 
+
+How do I put a new Setup file on the device? 
+
+How do I include Wi-Fi on a player that already has an ethernet connection? 
+
+How do I install a Wireless module on my player? 
+
+How do I change Wi-Fi SSID and password on a unit that has already been provisioned? 
+
+What is BrightSign's End-of-life Policy for BSN (BrightSign Network) or BSNEE? 
+
+What is Player Activation? 
+
+My player shows under the network tab but is inactive. 
+
+How do I create a bsn.cloud account? 
+
+How do I reprovision my device from the Local Diagnostic Web Server?  
+
+When publishing with LFN, my device shows unable to connect. What should I do?  
+
+How do I move a bsn.Content subscription from one network to another?  
+
+How can I communicate with my TV from a BrightSign player?  
+
+How can I setup a proxy on my player? 
+
+Shape 
+
+15-20 Derivative Questions 
+
+What is a bsn.cloud network and how do I create one? 
+
+What is a Setup file and what does it do? 
+
+What is a Provisioning Record? 
+
+What is the difference between bsn.Content and bsn.Control? 
+
+What is the rDWS (Remote Diagnostic Web Server) and how do I access it? 
+
+What is a bsn.Content subscription and how do I purchase one? 
+
+What does it mean to "reprovision" a player? 
+
+What is the WD-105 and what players is it compatible with? 
+
+What is the WD-104 and what players is it compatible with? 
+
+What is an SSID and where do I enter it in BSN.cloud? 
+
+What is BSNEE and is it still supported? 
+
+When does BSN shut down, and what should I do before then? 
+
+What is an Activation Code and where do I find it? 
+
+What is the Default Setup on a bsn.cloud network? 
+
+What is a provisioning error and what causes it? 
+
+What ports and URLs does BrightSign require to be open on my network? 
+
+What is the difference between Standalone, Local File Networking, and Web Folder publishing? 
+
+What is a Media Library in bsn.Content? 
+
+What is a .bpfx file? 
+
+What is a bsn.Content group and how does it affect publishing? 
+
+ 

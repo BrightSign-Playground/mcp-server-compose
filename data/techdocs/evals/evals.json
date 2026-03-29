@@ -1,0 +1,1202 @@
+[
+  {
+    "prompt": "What BrightScript object and method do you call to perform an asynchronous HTTP GET that saves the response to a local file?",
+    "label": "good",
+    "notes": "roUrlTransfer with AsyncGetToFile(destination). The object is created via CreateObject('roUrlTransfer'), SetUrl() sets the URL, and AsyncGetToFile('SD:/path/file.mp4') starts the download.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "What registry section and key do you write to enable SSH on a BrightSign player?",
+    "label": "good",
+    "notes": "Section 'networking', key 'ssh', value '22'. Example: reg = CreateObject('roRegistrySection', 'networking') then reg.Write('ssh', '22').",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What registry section and key do you write to enable the Local Diagnostic Web Server (DWS) on a BrightSign player?",
+    "label": "good",
+    "notes": "Section 'networking', key 'dwse', value 'yes'. Example: reg.Write('dwse', 'yes').",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "What roHtmlWidget configuration key enables Node.js for an HTML widget in BrightScript?",
+    "label": "good",
+    "notes": "The key is 'nodejs_enabled' set to true. Example: config = { nodejs_enabled: true, url: '...', inspector_server: { port: 3000 } }",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What JavaScript module path do you require() to send messages from JavaScript to BrightScript on a BrightSign player?",
+    "label": "good",
+    "notes": "@brightsign/messageport. Example: var MESSAGE_PORT = require('@brightsign/messageport'); var bsMessage = new MESSAGE_PORT();",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What method on the messageport object do you call in JavaScript to send a message to BrightScript?",
+    "label": "good",
+    "notes": "PostBSMessage(). Example: bsMessage.PostBSMessage({ event: 'videoComplete', result: 'success' });",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What event name does the JavaScript messageport emit when it receives a message from BrightScript?",
+    "label": "good",
+    "notes": "'bsmessage'. Example: bsMessage.addEventListener('bsmessage', function(msg) { ... });",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript method on roHtmlWidget sends a message to JavaScript running inside the widget?",
+    "label": "good",
+    "notes": "PostJSMessage(). Example: htmlWidget.PostJSMessage({ command: 'play', videoId: 'video1' })",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript video event code indicates that a video file has finished playing?",
+    "label": "good",
+    "notes": "Event code 8 (MediaEnded). In the event loop: if eventCode = 8 then print 'Video ended'",
+    "file": "02-first-brightscript-application"
+  },
+  {
+    "prompt": "What BrightScript video event code indicates a playback failure?",
+    "label": "good",
+    "notes": "Event code 15 (PlaybackFailure). Example: else if eventCode = 15 then print 'Playback error: '; msg.GetData()",
+    "file": "02-first-brightscript-application"
+  },
+  {
+    "prompt": "What BrightScript object and method sets the message port on a video player so it can deliver events?",
+    "label": "good",
+    "notes": "roVideoPlayer.SetPort(msgPort). Example: videoPlayer = CreateObject('roVideoPlayer'); videoPlayer.SetPort(msgPort)",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript method enables loop mode on a video player?",
+    "label": "good",
+    "notes": "SetLoopMode(true). Example: videoPlayer = CreateObject('roVideoPlayer'); videoPlayer.SetLoopMode(true)",
+    "file": "02-first-brightscript-application"
+  },
+  {
+    "prompt": "What BrightScript object is created to read and write player registry values, and what parameter does its constructor require?",
+    "label": "good",
+    "notes": "roRegistrySection, constructed with the section name as a string. Example: CreateObject('roRegistrySection', 'networking')",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What method do you call on roRegistrySection to persist written values to permanent storage?",
+    "label": "good",
+    "notes": "Flush(). Example: reg.Write('ssh', '22'); reg.Flush()",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript object is used to perform async and sync HTTP transfers, and what method starts a non-blocking GET to a string?",
+    "label": "good",
+    "notes": "roUrlTransfer, method AsyncGetToString(). Example: url = CreateObject('roUrlTransfer'); url.SetPort(msgPort); url.AsyncGetToString()",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript debugger command prints the current call stack (backtrace)?",
+    "label": "good",
+    "notes": "'bt'. From the BrightScript Debugger prompt: BrightScript Debugger> bt",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript debugger command displays local variables and their values?",
+    "label": "good",
+    "notes": "'var'. From the BrightScript Debugger prompt: BrightScript Debugger> var",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript debugger command runs the garbage collector and shows statistics?",
+    "label": "good",
+    "notes": "'gc'. Listed among debugger commands: gc - Run garbage collector and show stats",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What BrightScript object and method do you use to get the current date/time as an ISO 8601 string?",
+    "label": "good",
+    "notes": "roDateTime with ToISOString(). Example: timestamp = CreateObject('roDateTime').ToISOString()",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What BrightScript object and method measure elapsed time in milliseconds for performance profiling?",
+    "label": "good",
+    "notes": "roTimeSpan with TotalMilliseconds(). Example: startTime = CreateObject('roTimespan'); startTime.Mark(); ... elapsed = startTime.TotalMilliseconds()",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript function runs the garbage collector and returns an object with freed/orphaned counts?",
+    "label": "good",
+    "notes": "RunGarbageCollector(). Returns object with .freed and .orphaned properties. Example: gc = RunGarbageCollector(); print 'GC freed ' + str(gc.freed) + ' objects'",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What roHtmlWidget configuration key and value enables the web inspector for remote Chrome DevTools debugging?",
+    "label": "good",
+    "notes": "Key inspector_server with value { port: 2999 }. Example: config = { url: '...', inspector_server: { port: 2999 } }",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What Chrome browser URL do you navigate to in order to connect Chrome DevTools to a BrightSign player's web inspector?",
+    "label": "good",
+    "notes": "chrome://inspect or chrome://inspect/#devices. Then click Configure and add <player-ip>:2999.",
+    "file": "03-debugging-javascript"
+  },
+  {
+    "prompt": "What registry section and key do you write to enable the BrightScript debugger on a player?",
+    "label": "good",
+    "notes": "Section 'brightscript', key 'debug', value '1'. Example: reg = CreateObject('roRegistrySection', 'brightscript'); reg.Write('debug', '1')",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What HTML video attribute routes BrightSign video directly to the hardware compositor plane for better performance?",
+    "label": "good",
+    "notes": "hwz attribute. Example: <video src='video.mp4' hwz='z-index:-1' autoplay></video>",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript method on roHtmlWidget enables hardware video plane (HWZ) globally for an HTML widget?",
+    "label": "good",
+    "notes": "SetHWZDefault('on'). Example: htmlWidget = CreateObject('roHtmlWidget', rect); htmlWidget.SetHWZDefault('on')",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What HTML video attribute controls the stream timeout in milliseconds for BrightSign streaming video?",
+    "label": "good",
+    "notes": "x-bs-stream-timeout. Example: <video src='udp://239.192.1.1:5004' x-bs-stream-timeout='5000'></video>",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What JavaScript require() path provides access to BrightSign device information such as model and serial number?",
+    "label": "good",
+    "notes": "@brightsign/deviceinfo. Example: var DeviceInfoClass = require('@brightsign/deviceinfo'); var deviceInfo = new DeviceInfoClass();",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What JavaScript require() path provides GPIO control on a BrightSign player?",
+    "label": "good",
+    "notes": "@brightsign/controlport. Example: var ControlPortClass = require('@brightsign/controlport'); var controlPort = new ControlPortClass('BrightSign');",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript object and method configure a serial port with line-based events, and what is the constructor signature?",
+    "label": "good",
+    "notes": "roSerialPort with SetLineEventPort(msgPort). Constructor: CreateObject('roSerialPort', 0, 9600) where 0 is port index and 9600 is baud rate.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method sets the line terminator character received from a serial device?",
+    "label": "good",
+    "notes": "SetReceiveEol(). Example: serial.SetReceiveEol(chr(13)) sets CR as the line terminator.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript object and method configure GPIO pin 2 as a digital output?",
+    "label": "good",
+    "notes": "roControlPort with EnableOutput(). Example: port = CreateObject('roControlPort', 'BrightSign'); port.EnableOutput(2)",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method sets the output state (high/low) of a GPIO pin?",
+    "label": "good",
+    "notes": "SetOutputState(pin, state). Example: port.SetOutputState(2, true) to set pin 2 high.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript event type is received when a GPIO pin configured as input goes low (button pressed)?",
+    "label": "good",
+    "notes": "roControlDown. Example: if msgType = 'roControlDown' then buttonId = msg.GetInt()",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method on roControlPort configures PWM pulse parameters for LED dimming?",
+    "label": "good",
+    "notes": "SetPulseParams(). Example: gpioPort.SetPulseParams({ milliseconds: 500, slices: 2 })",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript extension control script filename is required in every extension package?",
+    "label": "good",
+    "notes": "bsext_init. It is the control script that receives start/stop/restart/run lifecycle commands.",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "What directory path are BrightSign native extensions mounted to on the player?",
+    "label": "good",
+    "notes": "/var/volatile/bsext/${extension_name}/. Example: /var/volatile/bsext/hello-ext/",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "What shell command creates a squashfs archive for a BrightSign extension package?",
+    "label": "good",
+    "notes": "mksquashfs. Example: mksquashfs hello-ext hello-ext.squashfs -noappend",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "What shell command reads system logs on a BrightSign player in real time?",
+    "label": "good",
+    "notes": "logread -f. Also: logread | grep hello-ext to filter by extension name.",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "What SDK environment script must be sourced before cross-compiling for BrightSign's ARM architecture?",
+    "label": "good",
+    "notes": "/opt/brightsign-sdk/environment-setup-cortexa72-brightsign-linux. Example: source /opt/brightsign-sdk/environment-setup-cortexa72-brightsign-linux",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "What file format (extension) are signed BrightSign extensions distributed as for production deployment?",
+    "label": "good",
+    "notes": ".bsfw (BrightSign FirmWare format). Signed extensions can be installed via BSN.cloud, presentation packages, or USB.",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "What HTTP header value does a BrightSign player send in its recovery URL request to indicate it just booted and found a valid autorun?",
+    "label": "good",
+    "notes": "recoverymode: override. The player sends this header when a valid autorun exists and it is performing its boot-time check-in.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What HTTP header value does a BrightSign player send when it has no autorun or its autorun crashed?",
+    "label": "good",
+    "notes": "recoverymode: last_resort. This is triggered when no storage device has an autorun, or the autorun fails with a load or runtime error.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What HTTP response status does a recovery server return to tell a BrightSign player to continue running its existing autorun without changes?",
+    "label": "good",
+    "notes": "HTTP 204 (or HTTP 200 with empty body). Both tell the player to leave the existing autorun running.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What HTTP response header does the recovery server use to control the interval between periodic check-ins from a BrightSign player?",
+    "label": "good",
+    "notes": "Retry-After (value in seconds). The server can use this to increase or decrease check-in frequency dynamically.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What registry key in the 'networking' section stores the recovery/provisioning URL on a BrightSign player?",
+    "label": "good",
+    "notes": "The key is 'ru'. Example: reg = CreateObject('roRegistrySection', 'networking'); reg.Read('ru')",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What DHCP option number is used to deliver the recovery URL to BrightSign players automatically on the network?",
+    "label": "good",
+    "notes": "DHCP Option 43. The recovery URL in the payload is prepended with 'U' + ASCII character representing URL length.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What mDNS hostname does a BrightSign player automatically check for a local provisioning server?",
+    "label": "good",
+    "notes": "brightsign.b-deploy.local. The player checks http://brightsign.b-deploy.local/ automatically.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What npm package provides the BSC CLI tool for communicating with BrightSign players via Local DWS?",
+    "label": "good",
+    "notes": "@brightsign/bsc. Install with: npm install -g @brightsign/bsc",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "What BSC CLI command uploads a file to a BrightSign player?",
+    "label": "good",
+    "notes": "bsc put <local-file> <remote-path>. Example: bsc put ./index.html /storage/sd/",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "What BSC CLI command takes a screenshot from a BrightSign player?",
+    "label": "good",
+    "notes": "bsc screenshot <output-file>. Example: bsc screenshot ./screenshot.png",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "What BrightScript type suffix denotes a String variable?",
+    "label": "good",
+    "notes": "$ suffix. Example: name$ = 'John' declares name$ as a String.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What BrightScript type suffix denotes an Integer variable?",
+    "label": "good",
+    "notes": "% suffix. Example: count% = 100 declares count% as an Integer.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What BrightScript statement includes an external .brs library file into the current script?",
+    "label": "good",
+    "notes": "Library statement. Example: Library 'core/setupCore.brs'",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What BrightScript keyword is used in place of 'this' or 'self' to reference the current object's state inside a method?",
+    "label": "good",
+    "notes": "'m'. Example: m.deviceUniqueID$ = setupParams.deviceID$ accesses the object's own property.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What BrightScript built-in function checks whether a storage device is present by attempting to create an roStorageInfo object?",
+    "label": "good",
+    "notes": "CreateObject('roStorageInfo', deviceName$) is used; if the type equals 'roStorageInfo' the device is mounted.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What naming convention do BrightScript plugin factory functions follow in production code?",
+    "label": "good",
+    "notes": "'new' prefix. Examples: newDiagnostics(), newNetworking(), newLogging(). This is explicitly documented as the naming convention.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "What BrightScript method on an roTimer sets the interval before the timer fires, and what are its parameters?",
+    "label": "good",
+    "notes": "SetElapsed(seconds, milliseconds). Example: timer.SetElapsed(5, 0) fires after 5 seconds.",
+    "file": "02-first-brightscript-application"
+  },
+  {
+    "prompt": "What BrightScript method on roTimer retrieves the timer's unique identity for distinguishing multiple timer events?",
+    "label": "good",
+    "notes": "GetIdentity(). Example: stri(msg.GetSourceIdentity()) = stri(timer.GetIdentity())",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "What BrightScript method on an roUrlEvent returns the HTTP response code?",
+    "label": "good",
+    "notes": "GetResponseCode(). Example: if msg.GetResponseCode() = 200 then ... The event type is 'roUrlEvent'.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "What BrightScript event type is received when a URL transfer completes?",
+    "label": "good",
+    "notes": "roUrlEvent. Example: if type(msg) = 'roUrlEvent' then ... process the response.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What BrightScript event type is delivered from an roSyncPool when a file is downloaded?",
+    "label": "good",
+    "notes": "roSyncPoolEvent. In the plugin architecture: else if (type(msg) = 'roSyncPoolEvent') then m.networking.PoolEvent(msg)",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "What BrightScript event type is received when an roHtmlWidget delivers a message from JavaScript?",
+    "label": "good",
+    "notes": "roHtmlWidgetEvent. Check data.reason = 'message' and then access data.message for the payload.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What field in the roHtmlWidgetEvent data object indicates why the event was fired (e.g. 'message', 'load-finished')?",
+    "label": "good",
+    "notes": "data.reason. Values include 'message', 'load-finished', 'load-error'. Example: if data.reason = 'message' then ...",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What roHtmlWidget configuration key specifies the URL to load when creating the widget?",
+    "label": "good",
+    "notes": "'url'. Example: config = { url: 'file:///sd:/index.html', port: port }",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What roHtmlWidget configuration key enables mouse/touch input?",
+    "label": "good",
+    "notes": "'mouse_enabled' set to true. Example: config = { url: '...', mouse_enabled: true }",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What roHtmlWidget configuration key sets the local storage path for web data persistence?",
+    "label": "good",
+    "notes": "'storage_path'. Example: config = { url: '...', storage_path: 'SD:/html-storage' }",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What roHtmlWidget configuration key sets the storage quota, and what unit is the value in?",
+    "label": "good",
+    "notes": "'storage_quota', value in bytes as a string for >2GB. Example: storage_quota: '1073741824' (1GB)",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What Node.js version is the built-in embedded Node.js runtime in BrightSign OS 8.5.x and 9.0.x?",
+    "label": "good",
+    "notes": "14.17.6. Both embedded and standalone Node.js are version 14.17.6 in OS 8.5.x and 9.0.x.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What roHtmlWidget configuration key must be set to disable cross-domain security restrictions in Node.js mode?",
+    "label": "good",
+    "notes": "security_params with { websecurity: false }. Example: config = { nodejs_enabled: true, url: '...', security_params: { websecurity: false } }",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What JavaScript code sets the working directory for Node.js file system operations on a BrightSign player?",
+    "label": "good",
+    "notes": "var process = require('process'); process.chdir('/storage/sd');",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What JavaScript property array do you push to in order to add additional module search paths for Node.js on BrightSign?",
+    "label": "good",
+    "notes": "module.paths. Example: module.paths.push('/storage/sd/'); module.paths.push('/storage/ssd/');",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What BrightSign shell command measures HTTP download performance from a given URL?",
+    "label": "good",
+    "notes": "httpgetperf <url>. Listed in shell commands for performance testing.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightSign shell command displays the current network interface configuration?",
+    "label": "good",
+    "notes": "ifconfig. Listed under network operations in BrightSign Shell Commands.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What curl command reboots a BrightSign player via the Local DWS REST API?",
+    "label": "good",
+    "notes": "curl -u admin:serialnumber -X PUT http://<player-ip>/api/v1/reboot",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What Local DWS REST API path retrieves player information?",
+    "label": "good",
+    "notes": "/api/v1/info/player. Example: curl -u admin:serialnumber http://192.168.1.100/api/v1/info/player",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What registry section and key do you write to configure a remote syslog server address?",
+    "label": "good",
+    "notes": "Section 'networking', key 'syslog', value is the server IP or hostname. Example: reg.Write('syslog', '192.168.1.100')",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What BrightScript object is used to write messages to the system log?",
+    "label": "good",
+    "notes": "roSystemLog. Example: syslog = CreateObject('roSystemLog'); syslog.SendLine(logMsg)",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What BrightScript object and method are used to write to an append-only log file?",
+    "label": "good",
+    "notes": "roAppendFile with SendLine(). Example: file = CreateObject('roAppendFile', m.logFile); file.SendLine(logEntry)",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What roUrlTransfer method enables retaining the response body even when the HTTP response indicates an error?",
+    "label": "good",
+    "notes": "RetainBodyOnError(true). Example: transfer.RetainBodyOnError(true) keeps body accessible on error responses.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What BrightScript method on roUrlTransfer cancels an in-progress asynchronous request?",
+    "label": "good",
+    "notes": "AsyncCancel(). Example: transfer.AsyncCancel() called when timeout is exceeded.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What BrightScript method enables download resume capability on an roUrlTransfer object?",
+    "label": "good",
+    "notes": "EnableResume(true). Example: url.EnableResume(true) allows resuming on failure.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What roTouchScreen method defines a rectangular interactive region with a given ID?",
+    "label": "good",
+    "notes": "AddRectangleRegion(x, y, width, height, id). Example: touch.AddRectangleRegion(100, 100, 300, 200, 1)",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript event type is received from roTouchScreen when the screen is touched?",
+    "label": "good",
+    "notes": "roTouchEvent. Example: if type(msg) = 'roTouchEvent' then x = msg.GetX(); y = msg.GetY(); region = msg.GetID()",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript object and method are used to create a TCP server that listens on a port?",
+    "label": "good",
+    "notes": "roTCPServer with SetBindAddress(). Example: server = CreateObject('roTCPServer'); server.SetBindAddress('0.0.0.0', 8080)",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript event type is received when a new TCP client connects to an roTCPServer?",
+    "label": "good",
+    "notes": "roTCPConnectEvent. Example: if type(msg) = 'roTCPConnectEvent' then client = server.Accept()",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript object and method create a UDP socket and set its destination for broadcast?",
+    "label": "good",
+    "notes": "roDatagramSocket with SetSendToAddress(). Example: udp = CreateObject('roDatagramSocket'); udp.SetSendToAddress('255.255.255.255', 5000)",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript object creates an asset pool for managing downloaded content?",
+    "label": "good",
+    "notes": "roAssetPool. Example: pool = CreateObject('roAssetPool', 'SD:/pool'); collection = CreateObject('roAssetCollection', pool)",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What registry section and key enables Prometheus node exporter metrics on BrightSign?",
+    "label": "good",
+    "notes": "Section 'networking', key 'prometheus-node-exporter-port', value '9100'. Metrics then available at http://<player-ip>:9100/metrics",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What registry section and key enables remote snapshots on a BrightSign player?",
+    "label": "good",
+    "notes": "Section 'networking', key 'enableremotesnapshot', value 'true'. Also: remotesnapshotinterval, remotesnapshotjpegqualitylevel, remotesnapshotmaximages.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript method on roNetworkConfiguration sets the SSH/shell login password?",
+    "label": "good",
+    "notes": "SetLoginPassword(). Example: n = CreateObject('roNetworkConfiguration', 0); n.SetLoginPassword('password'); n.Apply()",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript method on roNetworkConfiguration configures the DWS settings including port and authentication?",
+    "label": "good",
+    "notes": "SetupDWS(). Example: CreateObject('roNetworkConfiguration', 0).SetupDWS({port: '80', open: 'none'})",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "What C signal must a BrightSign native extension handle to support clean shutdown?",
+    "label": "good",
+    "notes": "SIGTERM. Extensions must also typically handle SIGINT for manual testing. Example: signal(SIGTERM, handle_signal); signal(SIGINT, handle_signal);",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "What shell daemon management tool is used in bsext_init scripts to start the extension as a background process?",
+    "label": "good",
+    "notes": "start-stop-daemon. Example: start-stop-daemon --start --background --make-pidfile --pidfile $PIDFILE --exec $APP",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "What C function reads the path to the current executable, which is used in extensions to find their own location?",
+    "label": "good",
+    "notes": "readlink('/proc/self/exe', exe_path, sizeof(exe_path)). Used instead of hardcoding paths since extensions can be mounted at different locations.",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "What GDB command on the BrightSign player starts the GDB server for remote debugging of an extension?",
+    "label": "good",
+    "notes": "gdbserver :2345 /var/volatile/bsext/my-ext/my-app. Then on host: $GDB build-arm/my-app followed by target remote <player-ip>:2345",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "What BrightScript try/catch syntax is used for exception handling, and what method gets the error message from the caught exception?",
+    "label": "good",
+    "notes": "try ... catch e ... end try. Method e.getMessage() returns the error string. Example: catch e; print e.getMessage()",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What roVideoMode method sets the video output resolution and refresh rate?",
+    "label": "good",
+    "notes": "SetMode(). Example: videoMode = CreateObject('roVideoMode'); videoMode.SetMode('1920x1080x60p')",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What roVideoPlayer method seeks to a position specified in milliseconds?",
+    "label": "good",
+    "notes": "Seek(). Example: videoPlayer.Seek(30000) jumps to 30 seconds.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What roVideoPlayer method retrieves the current playback position in milliseconds?",
+    "label": "good",
+    "notes": "GetPlaybackPosition(). Example: position = videoPlayer.GetPlaybackPosition(); print 'Position: '; position; 'ms'",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript method on roUrlTransfer configures a proxy bypass list for specific hostnames?",
+    "label": "bad",
+    "notes": "Proxy bypass list configuration via a BrightScript method on roUrlTransfer is not documented. The docs show SetProxy() for setting a proxy, but not a bypass/exception list method.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer queries whether a specific video codec is hardware-accelerated on the current player?",
+    "label": "bad",
+    "notes": "No such method is documented in any of the files. Codec hardware acceleration querying is not a documented API.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript method configures the HDMI CEC device name broadcast by a BrightSign player?",
+    "label": "bad",
+    "notes": "HDMI CEC configuration methods are not documented anywhere in the provided docs.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What registry key controls the maximum number of concurrent roUrlTransfer downloads allowed on a BrightSign player?",
+    "label": "bad",
+    "notes": "No registry key limiting concurrent downloads is documented in any of the files.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer sets a custom ICC color profile for video output?",
+    "label": "bad",
+    "notes": "ICC color profile configuration is not documented in any of the provided files.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript object and method perform a DNS lookup and return the resolved IP address?",
+    "label": "bad",
+    "notes": "No BrightScript DNS lookup API object is documented. Only shell command 'nslookup' is mentioned.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What JavaScript method on the BrightSign messageport object unregisters an event listener?",
+    "label": "bad",
+    "notes": "Only addEventListener is documented. removeEventListener on the messageport is not covered in the docs.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript function returns the player's current CPU temperature without using roDeviceInfo?",
+    "label": "bad",
+    "notes": "Only roDeviceInfo.GetTemperature() is documented. An alternative function is not described.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method pauses the plugin event loop without blocking the message port from receiving events?",
+    "label": "bad",
+    "notes": "No such non-blocking pause mechanism for the plugin event loop is described in the docs.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "What BrightScript object and method enumerate all connected HDMI devices via EDID?",
+    "label": "bad",
+    "notes": "EDID enumeration via BrightScript is not documented in any of the provided files.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What JavaScript API on BrightSign returns the player's current network bandwidth utilization?",
+    "label": "bad",
+    "notes": "Network bandwidth utilization as a real-time metric via JavaScript is not documented.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What BrightScript function base64-encodes a string for use in HTTP authorization headers?",
+    "label": "bad",
+    "notes": "No BrightScript base64 encoding function is documented. Only Python examples use base64.b64encode in the docs.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "What roUrlTransfer method sets a rate limit in kilobytes per second for bandwidth throttling?",
+    "label": "bad",
+    "notes": "No bandwidth throttling or rate limiting method on roUrlTransfer is documented anywhere.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer enables hardware video transcoding to a different format?",
+    "label": "bad",
+    "notes": "Video transcoding via BrightScript is not documented. BrightSign does not expose a transcoding API.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript registry key configures the maximum number of registry sections allowed?",
+    "label": "bad",
+    "notes": "No registry configuration limiting the number of sections is documented.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript object creates a named pipe for inter-process communication between BrightScript and a native extension?",
+    "label": "bad",
+    "notes": "Named pipe IPC between BrightScript and native extensions is not documented. The docs describe UDP sockets and roUrlTransfer for communication.",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "What BrightSign JavaScript API method returns the list of all installed native extensions?",
+    "label": "bad",
+    "notes": "No JavaScript API for listing installed extensions is documented.",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "What BSN.cloud REST endpoint returns real-time CPU usage statistics for a specific player?",
+    "label": "bad",
+    "notes": "A specific CPU stats endpoint in the BSN.cloud API is not documented. Only general player status and remote DWS are mentioned.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer configures the player to use a specific audio output channel mapping (e.g., surround to stereo downmix)?",
+    "label": "bad",
+    "notes": "Audio channel mapping or downmix configuration via a BrightScript roVideoPlayer method is not documented in any of the provided files. The docs show SetAudioOutput() for routing to HDMI/analog but not channel mapping.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript exception class name is thrown when an roUrlTransfer request exceeds its timeout?",
+    "label": "bad",
+    "notes": "No specific exception class for URL transfer timeouts is documented. The docs show returning { success: false, error: 'timeout' } manually.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What BrightScript method configures TLS 1.3 as the minimum acceptable protocol version for HTTPS connections?",
+    "label": "bad",
+    "notes": "TLS version configuration for BrightScript HTTP connections is not documented in any of the provided files.",
+    "file": "19-secure-deployment-practices"
+  },
+  {
+    "prompt": "What BrightScript object and method programmatically trigger a firmware update from a local URL?",
+    "label": "bad",
+    "notes": "Programmatic firmware update via BrightScript API is not documented in any of the provided files.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightSign roNodeJs constructor parameter sets the memory heap size limit for the Node.js instance?",
+    "label": "bad",
+    "notes": "Memory heap size configuration for roNodeJs is not documented. Only file path is shown as constructor parameter.",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "What BrightScript function converts a Unix timestamp integer to an roDateTime object?",
+    "label": "bad",
+    "notes": "No such conversion function from Unix timestamp to roDateTime is documented anywhere in the provided files.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What BrightScript method on roControlPort reads the analog voltage level of an ADC-capable GPIO pin?",
+    "label": "bad",
+    "notes": "Analog voltage reading from GPIO pins is not documented. The docs only cover digital GPIO. ADC is mentioned only via external serial device.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer configures the number of frames to buffer before playback starts?",
+    "label": "bad",
+    "notes": "No API to configure the pre-buffer frame count on roVideoPlayer is documented.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript method extracts a zip archive to a specified directory?",
+    "label": "bad",
+    "notes": "No BrightScript zip extraction API is documented. The docs only mention autorun.zip as a deployment mechanism handled by the OS.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What JavaScript require() path provides Bluetooth device discovery and pairing on BrightSign?",
+    "label": "bad",
+    "notes": "Bluetooth APIs are not documented in any of the provided files.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript registry key sets the IP multicast TTL (time-to-live) for UDP multicast group joins?",
+    "label": "bad",
+    "notes": "UDP multicast TTL registry configuration is not documented.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method on roDatagramSocket joins an IP multicast group address?",
+    "label": "bad",
+    "notes": "Multicast group join methods on roDatagramSocket are not documented in the hardware integrations chapter.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript object reads I2C sensor values directly from a connected peripheral?",
+    "label": "bad",
+    "notes": "No I2C object or API is documented for BrightScript in any of the provided files.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer retrieves the total number of frames in the video file?",
+    "label": "bad",
+    "notes": "Frame count retrieval is not documented. Only duration in milliseconds via GetDuration() is mentioned.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript method configures SNMPv3 authentication credentials for SNMP monitoring?",
+    "label": "bad",
+    "notes": "SNMP configuration via BrightScript is not documented. Only Prometheus node exporter is mentioned for metrics.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What extension packaging flag in mksquashfs sets the block size to the value required by BrightSign signature verification?",
+    "label": "bad",
+    "notes": "No required block size for BrightSign signature verification is documented. The docs show -b 256K as an example but do not state it is required.",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "What JavaScript API method on BrightSign configures HDCP output protection for video content?",
+    "label": "bad",
+    "notes": "HDCP configuration via JavaScript is not documented in any of the provided files.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript method on roUrlTransfer configures a SOCKS5 proxy server for outbound connections?",
+    "label": "bad",
+    "notes": "SOCKS5 proxy configuration on roUrlTransfer is not documented. Only proxy bypass parsing is mentioned.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "What BrightScript function applies a CSS transform matrix to an roHtmlWidget for 3D perspective effects?",
+    "label": "bad",
+    "notes": "CSS transform matrix manipulation from BrightScript on roHtmlWidget is not documented.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What registry key controls the automatic restart interval for a crashed BrightScript application?",
+    "label": "bad",
+    "notes": "No registry key for automatic restart interval on crashes is documented. The recovery URL mechanism handles this via the server.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What BrightScript object creates a shared memory segment accessible by both BrightScript and Node.js simultaneously?",
+    "label": "bad",
+    "notes": "Shared memory between BrightScript and Node.js is not documented. The documented communication method is messageport/PostJSMessage.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What BrightScript method on roAssetPool sets the maximum cache size in megabytes?",
+    "label": "bad",
+    "notes": "roAssetPool cache size configuration method is not documented in any of the provided files.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript object and method subscribe to BSN.cloud push notifications for real-time presentation updates?",
+    "label": "bad",
+    "notes": "BrightScript push notification subscription for BSN.cloud updates is not documented. The recovery URL/heartbeat mechanism is what's documented.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer enables hardware-accelerated motion interpolation for low-framerate content?",
+    "label": "bad",
+    "notes": "Motion interpolation API on roVideoPlayer is not documented in any of the provided files.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What Node.js module do you require() on BrightSign to access the player's hardware security module (HSM) for key storage?",
+    "label": "bad",
+    "notes": "A Node.js HSM or hardware key storage module is not documented in the BrightSign documentation.",
+    "file": "19-secure-deployment-practices"
+  },
+  {
+    "prompt": "What BrightScript method programmatically ejects a USB storage device safely?",
+    "label": "bad",
+    "notes": "A BrightScript method for ejecting USB storage is not documented. The JavaScript storage.eject() is documented but not a BrightScript equivalent.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method compresses a string using gzip and returns the compressed byte array?",
+    "label": "bad",
+    "notes": "No gzip compression function is documented in BrightScript in any of the provided files.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What BSN.cloud API endpoint retrieves the full playback history log for a specific player?",
+    "label": "bad",
+    "notes": "A specific playback history log endpoint in BSN.cloud is not documented in the provided files.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer configures the output color space to BT.2020 for HDR content?",
+    "label": "bad",
+    "notes": "HDR/BT.2020 color space configuration via BrightScript roVideoPlayer API is not documented.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript event type is delivered when a BrightSign player successfully connects to an NTP time server?",
+    "label": "bad",
+    "notes": "No NTP synchronization event type is documented in any of the provided files.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript object manages the player's internal certificate store for custom CA certificates?",
+    "label": "bad",
+    "notes": "A BrightScript object for managing CA certificates is not documented. Only registry key approach for DWS TLS is mentioned.",
+    "file": "19-secure-deployment-practices"
+  },
+  {
+    "prompt": "What BrightSign shell command exports the complete registry to a backup JSON file?",
+    "label": "bad",
+    "notes": "A registry export shell command is not documented. Only individual read/write registry commands are shown.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer enables synchronized playback with genlock to an external reference signal?",
+    "label": "bad",
+    "notes": "Genlock or external sync reference configuration via BrightScript is not documented in any of the provided files.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript function returns the number of CPU cores available on the player for workload distribution?",
+    "label": "bad",
+    "notes": "No BrightScript function for querying CPU core count is documented in any of the provided files.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What JavaScript event name does a BrightSign GPIO control port emit when a button is held for longer than 2 seconds?",
+    "label": "bad",
+    "notes": "Long-press detection (hold events) for GPIO via JavaScript events is not documented.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method on roTouchScreen sets the minimum swipe velocity to distinguish swipes from taps?",
+    "label": "bad",
+    "notes": "Swipe velocity threshold configuration on roTouchScreen is not documented.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript method on roRegistrySection encrypts the stored value using the player's hardware security module?",
+    "label": "bad",
+    "notes": "Registry value encryption via HSM is not documented in any of the provided files.",
+    "file": "19-secure-deployment-practices"
+  },
+  {
+    "prompt": "What BrightScript event type is raised when the SD card storage falls below a configurable free space threshold?",
+    "label": "bad",
+    "notes": "Storage low-space events are not documented. Only manual checks via roStorageInfo are implied.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer queries the current adaptive bitrate stream manifest URL?",
+    "label": "bad",
+    "notes": "Querying the ABR manifest URL from roVideoPlayer is not documented in any of the provided files.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What TypeScript decorator from the @brightsign/bscore package marks a class method as a BrightScript-callable endpoint?",
+    "label": "bad",
+    "notes": "TypeScript decorators for BrightScript interop are not documented. Only basic npm install of @brightsign/bscore is mentioned.",
+    "file": "16-building-custom-extensions"
+  },
+  {
+    "prompt": "What BrightScript object and method enable VLAN tagging on the player's Ethernet interface?",
+    "label": "bad",
+    "notes": "VLAN configuration via BrightScript roNetworkConfiguration is not documented.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript method on roHtmlWidget preloads a secondary page URL into memory without displaying it?",
+    "label": "bad",
+    "notes": "Preloading a secondary page without displaying it via roHtmlWidget is not documented.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What is the name of the BrightScript function that returns the player's MAC address as a string?",
+    "label": "bad",
+    "notes": "No BrightScript function returning the MAC address is documented in any of the provided files.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer enables dolby vision or HDR10 tone-mapping for standard dynamic range displays?",
+    "label": "bad",
+    "notes": "HDR10/Dolby Vision tone-mapping configuration is not documented in any of the provided files.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What bsext_init lifecycle command triggers a rolling restart without dropping active connections?",
+    "label": "bad",
+    "notes": "Only start/stop/restart/run commands are documented for bsext_init. A graceful rolling restart is not documented.",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "What BrightScript method configures the player to publish ONVIF-compatible device discovery announcements?",
+    "label": "bad",
+    "notes": "ONVIF device discovery is not documented in any of the provided files.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What JavaScript API on BrightSign configures the Wi-Fi 802.1X EAP authentication credentials?",
+    "label": "bad",
+    "notes": "802.1X EAP configuration via JavaScript is not documented. Only basic WPA/WPA2 passphrase is mentioned.",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer captures a JPEG thumbnail from the currently playing video at a specified timestamp?",
+    "label": "bad",
+    "notes": "Video thumbnail extraction to JPEG is not documented in any of the provided files.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript event type is raised when the player successfully resolves a mDNS service record?",
+    "label": "bad",
+    "notes": "mDNS service resolution events via BrightScript are not documented. mDNS is only mentioned as a provisioning auto-discovery mechanism.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What BrightScript method sets the RTSP buffer jitter tolerance in milliseconds for live stream playback?",
+    "label": "bad",
+    "notes": "RTSP jitter buffer configuration via BrightScript is not documented. Only the x-bs-stream-latency HTML attribute is mentioned.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript function converts a color value in ARGB format to an equivalent HSL representation?",
+    "label": "bad",
+    "notes": "Color space conversion functions are not documented in BrightScript in any of the provided files.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What BrightScript method enables the player's built-in SIP soft phone client for VoIP integration?",
+    "label": "bad",
+    "notes": "SIP/VoIP functionality is not documented in any of the provided files.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What roHtmlWidget property returns the current scroll position of the HTML page as an x,y coordinate?",
+    "label": "bad",
+    "notes": "Querying the HTML page scroll position from BrightScript is not documented.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript method on roControlPort sets an individual pin as open-drain output?",
+    "label": "bad",
+    "notes": "Open-drain output mode configuration per pin is not documented. The docs show SetWholeStateDown() for driving all pins and SetDirectionDown() for output mode, but not open-drain configuration.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript object and method enumerate available audio output devices and their current status?",
+    "label": "bad",
+    "notes": "Enumerating audio output device status via BrightScript API is not documented in any of the provided files.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BSN.cloud registry key controls the maximum number of concurrent player connections to the WebSocket gateway?",
+    "label": "bad",
+    "notes": "WebSocket gateway connection limits are not configurable via a registry key and are not documented.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "What BrightScript method on roFileInfo calculates an MD5 checksum of the file's contents?",
+    "label": "bad",
+    "notes": "MD5 or any cryptographic hash calculation via roFileInfo is not documented. The secure deployment guide mentions checksums conceptually but no BrightScript API for computing them.",
+    "file": "19-secure-deployment-practices"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer configures the aspect ratio stretch mode for non-native content?",
+    "label": "bad",
+    "notes": "Aspect ratio stretch mode configuration via roVideoPlayer is not documented. The docs cover SetMode() on roVideoMode for resolution but not a per-player stretch/letterbox method.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What JavaScript method on the BrightSign serialport module sets the RS-485 direction control pin automatically?",
+    "label": "bad",
+    "notes": "Automatic RS-485 direction control pin management via a JavaScript serialport method is not documented.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript object subscribes to player health alerts that fire when CPU temperature exceeds a threshold?",
+    "label": "bad",
+    "notes": "Threshold-based temperature alert subscriptions via a BrightScript object are not documented. Only polling via GetTemperature() or JavaScript setInterval is shown.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What gopurple CLI tool command pushes a new presentation file to a BrightSign player via BSN.cloud?",
+    "label": "bad",
+    "notes": "A specific gopurple command for pushing presentations is not documented. Only rdws-info, rdws-snapshot, rdws-reboot, and rdws-files-list are named.",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "What BrightScript method on roHtmlWidget sets the user agent string sent with HTTP requests from the browser?",
+    "label": "bad",
+    "notes": "User agent string configuration on roHtmlWidget is not documented in any of the provided files.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript method configures a client-side TLS certificate and private key for mutual TLS authentication?",
+    "label": "bad",
+    "notes": "Mutual TLS / client certificate configuration via BrightScript is not documented in the provided files.",
+    "file": "19-secure-deployment-practices"
+  },
+  {
+    "prompt": "What BrightScript event type is delivered when the player's network interface changes from Ethernet to WiFi failover?",
+    "label": "bad",
+    "notes": "Network failover change events are not documented as a BrightScript event type.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What roHtmlWidget method returns the currently active URL that the widget is displaying?",
+    "label": "bad",
+    "notes": "Getting the current URL from an active roHtmlWidget is not documented as a method.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript method on roControlPort reads back the currently configured output state of all GPIO pins?",
+    "label": "bad",
+    "notes": "Reading back the output state (not input state) of GPIO pins via a dedicated output-state query method is not documented. SetWholeState() sets, GetWholeState() reads input state.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What BrightScript object and method add an entry to the player's ARP cache for a known MAC/IP mapping?",
+    "label": "bad",
+    "notes": "Manual ARP cache manipulation via BrightScript is not documented in any of the provided files.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer returns the decoded frame rate (FPS) of the currently playing video?",
+    "label": "bad",
+    "notes": "Querying the actual decoded frame rate of the playing video is not documented in any of the provided files.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What BrightScript function opens a UNIX domain socket for inter-process communication with a native extension?",
+    "label": "bad",
+    "notes": "UNIX domain socket creation via BrightScript is not documented. Extension communication examples use UDP or TCP network sockets.",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "What BSN.cloud B-Deploy configuration key specifies the group assignment for automatically provisioned players?",
+    "label": "bad",
+    "notes": "While B-Deploy is mentioned and bulk registration shown, specific group assignment key names in the B-Deploy API body are not documented.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "What BrightScript method configures the DRM license server URL for Widevine-protected content playback?",
+    "label": "bad",
+    "notes": "Widevine DRM license server configuration via BrightScript is not documented in any of the provided files.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What Node.js module on BrightSign provides access to the player's TPM chip for secure key generation?",
+    "label": "bad",
+    "notes": "TPM (Trusted Platform Module) access via Node.js is not documented in any of the provided files.",
+    "file": "19-secure-deployment-practices"
+  },
+  {
+    "prompt": "What BrightScript function returns a list of all .brs files in the root storage directory?",
+    "label": "bad",
+    "notes": "No BrightScript function that specifically returns only .brs files is documented. ListDir() lists all files and MatchFiles() is shown in production patterns but not explicitly documented as a standalone function here.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What BrightScript object and method add a callback invoked when system memory drops below a specified threshold?",
+    "label": "bad",
+    "notes": "Memory threshold callbacks are not documented. Only polling via GetMemoryLevel() is shown.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What BrightScript method on roNetworkConfiguration sets a static IPv6 address and prefix length on the player's Ethernet interface?",
+    "label": "bad",
+    "notes": "No documented method for IPv6 static address configuration exists in the BrightScript networking API. roNetworkConfiguration is documented for IPv4, WiFi SSID, and login password only.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript object and method configure SSH public key authentication using an RSA key file stored on SD card?",
+    "label": "bad",
+    "notes": "SSH key-based authentication configuration is not documented. The SSH registry key only enables/disables SSH access; no API for key management is described.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript method on roVideoPlayer sets the video output to interlaced 1080i mode instead of the default progressive scan?",
+    "label": "bad",
+    "notes": "No method for selecting interlaced output mode is documented on roVideoPlayer. Video output format configuration at the player level is not covered in the howto or reference documentation.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What JavaScript API on BrightSign configures the Content Security Policy (CSP) headers for the embedded Chromium browser?",
+    "label": "bad",
+    "notes": "CSP configuration for the roHtmlWidget Chromium instance is not documented. Security headers for the embedded browser are not exposed through any documented JavaScript or BrightScript API.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What BrightScript function returns the current battery level percentage for a BrightSign player with an optional UPS battery attached?",
+    "label": "bad",
+    "notes": "No battery or UPS monitoring API is documented in BrightScript. The hardware integrations documentation covers GPIO, serial, and touch but not power supply monitoring.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What Node.js module path on BrightSign provides access to MQTT publish and subscribe functionality for IoT integration?",
+    "label": "bad",
+    "notes": "No @brightsign/mqtt or built-in MQTT module is documented. The documented Node.js modules are messageport, deviceinfo, htmlwidget, controlport, registry, and serialport.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What bsext_init lifecycle command waits for the extension daemon to finish initializing before returning control to the caller?",
+    "label": "bad",
+    "notes": "No blocking/synchronous lifecycle command is documented. The documented bsext_init commands are start, stop, restart, and run; none have a wait-for-ready semantic.",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "What BSN.cloud REST endpoint accepts a batch POST request to update presentation content for multiple players simultaneously?",
+    "label": "bad",
+    "notes": "No batch content-update endpoint is documented. The BSN.cloud REST documentation covers individual device registration and per-device operations, not bulk content delivery.",
+    "file": "01-integrating-with-bsn-cloud"
+  }
+]

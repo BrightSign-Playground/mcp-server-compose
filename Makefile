@@ -11,6 +11,17 @@ help: ## Show available targets
 $(BINARY): $(shell find cmd internal -name '*.go') go.mod go.sum
 	go build -o $(BINARY) ./cmd/stack
 
+prereqs: ## Install Python tool prerequisites via uv
+	@if ! command -v uv >/dev/null 2>&1; then \
+		echo "Error: uv is not installed."; \
+		echo ""; \
+		echo "Install it with:"; \
+		echo "  curl -LsSf https://astral.sh/uv/install.sh | sh"; \
+		exit 1; \
+	fi
+	uv tool install "huggingface_hub[cli]"
+	uv tool install podman-compose
+
 submodules: ## Initialize and update all git submodules
 	git submodule update --init --recursive
 
@@ -21,6 +32,29 @@ test: ## Run unit tests for the stack tool
 
 up: $(BINARY) ## Start all enabled services
 	$(BINARY) --config $(CONFIG) up
+	@sleep 5; \
+	KC=$$(podman ps --filter name=stack-keycloak_keycloak --format '{{.Status}}' 2>/dev/null); \
+	if echo "$$KC" | grep -q '(starting)'; then \
+		echo ""; \
+		echo "NOTE: Keycloak is still starting. First boot can take 2-5 minutes."; \
+		echo "      Monitor with: podman logs -f stack-keycloak_keycloak_1"; \
+		echo ""; \
+	fi; \
+	if podman logs stack-keycloak_keycloak_1 2>&1 | grep -q 'Killed.*java' 2>/dev/null; then \
+		echo ""; \
+		echo "WARNING: Keycloak's JVM is being OOM-killed by the container memory limit."; \
+		echo "         This is common on first start when Keycloak builds its Quarkus cache."; \
+		echo ""; \
+		echo "  Fix: increase the memory limit in keycloak-testing/compose.yml:"; \
+		echo ""; \
+		echo "    deploy:"; \
+		echo "      resources:"; \
+		echo "        limits:"; \
+		echo "          memory: 2g    # increase from default"; \
+		echo ""; \
+		echo "  Then run: make down && make up"; \
+		echo ""; \
+	fi
 
 down: $(BINARY) ## Stop all services
 	$(BINARY) --config $(CONFIG) down
@@ -31,10 +65,115 @@ restart: $(BINARY) ## Restart all services
 status: $(BINARY) ## Show service status
 	$(BINARY) --config $(CONFIG) status
 
+DOCS_DIR := $(shell awk '/^\[docs2vector\]/{f=1} f && /^docs_dir/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
+PG_HOST  := $(shell awk '/^\[postgres\]/{f=1} f && /^host/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
+PG_PORT  := $(shell awk '/^\[postgres\]/{f=1} f && /^port/{print $$3; exit}' $(CONFIG))
+LLAMA_HOST := $(shell awk '/^\[llama\]/{f=1} f && /^host[^_]/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
+LLAMA_PORT := $(shell awk '/^\[llama\]/{f=1} f && /^host_port/{print $$3; exit}' $(CONFIG))
+
+# Reusable pre-flight check for ingest targets.
+# Verifies docs_dir exists, PostgreSQL is reachable, and llama-server is up.
+define ingest_preflight
+	@if [ -n "$(DOCS_DIR)" ] && [ ! -d "$(DOCS_DIR)" ] && ! echo "$(ARGS)" | grep -q '\-\-docs-dir'; then \
+		echo ""; \
+		echo "ERROR: docs_dir '$(DOCS_DIR)' (from $(CONFIG)) does not exist."; \
+		echo ""; \
+		echo "  Either create it and populate it with documents:"; \
+		echo "    sudo mkdir -p $(DOCS_DIR)"; \
+		echo "    cp /path/to/your/docs/* $(DOCS_DIR)/"; \
+		echo ""; \
+		echo "  Or override it on the command line:"; \
+		echo "    make $(1) ARGS=\"--docs-dir /path/to/your/docs\""; \
+		echo ""; \
+		echo "  Or change docs_dir in $(CONFIG) under [docs2vector]."; \
+		echo ""; \
+		exit 1; \
+	fi
+	@if [ "$(PG_HOST)" = "host.containers.internal" ]; then \
+		NET_IP=$$(hostname -I 2>/dev/null | awk '{print $$1}'); \
+		if pg_isready -h "$$NET_IP" -p $(PG_PORT) >/dev/null 2>&1; then :; \
+		elif pg_isready -h localhost -p $(PG_PORT) >/dev/null 2>&1; then \
+			echo ""; \
+			echo "ERROR: PostgreSQL is running but only listening on localhost."; \
+			echo "       Containers connect via host.containers.internal ($$NET_IP),"; \
+			echo "       so PostgreSQL must accept non-loopback connections."; \
+			echo ""; \
+			echo "  Fix: edit postgresql.conf and set:"; \
+			echo "    listen_addresses = '*'          # or '0.0.0.0' for IPv4 only"; \
+			echo ""; \
+			echo "  Then add a line to pg_hba.conf:"; \
+			echo "    host  all  all  0.0.0.0/0  md5"; \
+			echo ""; \
+			echo "  Then restart PostgreSQL:"; \
+			echo "    sudo systemctl restart postgresql"; \
+			echo ""; \
+			exit 1; \
+		else \
+			echo ""; \
+			echo "ERROR: PostgreSQL is not reachable on port $(PG_PORT)."; \
+			echo ""; \
+			echo "  1. Check that PostgreSQL is running:"; \
+			echo "       sudo systemctl status postgresql"; \
+			echo ""; \
+			echo "  2. If it is not installed yet:"; \
+			echo "       make install-postgres"; \
+			echo ""; \
+			exit 1; \
+		fi; \
+	else \
+		if ! pg_isready -h "$(PG_HOST)" -p $(PG_PORT) >/dev/null 2>&1; then \
+			echo ""; \
+			echo "ERROR: PostgreSQL is not reachable at $(PG_HOST):$(PG_PORT)."; \
+			echo ""; \
+			echo "  Check that PostgreSQL is running and accepting connections"; \
+			echo "  on $(PG_HOST):$(PG_PORT), or update [postgres] in $(CONFIG)."; \
+			echo ""; \
+			exit 1; \
+		fi; \
+	fi
+	@if [ "$(LLAMA_HOST)" = "host.containers.internal" ]; then \
+		NET_IP=$$(hostname -I 2>/dev/null | awk '{print $$1}'); \
+		if curl -sf "http://$$NET_IP:$(LLAMA_PORT)/health" >/dev/null 2>&1; then :; \
+		elif curl -sf "http://localhost:$(LLAMA_PORT)/health" >/dev/null 2>&1; then \
+			echo ""; \
+			echo "ERROR: llama-server is running but only listening on localhost."; \
+			echo "       Containers connect via host.containers.internal ($$NET_IP),"; \
+			echo "       so llama-server must bind to 0.0.0.0."; \
+			echo ""; \
+			echo "  Start it with:"; \
+			echo "    make llama-server     # already binds to 0.0.0.0"; \
+			echo ""; \
+			exit 1; \
+		else \
+			echo ""; \
+			echo "ERROR: llama-server is not reachable at localhost:$(LLAMA_PORT)."; \
+			echo ""; \
+			echo "  Start the embedding server first:"; \
+			echo "    make llama-server"; \
+			echo ""; \
+			exit 1; \
+		fi; \
+	else \
+		if ! curl -sf "http://$(LLAMA_HOST):$(LLAMA_PORT)/health" >/dev/null 2>&1; then \
+			echo ""; \
+			echo "ERROR: llama-server is not reachable at $(LLAMA_HOST):$(LLAMA_PORT)."; \
+			echo ""; \
+			echo "  Start the embedding server first:"; \
+			echo "    make llama-server"; \
+			echo ""; \
+			echo "  If it is running on a different host/port, update [llama] in $(CONFIG)."; \
+			echo ""; \
+			exit 1; \
+		fi; \
+	fi
+endef
+
 ingest: $(BINARY) ## Drop and reingest docs (ARGS="--docs-dir /path/to/docs")
+	$(call ingest_preflight,ingest)
 	$(BINARY) --config $(CONFIG) ingest $(ARGS)
 
 ingest-add: $(BINARY) ## Add/upsert docs without dropping existing data (ARGS="--docs-dir /path/to/docs")
+	$(call ingest_preflight,ingest-add)
 	$(BINARY) --config $(CONFIG) ingest --no-drop $(ARGS)
 
 logs: $(BINARY) ## Tail logs (COMPONENT= to filter)
@@ -79,6 +218,10 @@ prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgre
 	psql ragdb   -c "CREATE EXTENSION IF NOT EXISTS vector;"
 
 llama-server: ## Run llama-server with nomic-embed-text-v1.5 on port 16000
+	@if [ ! -f ./models/nomic-embed-text-v1.5.Q8_0.gguf ]; then \
+		echo "Model not found, downloading..."; \
+		$(MAKE) download-nomic-model; \
+	fi
 	llama-server \
 		--model ./models/nomic-embed-text-v1.5.Q8_0.gguf \
 		--embeddings --pooling mean \
@@ -95,6 +238,10 @@ llama-server-mxbai: ## Run llama-server with mxbai-embed-large-v1 on port 16000 
 		--n-gpu-layers 99
 
 reranker-server: ## Run llama-server with bge-reranker-v2-m3 on port 16001
+	@if [ ! -f ./models/bge-reranker-v2-m3-Q8_0.gguf ]; then \
+		echo "Model not found, downloading..."; \
+		$(MAKE) download-reranker-model; \
+	fi
 	llama-server \
 		--model ./models/bge-reranker-v2-m3-Q8_0.gguf \
 		--reranking \

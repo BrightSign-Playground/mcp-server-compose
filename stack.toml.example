@@ -102,10 +102,14 @@ system_prompt = ""
 docs_dir       = "/path/to/docs"   # REQUIRED: host directory to ingest
 chunk_size     = 512
 embed_model    = "mxbai-embed-large-v1"
+# embed_dim is auto-resolved from embed_model for known models.
+# Set explicitly only for custom/unknown models:
+# embed_dim = 1024
 query_prefix   = ""
 passage_prefix = ""
 
 # ── Secrets ──────────────────────────────────────────────────────────────────────
-[secrets]
-# Required only when rag_mcp_server.hyde.enabled = true
-anthropic_api_key = ""
+# Secrets must NEVER be stored in this file. Set them as environment variables,
+# preferably via a .envrc file (loaded by direnv). See README.md for details.
+#
+# ANTHROPIC_API_KEY — required only when rag_mcp_server.hyde.enabled = true
