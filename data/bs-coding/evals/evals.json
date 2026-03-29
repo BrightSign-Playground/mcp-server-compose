@@ -1,0 +1,3002 @@
+[
+  {
+    "prompt": "What is the entry point file that BrightSign players execute automatically when they boot from an SD card?",
+    "label": "good",
+    "notes": "The file is autorun.brs, placed at the root of the SD card. It is executed automatically at boot and manages content playback.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "How do you use the roAutorunManager object to schedule content playback at specific times on a BrightSign player?",
+    "label": "bad",
+    "notes": "roAutorunManager is fabricated. There is no such object in BrightScript. Content scheduling is done through BSN.cloud presentations or custom timer logic using roTimer.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What player family codes does BrightSign use to categorize its product line?",
+    "label": "good",
+    "notes": "LS (entry-level essential), HD (mainstream 4K), XD (enhanced graphics/HTML5), XT (enterprise/premium), XC (high-output multi-display). Series numbers follow: e.g., XT245 is XT family Series 5.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "How do you configure the roStreamEncoder object to transcode video files on a BrightSign player?",
+    "label": "bad",
+    "notes": "roStreamEncoder is fabricated. BrightSign players do not transcode video. They are playback-only devices that decode supported formats via hardware decoders.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is the warranty period for BrightSign Series 5 players purchased after January 1, 2025?",
+    "label": "good",
+    "notes": "5-year standard warranty for all Series 5 and newer players purchased after January 1, 2025.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What is the BrightScript method SetStreamQuality() on roVideoPlayer used for?",
+    "label": "bad",
+    "notes": "SetStreamQuality() is fabricated. roVideoPlayer does not have this method. Video quality is determined by the source file encoding and the player's hardware capabilities.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is the maximum number of HDMI outputs on the BrightSign XC5 series?",
+    "label": "good",
+    "notes": "The XC4055 model has quad HDMI outputs (4), while the XC2055 has dual HDMI outputs (2). The XC5 series supports 8K60p video decoding and up to 10x graphics performance vs predecessors.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "How do you use the roChannelManager object to switch between multiple content channels on a BrightSign player?",
+    "label": "bad",
+    "notes": "roChannelManager is fabricated. There is no channel management object. Content switching is done by managing roVideoPlayer, roImagePlayer, and roHtmlWidget objects directly.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is BrightSign OS built on?",
+    "label": "good",
+    "notes": "BrightSign OS (BOS) is a customized Linux distribution built on the Yocto and OpenEmbedded projects. It has a minimal-footprint philosophy with a read-only root filesystem, dm-verity secure boot, and signed firmware.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What does the roDisplayManager.SetZoneTransition() method do in BrightScript?",
+    "label": "bad",
+    "notes": "roDisplayManager is fabricated. There is no such object. Zone support is managed through EnableZoneSupport() and individual player objects like roVideoPlayer.SetRectangle().",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What Chromium version upgrade is available for Series 5 players?",
+    "label": "good",
+    "notes": "Series 5 players support Chromium 110/120 upgrades. Default is Chromium 87 on BOS 8.5.x-9.0.x, upgradeable to 120 on BOS 9.1.x.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "How do you use the roContentSync.SetPlaylist() method to define a content rotation schedule?",
+    "label": "bad",
+    "notes": "roContentSync does not exist as described. Content synchronization uses roSyncSpec for reading sync specifications and roAssetPool/roAssetCollection for asset management. There is no SetPlaylist() method.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What are the supported H.265 profiles on BrightSign players?",
+    "label": "good",
+    "notes": "Main Profile (8-bit color) and Main 10 Profile (10-bit HDR). Only Version 1 profiles are supported; Version 2 is not supported.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "How do you use the roNetworkMonitor.OnDisconnect() callback to handle network failures?",
+    "label": "bad",
+    "notes": "roNetworkMonitor is fabricated. Network status is checked via roNetworkConfiguration.GetCurrentConfig() or by monitoring roUrlEvent responses. There is no callback-based network monitoring object.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What container formats are supported for video playback on BrightSign?",
+    "label": "good",
+    "notes": ".mp4, .mov, .mkv, .webm, .ts, .m2ts, .mpg, .mpeg, .avi, .vob are all supported container formats for video content.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What is the roRemoteShell object used for in BrightSign development?",
+    "label": "bad",
+    "notes": "roRemoteShell is fabricated. SSH access is enabled via registry keys (networking section, ssh key) and roNetworkConfiguration.SetLoginPassword(). There is no roRemoteShell object.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What are the gopurple SDK command-line tools used for?",
+    "label": "good",
+    "notes": "The gopurple SDK includes 34 CLI tools for remote device management via Remote DWS (rDWS) API. Tools include rdws-info, rdws-reboot, rdws-files-list, rdws-files-upload, rdws-logs-get, rdws-snapshot, rdws-ssh, and more.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "How do you use the roPackageManager.InstallUpdate() method to apply firmware updates on a BrightSign player?",
+    "label": "bad",
+    "notes": "roPackageManager is fabricated. Firmware updates are managed through BSN.cloud, the DWS, or by placing firmware files on the SD card. There is no roPackageManager object.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How does BrightSign handle flash storage for the operating system?",
+    "label": "good",
+    "notes": "BrightSign OS is stored on internal eMMC flash with a read-only root filesystem. It uses dm-verity for secure boot with signed firmware validation. Updates are atomic with rollback capability.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What method do you call on roDeviceInfo to retrieve the player's hardware acceleration capabilities list?",
+    "label": "bad",
+    "notes": "roDeviceInfo does not have a method for listing hardware acceleration capabilities. It provides GetDeviceUniqueId(), GetModel(), GetFamily(), GetVersion(), GetMemoryLevel(), etc. Hardware acceleration is implicit in model capabilities.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What is the typical boot time for BrightSign players?",
+    "label": "good",
+    "notes": "Typically under 15 seconds, enabled by the minimal-footprint BOS design, read-only root filesystem, and optimized boot sequence.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What is the roDeploymentManager object used for when deploying content to BrightSign players?",
+    "label": "bad",
+    "notes": "roDeploymentManager is fabricated. Content deployment uses autorun.zip, roUrlTransfer for downloads, roAssetPool/roAssetCollection for asset management, or BSN.cloud for cloud-based deployment.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript object do you use to create a video player and play a file?",
+    "label": "good",
+    "notes": "roVideoPlayer is used for video playback. You create it with CreateObject('roVideoPlayer') and call PlayFile('filename.mp4') to play content.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What does the roProfiler.StartTrace() method do on BrightSign players?",
+    "label": "bad",
+    "notes": "roProfiler is fabricated. BrightScript profiling uses the debugger commands 'stats', 'counts', 'bsc', and 'hash'. For Chromium, tracing uses registry keys 'tracecategories' and 'traceduration' in the 'html' section.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What are the type suffix characters used in BrightScript for String, Integer, Float, and Double variables?",
+    "label": "good",
+    "notes": "$ for String, % for Integer, ! for Float, # for Double. For example: name$ = 'John', count% = 100, price! = 19.99, value# = 1.234567890.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the roDebugConsole.SetBreakCondition() method for conditional breakpoints?",
+    "label": "bad",
+    "notes": "roDebugConsole is fabricated. BrightScript breakpoints are set using the STOP statement in code. There is no programmatic conditional breakpoint API. You can add if-then logic before STOP for conditional breaks.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "Is BrightScript case-sensitive for keywords and variable names?",
+    "label": "good",
+    "notes": "BrightScript is case-insensitive for keywords and identifiers (Print, PRINT, print are equivalent). However, string comparisons ARE case-sensitive.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the roEventBus.Subscribe() method to implement pub/sub messaging in BrightScript?",
+    "label": "bad",
+    "notes": "roEventBus is fabricated. BrightScript uses manual Observer pattern implementation with associative arrays containing subscribe/notify methods, or routes events through a central message port.",
+    "file": "04-design-patterns"
+  },
+  {
+    "prompt": "What is the 'm' variable in BrightScript and what does it refer to?",
+    "label": "good",
+    "notes": "The 'm' variable is BrightScript's 'self' reference. It provides access to the current object's properties and methods when called inside an associative array's method. It is used extensively for object state management.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is the roStateMachine object in BrightScript used for?",
+    "label": "bad",
+    "notes": "roStateMachine is fabricated. State machines in BrightScript are implemented manually using associative arrays with state methods and transition logic. There is no built-in state machine object.",
+    "file": "04-design-patterns"
+  },
+  {
+    "prompt": "How do you create an HTTP server in BrightScript on a BrightSign player?",
+    "label": "good",
+    "notes": "Use CreateObject('roHttpServer', { port: 8080 }) to create an HTTP server. You set a message port and add GET/POST endpoints using AddGetFromEvent() and AddPostToFile() methods.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What does the roPluginManager.RegisterPlugin() method do in BrightScript?",
+    "label": "bad",
+    "notes": "roPluginManager is fabricated. BrightScript plugins are organized as library files included with the Library statement. Plugin registration is done manually through factory functions and object composition.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "What BrightScript function is used to parse a JSON string into an object?",
+    "label": "good",
+    "notes": "ParseJson() parses a JSON string into a BrightScript object (associative array or array). FormatJson() converts a BrightScript object back to a JSON string.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is the roPluginContext.GetSharedState() method used for in BrightScript?",
+    "label": "bad",
+    "notes": "roPluginContext is fabricated. Plugin state is managed through the 'm' scope variable within associative array methods. There is no roPluginContext object or GetSharedState method.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "What are the array manipulation methods available on BrightScript arrays?",
+    "label": "good",
+    "notes": "BrightScript arrays support Push (add to end), Pop (remove from end), Shift (remove from beginning), Unshift (add to beginning), Delete (at index), Clear, Sort, Reverse, Append, and Count.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is the @brightsign/mediaplayer JavaScript module used for on BrightSign players?",
+    "label": "bad",
+    "notes": "@brightsign/mediaplayer is fabricated. Video playback in HTML5 uses the standard <video> element or BrightSign-specific attributes like hwz. The real modules include @brightsign/messageport, @brightsign/deviceinfo, @brightsign/htmlwidget.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What is the recommended approach for including external BrightScript files in your program?",
+    "label": "good",
+    "notes": "Use the Library statement at the beginning of your script: Library 'filename.brs'. This includes the external file and makes its functions available. Production code typically includes multiple libraries like Library 'setupCommon.brs'.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the @brightsign/webgl-accelerator module to enable GPU rendering in HTML5 apps?",
+    "label": "bad",
+    "notes": "@brightsign/webgl-accelerator is fabricated. WebGL is available through standard Chromium APIs. GPU rasterization is enabled by default in firmware 6.2.x and later. There is no special accelerator module.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you create an associative array (object) with methods in BrightScript?",
+    "label": "good",
+    "notes": "Use object literal syntax with methods referencing m for self: person = { name: 'John', describe: Function() As String, return m.name, End Function }. Methods access object properties through the m scope.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is the @brightsign/audiorouter module used for in BrightSign JavaScript development?",
+    "label": "bad",
+    "notes": "@brightsign/audiorouter is fabricated. Audio routing in HTML5 uses the pcmaudio and compaudio attributes on video elements, not a separate JavaScript module.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What is the roList object used for in BrightScript?",
+    "label": "good",
+    "notes": "roList is a linked list implementation. Use AddTail/AddHead to add elements, GetHead/GetNext for iteration, RemoveHead/RemoveTail for removal. It provides O(1) insertion at both ends.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the @brightsign/native-bridge module to call BrightScript functions from Node.js?",
+    "label": "bad",
+    "notes": "@brightsign/native-bridge is fabricated. Communication between JavaScript and BrightScript uses @brightsign/messageport for message passing. There is no direct function call bridge.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What string method splits a string by a delimiter in BrightScript?",
+    "label": "good",
+    "notes": "Use the Tokenize() method: csv$.Tokenize(',') splits the string by commas and returns an array of tokens. For example: 'apple,banana,orange'.Tokenize(',') returns ['apple', 'banana', 'orange'].",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the @brightsign/process-manager module to spawn child processes on a BrightSign player?",
+    "label": "bad",
+    "notes": "@brightsign/process-manager is fabricated. BrightSign's Node.js does not support spawning arbitrary child processes. Applications run within the Node.js/Chromium context. For separate processes, use native extensions.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you read a text file in BrightScript?",
+    "label": "good",
+    "notes": "Use ReadAsciiFile('filename.txt') for simple reading, or CreateObject('roReadFile', 'filename.txt') for line-by-line reading with ReadLine() and AtEof() checking.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the @brightsign/remote-debugger module to set up wireless debugging on BrightSign?",
+    "label": "bad",
+    "notes": "@brightsign/remote-debugger is fabricated. Remote debugging uses Chrome DevTools protocol via inspector_server port configuration in roHtmlWidget. There is no dedicated remote-debugger module.",
+    "file": "03-debugging-javascript"
+  },
+  {
+    "prompt": "What is the DIM statement used for in BrightScript?",
+    "label": "good",
+    "notes": "DIM creates multi-dimensional arrays. For example: Dim matrix[3, 3] creates a 3x3 matrix. Access elements with matrix[row, col] syntax.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the roExtensionManager.LoadExtension() method to dynamically load native extensions?",
+    "label": "bad",
+    "notes": "roExtensionManager is fabricated. Native extensions are installed as squashfs archives mounted to /var/volatile/bsext/ and started via the bsext_init script. There is no dynamic loading API from BrightScript.",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "How do you convert a number to a string in BrightScript?",
+    "label": "good",
+    "notes": "Multiple methods: Str(num%) returns string with leading space, num%.ToStr() returns without space, StrI(num%) returns trimmed. For reverse: Val(str$) or str$.ToInt() or str$.ToFloat().",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the BrightSign SDK's bsext-deploy command to remotely install extensions?",
+    "label": "bad",
+    "notes": "bsext-deploy is fabricated. Extensions are deployed manually by transferring the squashfs to the player via SSH/SFTP and mounting it. There is no automated deployment command in the SDK.",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "How do you check if a storage device is mounted on a BrightSign player?",
+    "label": "good",
+    "notes": "Create an roStorageInfo object for the device path: du = CreateObject('roStorageInfo', deviceName$). If the type is 'roStorageInfo', the device is mounted. Common device paths: 'USB1:/', 'SD:/', 'SSD:/'.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the roNeuralEngine.LoadModel() method to load TensorFlow Lite models on BrightSign?",
+    "label": "bad",
+    "notes": "roNeuralEngine is fabricated. BrightSign has announced AI toolkits for Series 6 but specific APIs for model loading are not documented as roNeuralEngine. Consult BrightSign technical documentation for current NPU APIs.",
+    "file": "03-writing-software-for-the-npu"
+  },
+  {
+    "prompt": "What is the roTimer object used for in BrightScript?",
+    "label": "good",
+    "notes": "roTimer creates scheduled timers. Use SetPort(msgPort), SetElapsed(seconds, 0) or SetDate/SetTime for scheduling, and Start() to begin. Timer events (roTimerEvent) include GetSourceIdentity() for identification.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the @brightsign/npu module to run inference on the NPU from JavaScript?",
+    "label": "bad",
+    "notes": "@brightsign/npu is fabricated. While BrightSign Series 6 has NPU support, specific JavaScript APIs for NPU inference are not documented as a @brightsign/npu module. Consult current BrightSign documentation.",
+    "file": "03-writing-software-for-the-npu"
+  },
+  {
+    "prompt": "What is the MatchFiles() function used for in BrightScript?",
+    "label": "good",
+    "notes": "MatchFiles(directory, pattern) returns a list of files matching a glob pattern. For example: MatchFiles('/uploadLogFolder', '*.log') returns all .log files in the directory.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you use the roGpioManager.SetAnalogOutput() method for analog control on BrightSign GPIO?",
+    "label": "bad",
+    "notes": "roGpioManager is fabricated and BrightSign GPIO does not support analog output. GPIO is digital-only (3.3V logic). PWM for LED dimming is achieved through timed GPIO pulsing with SetPulseParams() and SetPulse() on roControlPort.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What is the default baud rate for BrightSign's serial console connection?",
+    "label": "good",
+    "notes": "The default serial console settings are 115200 baud, 8N1 (8 data bits, no parity, 1 stop bit).",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roI2CPort object for I2C communication with sensors on BrightSign?",
+    "label": "bad",
+    "notes": "roI2CPort is fabricated. BrightSign does not provide I2C as a dedicated interface. The documentation explicitly states I2C and SPI are not available on standard models. GPIO and serial UART are the primary external communication mechanisms.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you enable SSH access on a BrightSign player using BrightScript?",
+    "label": "good",
+    "notes": "Write 'ssh' key with value '22' to the 'networking' registry section using roRegistrySection, then set a login password via roNetworkConfiguration.SetLoginPassword(), Apply(), Flush(), and reboot.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roBluetooth object for BLE communication on BrightSign players?",
+    "label": "bad",
+    "notes": "roBluetooth is fabricated. BrightSign players do not have built-in Bluetooth/BLE support in their documented API. External USB Bluetooth adapters are not documented as supported for BLE communication.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What storage paths are available on BrightSign players for development?",
+    "label": "good",
+    "notes": "/storage/sd/ for SD card, /storage/usb/ for USB storage, /storage/flash/ for internal flash, and /tmp/ for temporary storage.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roBSNAgent.SyncContent() method for automatic content synchronization?",
+    "label": "bad",
+    "notes": "roBSNAgent is fabricated. BSN.cloud content synchronization uses REST APIs with OAuth2 tokens, device provisioning through serial number registration, and automated content delivery via the BSN.cloud CDN.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "What is the recommended file system format for BrightSign SD cards?",
+    "label": "good",
+    "notes": "FAT32 for cards up to 32GB, exFAT for larger cards. The documentation also mentions Ext3 or Ext4 for better compatibility than FAT32 in development scenarios.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the BSN.cloud WebSocket API to stream real-time analytics from players?",
+    "label": "bad",
+    "notes": "While BSN.cloud has a WebSocket Gateway for real-time communication, there is no documented 'real-time analytics streaming' WebSocket API. BSN.cloud provides health monitoring and 24-hour health reports, not real-time analytics streams.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "How do you enable the Diagnostic Web Server (DWS) on a BrightSign player?",
+    "label": "good",
+    "notes": "Write 'dwse' key with value 'yes' to the 'networking' registry section, flush it, and optionally call SetupDWS() on roNetworkConfiguration. DWS is disabled by default due to EU RED compliance.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roProvisioningServer.SetRecoveryPolicy() method for custom recovery behavior?",
+    "label": "bad",
+    "notes": "roProvisioningServer is fabricated. Recovery behavior is controlled by the server-side HTTP handler responding to GET requests with recoverymode headers. The player's behavior is fixed; customization is done server-side.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "How do you enable Prometheus metrics export on a BrightSign player?",
+    "label": "good",
+    "notes": "Set the registry key 'prometheus-node-exporter-port' to '9100' in the 'networking' section. Metrics are then available at http://<player-ip>:9100/metrics.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roRecoveryManager.SetFallbackScript() method for backup autorun scripts?",
+    "label": "bad",
+    "notes": "roRecoveryManager is fabricated. BrightSign's recovery system uses the recovery URL (ru) to download replacement autorun scripts from a server. There is no local fallback script mechanism via a dedicated object.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What is the purpose of the roAssetPool object in BrightScript?",
+    "label": "good",
+    "notes": "roAssetPool manages a directory-based asset pool for content caching and management. Used with roAssetCollection for downloading and managing content assets from remote servers.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roSetupWizard object to configure a BrightSign player programmatically?",
+    "label": "bad",
+    "notes": "roSetupWizard is fabricated. Player configuration is done through registry writes using roRegistrySection, roNetworkConfiguration methods, and optionally BSN.cloud or BrightAuthor:connected setup.",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "How do you configure WiFi on a BrightSign player using BrightScript?",
+    "label": "good",
+    "notes": "Create roNetworkConfiguration with index 1 (WiFi interface). Call SetWiFiSSID('network'), SetWiFiPassphrase('password'), Apply(). Also write wifi='1' to the networking registry section.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roVideoPlayer.SetStreamProtocol() method to switch between HLS and DASH streaming?",
+    "label": "bad",
+    "notes": "SetStreamProtocol() is fabricated. BrightSign handles streaming protocol detection automatically based on the URL. HLS uses .m3u8 URLs, DASH uses .mpd URLs. In HTML5, use MSE (Media Source Extensions).",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What is the roVideoMode object used for?",
+    "label": "good",
+    "notes": "roVideoMode configures display output resolution. Use SetMode('1920x1080x60p') to set resolution, GetMode() to read current mode, GetSupportedModes() to list available modes, GetResX()/GetResY() for current resolution.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roZoneManager.CreateTransition() method for animated zone transitions?",
+    "label": "bad",
+    "notes": "roZoneManager is fabricated. Zone management is done by creating individual player/widget objects with roRectangle coordinates. There is no zone manager or animated transition API between zones.",
+    "file": "07-multi-zone-layouts"
+  },
+  {
+    "prompt": "What is the roNetworkConfiguration object used for?",
+    "label": "good",
+    "notes": "roNetworkConfiguration configures network interfaces. Index 0 is Ethernet, index 1 is WiFi. Methods include SetIP4Address(), SetIP4Netmask(), SetIP4Gateway(), SetDnsServers(), SetLoginPassword(), GetCurrentConfig(), Apply().",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roUrlTransfer.SetCachePolicy() method to control download caching?",
+    "label": "bad",
+    "notes": "SetCachePolicy() is fabricated. roUrlTransfer does not have a cache policy method. Caching is managed through HTTP cache headers from the server or by disabling the HTTP cache via registry key 'disable-http-cache' in the 'html' section.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "How do you set up HTTPS for the Local DWS on a BrightSign player?",
+    "label": "good",
+    "notes": "Generate a self-signed certificate with openssl, place dws.crt and dws.key at the storage root, or configure custom paths via registry keys ldws_cert_file_name and ldws_key_file_name in the networking section.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roUrlTransfer.SetOAuth2Credentials() method for automatic token refresh?",
+    "label": "bad",
+    "notes": "SetOAuth2Credentials() is fabricated. OAuth2 authentication must be implemented manually by obtaining tokens via API calls and adding them as Bearer tokens in the Authorization header via AddHeader().",
+    "file": "09-integrating-rest-apis"
+  },
+  {
+    "prompt": "What are the default LDWS credentials?",
+    "label": "good",
+    "notes": "Username: admin, Password: player serial number (or custom-configured). Access at http://<player-ip>/ on the local network.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roTouchScreen.SetMultiTouchMode() method to enable gesture recognition?",
+    "label": "bad",
+    "notes": "SetMultiTouchMode() is fabricated. Multi-touch is handled through HTML5 touch events (touchstart, touchmove, touchend) in roHtmlWidget with mouse_enabled set to true. roTouchScreen handles region-based touch detection.",
+    "file": "15-touch-screen-configuration"
+  },
+  {
+    "prompt": "How do you use Chromium performance tracing on a BrightSign player?",
+    "label": "good",
+    "notes": "Set registry keys in 'html' section: tracecategories (e.g., 'blink,cc,gpu'), traceduration (seconds), tracemonitorinterval (seconds). Traces save to /storage/sd/chromium_trace_*.json for analysis in chrome://tracing.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roDHCPServer object to assign IP addresses from a BrightSign player?",
+    "label": "bad",
+    "notes": "roDHCPServer is fabricated. The documentation explicitly states there is no roDHCPServer or equivalent native BrightScript object. DHCP server functionality requires a Node.js implementation using the dgram module.",
+    "file": "20-dhcp-server-node"
+  },
+  {
+    "prompt": "What are the common registry sections on a BrightSign player?",
+    "label": "good",
+    "notes": "Key sections include: 'networking' (network config, DWS, SSH, telnet, syslog), 'html' (web inspector, cache, GPU settings), 'brightscript' (debugger), 'video' (display mode), 'boot' (splash screen).",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roDisplayController.SetVideoWall() method to configure a video wall on BrightSign?",
+    "label": "bad",
+    "notes": "roDisplayController is fabricated. Video wall configurations use XC5 models with multiple HDMI outputs. Content is managed through normal video/HTML zones and multi-display setups, not a dedicated video wall API.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "How do you use the roUrlTransfer.EnableResume() method?",
+    "label": "good",
+    "notes": "EnableResume(true) allows download resume on failure. When a download is interrupted, the next attempt will resume from where it left off rather than starting over.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you use the roFirmwareUpdater.CheckForUpdates() method to auto-update BrightSign firmware?",
+    "label": "bad",
+    "notes": "roFirmwareUpdater is fabricated. Firmware updates are managed through BSN.cloud, BrightAuthor:connected, or by manually placing firmware files on the SD card. There is no auto-update checking API.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What debugger command shows the backtrace of function calls in the BrightScript debugger?",
+    "label": "good",
+    "notes": "The 'bt' command prints the backtrace of function calls. Other common commands include 'var' (local variables), 'step'/'s' (step one statement), 'cont'/'c' (continue), 'print <expr>', 'list', and 'gc'.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "How do you use the roHashMap object for key-value storage in BrightScript?",
+    "label": "bad",
+    "notes": "roHashMap is fabricated. BrightScript uses roAssociativeArray (created with {} syntax or CreateObject('roAssociativeArray')) for key-value storage. It supports dot notation, bracket access, DoesExist(), and Delete().",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you set a breakpoint in BrightScript code?",
+    "label": "good",
+    "notes": "Use the STOP statement in your code. When the debugger is enabled (registry key 'debug' set to '1' in 'brightscript' section), execution will pause at STOP statements allowing inspection.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "How do you use the roFileStream.SeekTo() method for random access file reading in BrightScript?",
+    "label": "bad",
+    "notes": "roFileStream is fabricated. BrightScript uses roReadFile for sequential reading, roByteArray.ReadFile() for binary reading, and ReadAsciiFile() for full text reading. Random access is not documented via a stream seek API.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you configure remote syslog logging on a BrightSign player?",
+    "label": "good",
+    "notes": "Write the syslog server IP address to the 'syslog' key in the 'networking' registry section. For example: reg.Write('syslog', '192.168.1.100').",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "How do you use the roSyncSpec.PushUpdate() method to trigger remote content synchronization?",
+    "label": "bad",
+    "notes": "PushUpdate() is fabricated. roSyncSpec is a read-only object for parsing sync specification files. It reads configuration with ReadFromFile() and LookupMetadata(). Content synchronization uses roAssetPool and roUrlTransfer.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "Does modern BrightScript support try/catch exception handling?",
+    "label": "good",
+    "notes": "Yes. Modern BrightScript supports try/catch/end try blocks. The catch clause receives an error object with getMessage() and getStack() methods for error details and stack trace.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "How do you use the roStorageInfo.GetHealthStatus() method to check SD card wear level?",
+    "label": "bad",
+    "notes": "GetHealthStatus() is fabricated. roStorageInfo validates if a storage device is mounted but does not provide health or wear level information. Storage health monitoring uses system-level tools.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What BrightScript function forces garbage collection and returns statistics about freed objects?",
+    "label": "good",
+    "notes": "RunGarbageCollector() forces garbage collection and returns an object with 'freed' and 'orphaned' counts. The debugger command 'gc' also runs garbage collection.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "How do you use the roNetworkConfiguration.SetWiFiEnterprise() method for 802.1X authentication?",
+    "label": "bad",
+    "notes": "SetWiFiEnterprise() is fabricated with this exact signature. While BrightSign may support enterprise WiFi through BrightAuthor:connected setup, the documented API uses SetWiFiSSID() and SetWiFiPassphrase() methods.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What is the roSystemLog object used for in BrightScript?",
+    "label": "good",
+    "notes": "roSystemLog writes messages to the system log. Use CreateObject('roSystemLog') and SendLine(message) to log. Often used in diagnostics plugins for both serial output and syslog.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "How do you use the roHtmlWidget.SetOfflineMode() method to cache web content for offline use?",
+    "label": "bad",
+    "notes": "SetOfflineMode() is fabricated. Offline functionality uses standard web technologies: Application Cache (deprecated) or Service Workers. Storage quota is configured via storage_path and storage_quota in the widget config.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What is the roDateTime object used for in BrightScript?",
+    "label": "good",
+    "notes": "roDateTime provides date and time functionality. Use CreateObject('roDateTime') to create, ToISOString()/ToIsoString() to get ISO format string. Used for timestamps in logging and scheduling.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What is the @brightsign/contentmanager module used for?",
+    "label": "bad",
+    "notes": "@brightsign/contentmanager is fabricated. Content management from JavaScript uses standard fs (file system) module for local files, fetch API for remote content, and @brightsign/htmlwidget for widget management.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What is the roRegistry object used for in BrightScript?",
+    "label": "good",
+    "notes": "roRegistry provides access to the player's persistent registry. Use GetSectionList() to list all sections. Individual sections are accessed via CreateObject('roRegistrySection', sectionName) for Read/Write/Flush operations.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "How do you use the roVideoMode.SetHDRMode() method to enable HDR output?",
+    "label": "bad",
+    "notes": "SetHDRMode() is fabricated as a standalone method. HDR is automatically handled based on content and player model capability. XC5/XT5 support HDR10 and HLG. HDR metadata passes through from compatible source content.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What is the Singleton pattern implementation strategy in BrightScript?",
+    "label": "good",
+    "notes": "Use a global function that checks m.global for an existing instance and creates one if not found. The singleton stores shared resources like roDeviceInfo, roSystemTime, and config data accessible from any module.",
+    "file": "04-design-patterns"
+  },
+  {
+    "prompt": "How do you use the roImagePlayer.SetTransitionEffect() method for slide transitions?",
+    "label": "bad",
+    "notes": "SetTransitionEffect() is fabricated. roImagePlayer does not have built-in transition effects. Transitions are implemented manually by fading through multiple image zones or using HTML/CSS animations in roHtmlWidget.",
+    "file": "07-multi-zone-layouts"
+  },
+  {
+    "prompt": "How does the Observer pattern work in BrightScript?",
+    "label": "good",
+    "notes": "Create an EventSubject with subscribe/unsubscribe/notify methods. Observers implement an onNotify method. The subject maintains an observers array and calls onNotify on each when events occur, enabling loose coupling.",
+    "file": "04-design-patterns"
+  },
+  {
+    "prompt": "How do you use the @brightsign/gpio module's analogRead() function for sensor data?",
+    "label": "bad",
+    "notes": "@brightsign/gpio with analogRead() is fabricated. BrightSign GPIO is digital-only (3.3V logic). The correct module is @brightsign/legacy/controlport. There are no analog read capabilities.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What design pattern is commonly used in BrightScript for managing player states like idle, playing, downloading?",
+    "label": "good",
+    "notes": "The State Machine pattern. It uses a current state variable, transition definitions, and event handlers per state. States can have enter/exit/handleEvent methods with transitions triggering state changes.",
+    "file": "04-design-patterns"
+  },
+  {
+    "prompt": "How do you use the roSerialPort.SetProtocol() method to switch between RS-232 and RS-485 modes?",
+    "label": "bad",
+    "notes": "SetProtocol() is fabricated. RS-485 requires an external transceiver connected to the serial port. There is no protocol switching method. Configuration uses SetMode('8N1') and optionally SetInverted(true) for some transceivers.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What is the Command pattern used for in BrightScript design?",
+    "label": "good",
+    "notes": "The Command pattern encapsulates operations as objects with execute/undo methods. This enables building command queues, undo/redo functionality, and macro recording for complex BrightScript applications.",
+    "file": "04-design-patterns"
+  },
+  {
+    "prompt": "How do you use the roRecoveryConfig.SetRetryInterval() method to change recovery check frequency?",
+    "label": "bad",
+    "notes": "roRecoveryConfig is fabricated. Recovery check frequency is controlled server-side via the Retry-After HTTP header in responses. The default periodic interval is 2 hours. There is no client-side configuration object.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What naming convention is used for factory functions in BrightScript plugin architecture?",
+    "label": "good",
+    "notes": "Factory functions use the 'new' prefix convention, such as newDiagnostics(), newNetworking(), newLogging(). They return configured associative array objects with methods and properties.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "How do you use the roAudioPlayer.SetEqualizer() method to adjust audio frequency response?",
+    "label": "bad",
+    "notes": "SetEqualizer() is fabricated. roAudioPlayer provides basic playback control (PlayFile, Stop, SetVolume) but no equalizer functionality. Audio processing is limited to codec decoding and output routing.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How does the central message port pattern work in BrightScript plugin architecture?",
+    "label": "good",
+    "notes": "A single roMessagePort is shared across plugins. The main EventLoop uses wait(0, msgPort) and routes events by type: roUrlEvent to networking, roTimerEvent to appropriate plugins via identity verification, roSyncPoolEvent to sync handlers.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "How do you use the roVideoPlayer.SetCodecPriority() method to prefer H.265 over H.264?",
+    "label": "bad",
+    "notes": "SetCodecPriority() is fabricated. Codec selection is automatic based on the source file's encoding. BrightSign hardware decoders handle supported codecs without manual priority configuration.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "How is timer identity verification performed in BrightScript plugin event routing?",
+    "label": "good",
+    "notes": "Compare stri(msg.GetSourceIdentity()) with stri(timer.GetIdentity()) for each registered timer. This ensures timer events are routed to the correct plugin handler, preventing misrouted events.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "How do you use the wait() function with multiple message ports simultaneously?",
+    "label": "bad",
+    "notes": "wait() only accepts a single message port. You cannot wait on multiple ports simultaneously. The standard pattern is to use one shared roMessagePort and set it on all objects using SetPort(). This is the central message port pattern.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How does dependency injection work in BrightScript plugin architecture?",
+    "label": "good",
+    "notes": "Parent objects (like Setup) are passed to child plugin factory functions. Child plugins store references to shared resources like msgPort, diagnostics, and systemTime through the passed parent object.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "How do you use the roSystemLog.SetLevel() method to filter log messages by severity?",
+    "label": "bad",
+    "notes": "SetLevel() is fabricated. roSystemLog provides SendLine() for writing messages. Log level filtering is typically implemented in application code (like the CreateLogger pattern with logLevel 0-3), not in the system log object.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "What does the roSyncSpec object do in BrightScript?",
+    "label": "good",
+    "notes": "roSyncSpec reads and parses sync specification files (like current-sync.json). Use ReadFromFile() to load and LookupMetadata(section, key) to retrieve configuration values. It's used for configuration-driven plugin setup.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "How do you use the gopurple rdws-deploy command to push content packages remotely?",
+    "label": "bad",
+    "notes": "rdws-deploy is fabricated. The gopurple tools include rdws-files-upload for individual file uploads and rdws-reprovision for reprovisioning. There is no combined deployment command. Content deployment uses BSN.cloud or manual methods.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What is the roAudioPlayer object used for in BrightScript?",
+    "label": "good",
+    "notes": "roAudioPlayer handles audio playback. Create with CreateObject('roAudioPlayer'), use PlayFile() to play audio, SetVolume() for volume control, SetPort() for event handling. Generates roAudioEvent messages.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "How do you use the @brightsign/hdmi-cec module to control external displays via HDMI?",
+    "label": "bad",
+    "notes": "@brightsign/hdmi-cec as a JavaScript module is fabricated. BrightSign supports HDMI CEC for display control but it is configured through BrightScript or setup tools, not a dedicated JavaScript module.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "What production-proven convention is used for plugin method assignment in BrightScript?",
+    "label": "good",
+    "notes": "Methods are assigned as function references to object properties: networking.InitializeNetworkDownloads = InitializeNetworkDownloads. The function uses 'm' to access the object's state when called.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "How do you use the roWebServer.EnableSSL() method for HTTPS on BrightSign HTTP servers?",
+    "label": "bad",
+    "notes": "roWebServer is fabricated. BrightScript uses roHttpServer for custom HTTP servers. HTTPS for the DWS uses certificate files configured via registry. There is no EnableSSL method on the HTTP server object.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What Chromium version does BrightSign OS 9.1.x use for HTML5 rendering?",
+    "label": "good",
+    "notes": "BOS 9.1.x uses Chromium 120. Earlier versions use Chromium 87 (BOS 8.5.x-9.0.x) or Chromium 69 (BOS 8.1.x-8.4.x).",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the roPerformanceMonitor.GetCPUUsage() method to monitor BrightSign player CPU load?",
+    "label": "bad",
+    "notes": "roPerformanceMonitor is fabricated. CPU monitoring on BrightSign uses the Prometheus node_exporter (enabled via registry) or system commands via shell access. BrightScript provides roDeviceInfo.GetMemoryLevel() for memory only.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you send a message from JavaScript to BrightScript in an HTML widget?",
+    "label": "good",
+    "notes": "Use require('@brightsign/messageport') to create a message port, then call PostBSMessage() with a data object. BrightScript receives it as an roHtmlWidgetEvent where data.reason equals 'message'.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the roRegistrySection.SetEncrypted() method to store sensitive data securely?",
+    "label": "bad",
+    "notes": "SetEncrypted() is fabricated. Registry values are stored as plain text key-value pairs using Write(key, value) and Flush(). There is no built-in encryption method for registry values.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What is the HWZ attribute on HTML5 video elements in BrightSign?",
+    "label": "good",
+    "notes": "HWZ (Hardware Z-order) routes video to the hardware compositor for better performance. Usage: <video src='video.mp4' hwz='z-index:-1' autoplay>. It supports z-index, transform rotation, and luma keying.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the roCanvasWidget.DrawLine() method for custom vector graphics?",
+    "label": "bad",
+    "notes": "roCanvasWidget exists for custom graphics but DrawLine() as described is not documented. Canvas drawing in BrightSign is typically done through HTML5 Canvas API in roHtmlWidget for complex graphics.",
+    "file": "07-multi-zone-layouts"
+  },
+  {
+    "prompt": "How do you configure storage path and quota for an HTML widget's local storage?",
+    "label": "good",
+    "notes": "Pass storage_path and storage_quota in the roHtmlWidget config: config = { url: 'file:///index.html', storage_path: 'SD:/html-storage', storage_quota: '1073741824' }.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the @brightsign/websocket module for real-time communication?",
+    "label": "bad",
+    "notes": "@brightsign/websocket is fabricated. WebSocket support uses the standard ws npm module (JavaScript-only) or native browser WebSocket API in HTML widgets. There is no BrightSign-specific WebSocket module.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What HTML5 video custom attributes does BrightSign support for streaming?",
+    "label": "good",
+    "notes": "x-bs-stream-timeout (stream timeout ms), x-bs-stream-low-latency (enable low latency), x-bs-stream-latency (adjust latency ms), x-bs-intrinsic-width/height (set intrinsic video size for aspect ratio).",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the roNodeJs.SetEnvironmentVariable() method to pass configuration to Node.js apps?",
+    "label": "bad",
+    "notes": "SetEnvironmentVariable() is fabricated for roNodeJs. Configuration is typically passed through files on the SD card (JSON config files) read by the Node.js script, not through environment variables on the BrightScript object.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you route audio output from an HTML5 video element to specific hardware outputs on BrightSign?",
+    "label": "good",
+    "notes": "Use pcmaudio and compaudio attributes: <video src='video.mp4' pcmaudio='hdmi' autoplay> routes PCM audio to HDMI. For Series 5 dual outputs: pcmaudio='hdmi-1;hdmi-2'.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the roCommandQueue.AddCommand() method for sequential command execution?",
+    "label": "bad",
+    "notes": "roCommandQueue is fabricated. Command queues in BrightScript are implemented manually using arrays of command objects (associative arrays with execute/undo methods). There is no built-in command queue object.",
+    "file": "04-design-patterns"
+  },
+  {
+    "prompt": "How does the roHtmlWidget pass messages from BrightScript to JavaScript?",
+    "label": "good",
+    "notes": "Call htmlWidget.PostJSMessage({key: value}) from BrightScript. In JavaScript, listen with bsMessage.addEventListener('bsmessage', handler) using the @brightsign/messageport module.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the roValidator.AddRule() method for form input validation?",
+    "label": "bad",
+    "notes": "roValidator is fabricated. Validation in BrightScript uses custom validation patterns with associative arrays containing check functions. There is no built-in validator object.",
+    "file": "04-design-patterns"
+  },
+  {
+    "prompt": "How do you access device information from JavaScript on a BrightSign player?",
+    "label": "good",
+    "notes": "Use require('@brightsign/deviceinfo'). The DeviceInfoClass provides model, osVersion, serialNumber properties, hasFeature() for capability checking, and getTemperature() for thermal monitoring.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the roPluginRegistry.DiscoverPlugins() method to auto-load plugins?",
+    "label": "bad",
+    "notes": "roPluginRegistry is fabricated. Plugin discovery is done manually through Library statements at the top of the script. There is no automatic plugin discovery mechanism in BrightScript.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "What video streaming protocols does BrightSign support through HTML5?",
+    "label": "good",
+    "notes": "HLS (.m3u8), RTSP, UDP multicast (udp://), and standard HTTP streaming. Custom attributes like x-bs-stream-timeout and x-bs-stream-low-latency are available for tuning.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the @brightsign/chromium.SetRenderMode() function to switch between hardware and software rendering?",
+    "label": "bad",
+    "notes": "@brightsign/chromium module is fabricated. GPU rasterization is enabled by default in OS8+. Canvas 2D acceleration can be disabled with canvas_2d_acceleration_enabled: false in the widget config. There is no render mode API.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you configure HDMI input capture on HTML5 video in BrightSign?",
+    "label": "good",
+    "notes": "Use <video src='tv:brightsign.biz/hdmi' autoplay> to display HDMI input. This is available on XT5 models that have HDMI input ports.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the @brightsign/drm module for Widevine DRM content playback?",
+    "label": "bad",
+    "notes": "@brightsign/drm is fabricated. BrightSign supports transport stream encryption via EncryptionAlgorithm/EncryptionKey attributes. Widevine DRM is not documented as a supported DRM system through a dedicated module.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the @brightsign/storage module to format an SD card from JavaScript?",
+    "label": "good",
+    "notes": "Use require('@brightsign/storage'), create instance, then call storage.format('/storage/sd', 'vfat'). Also supports storage.eject() for safe removal. Returns promises.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the roRecoveryMode.SetHeartbeatInterval() method to change the periodic check-in frequency?",
+    "label": "bad",
+    "notes": "roRecoveryMode is fabricated. The periodic check-in frequency is controlled server-side via the Retry-After HTTP header. The default is 2 hours. There is no client-side method to change this.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What is the 'image-rendering: optimizeSpeedBS' CSS property used for on BrightSign?",
+    "label": "good",
+    "notes": "A BrightSign-specific CSS property that enables fast bilinear filtering when scaling images to 50% or less of their original size. It improves performance for downscaled images in HTML5 content.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the roAutorunLoader.SetPriority() method to control autorun file selection priority?",
+    "label": "bad",
+    "notes": "roAutorunLoader is fabricated. The autorun priority is fixed: USB > SD > SD2 > SSD. If multiple storage devices contain autoruns, the player selects the first found in that order. There is no configurable priority API.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "How do you disable ES6 features in the BrightSign Chromium engine if needed?",
+    "label": "good",
+    "notes": "ES6 features can be disabled via a registry setting. The documentation mentions this capability for compatibility with older JavaScript code.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you use the @brightsign/network module to create raw socket connections?",
+    "label": "bad",
+    "notes": "@brightsign/network is fabricated. Network programming uses standard Node.js modules: net for TCP, dgram for UDP, http/https for HTTP. There is no BrightSign-specific network module.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you enable Node.js in an roHtmlWidget instance?",
+    "label": "good",
+    "notes": "Include nodejs_enabled: true in the configuration object when creating roHtmlWidget. This enables require() and access to Node.js built-in modules within the HTML page's JavaScript context.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you use the roUrlTransfer.SetBandwidthLimit() method to throttle downloads?",
+    "label": "bad",
+    "notes": "SetBandwidthLimit() is fabricated. roUrlTransfer does not provide bandwidth throttling. Download speed is limited by network conditions and server configuration. BrightSign has no built-in bandwidth limiting API.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "What Node.js version is available on BrightSign OS 8.5.x and 9.0.x?",
+    "label": "good",
+    "notes": "Node.js 14.17.6 is available on BOS 8.5.x and 9.0.x, both as the embedded version in Chromium and as the standalone Node.js runtime.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you use the roUrlTransfer.SetProxy() method to route traffic through a proxy server?",
+    "label": "bad",
+    "notes": "While proxy configuration may exist through registry settings, SetProxy() as a direct method on roUrlTransfer is not documented. Proxy bypass is configured via ParseProxyBypass() patterns in production code.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "Why can't you use npm modules with binary components on BrightSign players?",
+    "label": "good",
+    "notes": "BrightSign's Node.js implementation is limited to JavaScript-only code. Modules with binary components compiled for other platforms (usually Intel x64) won't run on BrightSign's ARM-based architecture. Use pure JS alternatives instead.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you use the roEventPort.AddFilter() method to filter events by type?",
+    "label": "bad",
+    "notes": "roEventPort is fabricated. BrightScript uses roMessagePort which receives all events from all objects assigned to it. Event filtering is done in the event loop by checking type(msg) against expected event types.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What storage paths do you use in Node.js on BrightSign for file operations?",
+    "label": "good",
+    "notes": "/storage/sd/ for microSD card, /storage/ssd/ for SSD storage, /storage/usb1/ for USB storage. Use process.chdir() to set the working directory.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you use the roFlashManager.PartitionStorage() method to allocate internal storage for applications?",
+    "label": "bad",
+    "notes": "roFlashManager is fabricated. Internal flash storage is managed by the OS. Developers work with /storage/sd/ (SD card), /storage/usb/ (USB), and /storage/ssd/ (SSD). There is no internal flash partition API.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What is the purpose of the brightsign_js_objects_enabled config option in roHtmlWidget?",
+    "label": "good",
+    "notes": "When set to true in the roHtmlWidget configuration, it enables access to BrightSign JavaScript objects (@brightsign/* modules) from within the HTML widget's JavaScript context.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you use the roDeploymentPackage.CreateManifest() method to build deployment packages?",
+    "label": "bad",
+    "notes": "roDeploymentPackage is fabricated. Deployment packages are standard zip files named autorun.zip containing the autorun.brs and content files. No manifest generation object exists.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you disable CORS in an roHtmlWidget for development purposes?",
+    "label": "good",
+    "notes": "Set security_params: { websecurity: false } in the roHtmlWidget configuration. Alternatively, set 'disable-web-security' to '1' in the 'html' registry section. Only use during development.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you use the roSerialPort.SetFlowControl() method for hardware flow control?",
+    "label": "bad",
+    "notes": "While BrightSign supports hardware RTS/CTS flow control, the specific method SetFlowControl() is not documented in this form. The documentation mentions hardware flow control is supported but does not detail the API method.",
+    "file": "13-serial-communication"
+  },
+  {
+    "prompt": "How do you set up a WebSocket server on a BrightSign player using Node.js?",
+    "label": "good",
+    "notes": "Use the ws module (JavaScript-only) with const wss = new WebSocket.Server({ port: 8080 }). Handle connection, message, and close events. The module must be pure JavaScript, no binary components.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you use the roClockWidget.SetTimeZone() method to display a different time zone?",
+    "label": "bad",
+    "notes": "SetTimeZone() on roClockWidget is not documented. Time zone is configured system-wide via roTimeZone.SetTimeZone() or the 'tz' registry key in the networking section. Individual widget time zones are not supported.",
+    "file": "07-multi-zone-layouts"
+  },
+  {
+    "prompt": "What is the recommended approach for downloading large files (>100MB) in JavaScript on BrightSign?",
+    "label": "good",
+    "notes": "Use the Fetch API with streaming instead of XMLHttpRequest to avoid memory issues. Use response.body.getReader() with fs.createWriteStream() to stream data directly to disk.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you use the roSystemControl.ScheduleReboot() method for timed reboots?",
+    "label": "bad",
+    "notes": "roSystemControl is fabricated. Scheduled reboots use roTimer to trigger RebootSystem() at the desired time. There is no dedicated system control object for scheduling reboots.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you set the working directory for Node.js file operations on BrightSign?",
+    "label": "good",
+    "notes": "Use process.chdir('/storage/sd') to set the working directory. After that, relative paths resolve from /storage/sd/. Also use module.paths.push() to add additional module search paths.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "How do you use the @brightsign/canvas-gpu module to enable hardware-accelerated canvas operations?",
+    "label": "bad",
+    "notes": "@brightsign/canvas-gpu is fabricated. Canvas 2D acceleration is enabled by default and configured through the roHtmlWidget config, not a separate module. WebGL is also available through standard Chromium APIs.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "How do you set up Chrome DevTools remote debugging for an HTML widget on a BrightSign player?",
+    "label": "good",
+    "notes": "Enable web inspector via registry (html section, enable_web_inspector=1), set inspector_server port in roHtmlWidget config, then in Chrome navigate to chrome://inspect, configure the player IP:port, and click Inspect.",
+    "file": "03-debugging-javascript"
+  },
+  {
+    "prompt": "How do you use the @brightsign/deviceinfo.getCPULoad() method for real-time CPU monitoring?",
+    "label": "bad",
+    "notes": "getCPULoad() is fabricated. @brightsign/deviceinfo provides model info, serial number, OS version, hasFeature(), and getTemperature(). CPU load monitoring uses Prometheus metrics or system-level tools.",
+    "file": "01-javascript-playback"
+  },
+  {
+    "prompt": "Why should you disable the web inspector in production BrightSign deployments?",
+    "label": "good",
+    "notes": "The web inspector logs data to memory even when disconnected, causing memory exhaustion and eventually crashes. It should only be enabled during development.",
+    "file": "03-debugging-javascript"
+  },
+  {
+    "prompt": "How do you use the roSyncSpec.SetMetadata() method to update sync configuration?",
+    "label": "bad",
+    "notes": "SetMetadata() is fabricated. roSyncSpec is a read-only object used for reading and parsing sync specification files. Writing configuration changes back requires different approaches like registry writes or file writes.",
+    "file": "05-plugin-architecture"
+  },
+  {
+    "prompt": "What port is typically used for the Node.js inspector on BrightSign?",
+    "label": "good",
+    "notes": "Port 3000 is commonly used, configured via inspector_server: { port: 3000 } in the roHtmlWidget configuration. Port 2999 is typically used for HTML widget debugging.",
+    "file": "03-debugging-javascript"
+  },
+  {
+    "prompt": "How do you use the roSystemInfo.GetBatteryLevel() method on BrightSign players?",
+    "label": "bad",
+    "notes": "roSystemInfo is fabricated and BrightSign players don't have batteries - they are AC-powered commercial devices. System information uses roDeviceInfo which provides model, firmware version, serial number, etc.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What are native extensions on BrightSign players?",
+    "label": "good",
+    "notes": "Native extensions are custom compiled C/C++ applications for BrightSign's ARM-based Linux platform. They run as system services, are packaged as squashfs archives, and install to /var/volatile/bsext/. They use a bsext_init control script.",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "How do you use the roHDMI.ForceEDID() method to override display detection on BrightSign?",
+    "label": "bad",
+    "notes": "roHDMI is fabricated. EDID handling is automatic. Video output mode can be manually set via roVideoMode.SetMode() or the registry key auto_mode_vms_override in the video section to override auto-detection.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What lifecycle commands does a BrightSign extension's bsext_init script receive?",
+    "label": "good",
+    "notes": "The bsext_init script receives: 'start' (during boot), 'stop' (during shutdown), 'restart' (to restart), and 'run' (run in foreground for testing).",
+    "file": "01-intro-to-extensions"
+  },
+  {
+    "prompt": "How do you use the roDeviceInfo.GetPeripherals() method to list connected devices?",
+    "label": "bad",
+    "notes": "GetPeripherals() is fabricated. roDeviceInfo provides GetDeviceUniqueId(), GetModel(), GetFamily(), GetVersion(), GetMemoryLevel(). Connected USB devices are detected by creating appropriate objects (roSerialPort, roControlPort).",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What cross-compilation toolchain is needed to build native extensions for BrightSign?",
+    "label": "good",
+    "notes": "A Yocto-based cross-compilation SDK built from BrightSign's open-source build system. It targets ARM aarch64 (cortexa72). The SDK is generated using bitbake meta-toolchain from BrightSign's source bundles.",
+    "file": "02-advanced-extensions"
+  },
+  {
+    "prompt": "How do you use the roMulticastReceiver.JoinGroup() method for multicast content delivery?",
+    "label": "bad",
+    "notes": "roMulticastReceiver is fabricated. Multicast video is played directly via URL (udp://239.x.x.x:port). For custom UDP multicast, use roDatagramReceiver or Node.js dgram module. There is no dedicated multicast group management object.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "Which BrightSign player series includes NPU (Neural Processing Unit) support?",
+    "label": "good",
+    "notes": "Series 6 players include NPU support. Models include HD6 (standard with NPU), XD6 (enhanced with NPU, 4K, PoE+), and XS6 (embedded SoC with integrated NPU).",
+    "file": "03-writing-software-for-the-npu"
+  },
+  {
+    "prompt": "How do you use the roFileSystem.SetPermissions() method to control file access on BrightSign?",
+    "label": "bad",
+    "notes": "roFileSystem.SetPermissions() is fabricated in this context. BrightSign's file system permissions are managed by the Linux OS. Developer code runs as the Node.js user with predefined storage permissions.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What data type precision do NPUs primarily use for maximum efficiency?",
+    "label": "good",
+    "notes": "NPUs primarily operate with 8-bit integer (INT8) data types for maximum efficiency, though some support 16-bit floating point (FP16/BF16) operations.",
+    "file": "03-writing-software-for-the-npu"
+  },
+  {
+    "prompt": "How do you use the roStorageManager.GetDeviceHealth() method to check SD card health?",
+    "label": "bad",
+    "notes": "roStorageManager is fabricated. Storage information uses roStorageInfo which validates if a device is mounted. There is no SD card health monitoring API in BrightScript.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What voltage level do BrightSign GPIO pins operate at?",
+    "label": "good",
+    "notes": "3.3V logic levels. Maximum current per pin is 24mA (source or sink). Total GPIO power supply is 500mA at 3.3V, polyfuse protected. Input threshold: 2V high, 0.8V low.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you use the 'benchmark' shell command to run a full system performance test on BrightSign?",
+    "label": "bad",
+    "notes": "The 'benchmark' command is fabricated. BrightSign shell provides specific performance commands: readperf, writeperf, httpgetperf for targeted testing. There is no comprehensive benchmark command.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript object is used to control GPIO pins on a BrightSign player?",
+    "label": "good",
+    "notes": "roControlPort created with CreateObject('roControlPort', 'BrightSign'). Use EnableOutput(pin) and SetOutputState(pin, true/false) for output, EnableInput(pin) for input with events.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you use the instanceof keyword in BrightScript for type checking?",
+    "label": "bad",
+    "notes": "instanceof does not exist in BrightScript. Type checking uses the type() function which returns a string representation. For example: if type(obj) = 'roAssociativeArray' then.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you create a serial port connection in BrightScript?",
+    "label": "good",
+    "notes": "Use CreateObject('roSerialPort', portNumber, baudRate). For example: serial = CreateObject('roSerialPort', 0, 9600). Configure with SetLineEventPort(), SetReceiveEol(), SetSendEol(). Send with SendLine().",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you use the roVideoPlayer.SetPortraitMode() method for vertical display orientation?",
+    "label": "bad",
+    "notes": "SetPortraitMode() is fabricated. Video rotation is handled through roVideoMode for display-level rotation, or hwz='z-index:-1; transform:rot90;' on HTML5 video elements for per-video rotation.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What is the 3.5mm serial connector pinout on BrightSign players?",
+    "label": "good",
+    "notes": "Tip = RX (Receive), Ring = TX (Transmit), Sleeve = Ground. This is the standard 3.5mm jack serial configuration used on many BrightSign models.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you use the roAudioMixer.SetChannelVolume() method for multi-channel audio mixing?",
+    "label": "bad",
+    "notes": "roAudioMixer is fabricated. Audio playback uses roAudioPlayer with SetVolume() for volume control. There is no dedicated audio mixer object for multi-channel mixing. Audio routing uses pcmaudio/compaudio HTML attributes.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "How does BrightSign support PWM (Pulse Width Modulation) for LED brightness control?",
+    "label": "good",
+    "notes": "Use roControlPort with SetPulseParams({milliseconds: 500, slices: 2}) to set the PWM period and resolution, then SetPulse(pin, bitmask) to set duty cycle per pin. For example, 8 slices allows 12.5% brightness steps.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you use the @brightsign/inspector module to programmatically capture debug snapshots?",
+    "label": "bad",
+    "notes": "@brightsign/inspector is fabricated. Debugging uses the Chromium DevTools protocol via inspector_server configuration. The standard Node.js inspector module can be used for programmatic debugging with inspector.open().",
+    "file": "03-debugging-javascript"
+  },
+  {
+    "prompt": "What types of USB HID devices does BrightSign support?",
+    "label": "good",
+    "notes": "USB keyboards, mice, touchscreens (standard HID drivers only), barcode scanners, RFID readers, game controllers/joysticks, and button panels (BP200/BP900).",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you use the roScreenCapture.SaveToFile() method for taking screenshots from BrightScript?",
+    "label": "bad",
+    "notes": "roScreenCapture is fabricated. Screenshots are taken via the DWS API (/api/v1/snapshot), the gopurple rdws-snapshot tool, or BrightAuthor:connected. There is no direct BrightScript screenshot object.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What JavaScript module is used for GPIO control on BrightSign from HTML5 applications?",
+    "label": "good",
+    "notes": "require('@brightsign/legacy/controlport'). Create an instance with new control_port_class('BrightSign'), then use ConfigureAsOutput(pin), SetPinValue(pin, value), ConfigureAsInput(pin), and addEventListener for events.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you use the roControlPort.SetDebounce() method to filter button noise?",
+    "label": "bad",
+    "notes": "SetDebounce() is fabricated. BrightSign GPIO hardware includes internal pull-up resistors (1k\u03a9 to 3.3V) but no programmable debounce. Software debounce must be implemented in application code using timing logic.",
+    "file": "12-using-gpio-for-interactivity"
+  },
+  {
+    "prompt": "What is the roControlPort.SetWholeState() method used for?",
+    "label": "good",
+    "notes": "SetWholeState() sets all GPIO outputs simultaneously using a bitmask. Each bit represents a pin: port.SetWholeState(gpio1 + gpio3) sets pins 1 and 3 high where gpio1=2^1=2, gpio3=2^3=8.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you use the @brightsign/worker module for multi-threaded JavaScript execution?",
+    "label": "bad",
+    "notes": "@brightsign/worker is fabricated. Multi-threading uses standard Web Workers API in the Chromium context. BrightScript itself is single-threaded. There is no BrightSign-specific worker module.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What are the service tiers available in BSN.cloud?",
+    "label": "good",
+    "notes": "bsn.Control (free tier: provisioning, diagnostics, health monitoring, B-Deploy), bsn.Content (paid: content management, presentations, scheduling), and Enterprise (custom SLA, advanced security, white-label).",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "How do you use the roFileWatcher.OnChange() callback to monitor file changes in BrightScript?",
+    "label": "bad",
+    "notes": "roFileWatcher is fabricated. File monitoring in BrightScript requires polling with periodic timer checks. In Node.js, use fs.watch() for file change detection. BrightScript has no native file watching capability.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What authentication method does BSN.cloud use for API access?",
+    "label": "good",
+    "notes": "OAuth2 with client credentials (client_id and client_secret). API requests use Bearer token authentication in the Authorization header.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "How do you use the roMediaController.SetPlaybackPriority() method to manage conflicting media requests?",
+    "label": "bad",
+    "notes": "roMediaController is fabricated. Media playback is managed directly through individual objects (roVideoPlayer, roAudioPlayer, roImagePlayer). There is no centralized media controller with priority management.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is the B-Deploy API used for in BSN.cloud?",
+    "label": "good",
+    "notes": "B-Deploy is used for bulk/automated device provisioning. It allows registering multiple devices at once with a setup ID, enabling zero-touch deployment for large installations.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "What is the @brightsign/power-management module used for in JavaScript?",
+    "label": "bad",
+    "notes": "@brightsign/power-management is fabricated. Power management on BrightSign is done through BrightScript registry settings, BSN.cloud scheduling, or the DWS API (PUT /api/v1/reboot). There is no dedicated JS power module.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What is the recovery URL ('ru') registry key used for on BrightSign players?",
+    "label": "good",
+    "notes": "The 'ru' key in the 'networking' registry section is the provisioning/recovery URL. The player makes HTTP GET requests to this URL at boot (override mode), periodically, and during recovery (last_resort mode) to check for content updates.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "How do you use the roDisplayOutput.SetColorSpace() method to configure HDR color output?",
+    "label": "bad",
+    "notes": "roDisplayOutput is fabricated. Display output is configured via roVideoMode.SetMode(). HDR output is automatic based on content and player model capability. There is no color space configuration API.",
+    "file": "01-introduction-to-brightsign-players"
+  },
+  {
+    "prompt": "What are the three recovery modes in BrightSign's automated provisioning system?",
+    "label": "good",
+    "notes": "Override (fires every boot when valid autorun exists, 20s timeout), Periodic (heartbeat check-in during normal operation, configurable interval), and Last Resort (emergency recovery when no autorun works, loops indefinitely).",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What is the roContentValidator.CheckIntegrity() method used for on BrightSign?",
+    "label": "bad",
+    "notes": "roContentValidator is fabricated. Content integrity is not validated through a dedicated object. File existence is checked via roReadFile/roFileInfo creation, and video playability via roVideoPlayer.ProbeFile().",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How does DHCP Option 43 work for BrightSign automatic provisioning?",
+    "label": "good",
+    "notes": "DHCP Option 43 provides the recovery URL to all BrightSign players on a network segment. The URL is prepended with 'U' + ASCII character representing URL length. It overrides the registry 'ru' value until DHCP lease expires.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "How do you use the @brightsign/filesystem module's mount() function to dynamically mount storage?",
+    "label": "bad",
+    "notes": "@brightsign/filesystem with mount() is fabricated. Storage mounting is handled by the OS automatically. From JavaScript, use the standard fs module for file operations. The @brightsign/storage module provides format and eject only.",
+    "file": "02-javascript-node-programs"
+  },
+  {
+    "prompt": "What happens when a BrightSign player's recovery server responds with HTTP 204?",
+    "label": "good",
+    "notes": "In override mode: player runs local autorun normally. In periodic mode: player continues current autorun. In last_resort mode: player immediately reboots. A 204 or empty 200 body means 'no update needed'.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What does the roNetworkDiagnostics.RunSpeedTest() method measure on BrightSign?",
+    "label": "bad",
+    "notes": "roNetworkDiagnostics is fabricated. Network diagnostics use roNetworkConfiguration.GetCurrentConfig() for interface status, roUrlTransfer for connectivity testing, and shell commands like ping and httpgetperf for speed testing.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What HTTP header does the BrightSign player send to indicate the type of recovery request?",
+    "label": "good",
+    "notes": "The 'recoverymode' header with values: 'override' (boot check-in), 'periodic' (running heartbeat), or 'last_resort' (emergency recovery). The 'storagestatus' header provides per-device storage condition info.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "How do you use the roVideoPlayer.SetSubtitleTrack() method for closed captioning?",
+    "label": "bad",
+    "notes": "SetSubtitleTrack() is fabricated. Caption configuration uses roVideoMode.SetCaptionMode() for display-level caption settings. There is no per-video subtitle track selection method on roVideoPlayer.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What are the possible storagestatus header values in BrightSign recovery mode requests?",
+    "label": "good",
+    "notes": "none (device not detected), storage (present but no autorun), autorun (valid autorun found), autorun load error (failed to load), autorun runtime error (crashed at runtime), error (failed filesystem check).",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What is the roSecureStorage object used for encrypted local data storage?",
+    "label": "bad",
+    "notes": "roSecureStorage is fabricated. Data storage uses roRegistrySection for key-value pairs and standard file operations for files. Neither provides built-in encryption. Security comes from the player's physical and network controls.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How does the Retry-After header work with BrightSign periodic recovery mode?",
+    "label": "good",
+    "notes": "The server can include a Retry-After header (value in seconds) in its response to control how frequently the player checks in during periodic mode. This allows dynamic frequency adjustment.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "How do you use the @brightsign/beacon module for BLE beacon scanning on BrightSign?",
+    "label": "bad",
+    "notes": "@brightsign/beacon is fabricated. BrightSign players do not include built-in Bluetooth/BLE hardware or scanning capabilities. BLE functionality would require external USB adapters, which are not documented as supported.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "What DNS-based discovery methods does BrightSign use for zero-config provisioning?",
+    "label": "good",
+    "notes": "If registry ru is blank, the player checks DNS for 'brightsign.b-deploy' hostname, and also checks mDNS for 'brightsign.b-deploy.local' on the local network for a provisioning server.",
+    "file": "02-automated-provisioning"
+  },
+  {
+    "prompt": "What is the roScheduler.AddEvent() method used for on BrightSign players?",
+    "label": "bad",
+    "notes": "roScheduler is fabricated. Scheduling on BrightSign uses roTimer for timed events, BSN.cloud for presentation scheduling, or custom time-checking logic with roDateTime. There is no built-in scheduler object.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is the quick-start autorun.brs script that enables all development tools on a BrightSign player?",
+    "label": "good",
+    "notes": "A script that writes registry keys to enable DWS (dwse=yes), SSH (ssh=22), BrightScript debug (debug=1), Prometheus metrics, and sets no password. Boot once with the SD card, remove it, then reboot for a fully accessible dev player.",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "How do you use the roVideoPlayer.SetTransition() method for video crossfade effects?",
+    "label": "bad",
+    "notes": "SetTransition() is fabricated. roVideoPlayer does not support crossfade transitions. Transitions between videos must be implemented at the application level, typically using HTML5/CSS animations or overlapping zones.",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What CLI tool does BrightSign provide for communicating with the Local DWS from your development machine?",
+    "label": "good",
+    "notes": "@brightsign/bsc, installed via 'npm install -g @brightsign/bsc'. It provides file operations, registry management, screenshots, power control, and system diagnostics by communicating with the Local DWS REST APIs.",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "What is the roTelemetryService.SendMetrics() method used for on BrightSign?",
+    "label": "bad",
+    "notes": "roTelemetryService is fabricated. Telemetry data is collected via BSN.cloud health monitoring, Prometheus node_exporter, or custom health check scripts using roUrlTransfer to POST metrics to a monitoring server.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What is the roTextWidget object used for on BrightSign players?",
+    "label": "good",
+    "notes": "roTextWidget displays text on screen. Created with CreateObject('roTextWidget', rectangle, zOrder, layerIndex, params). Parameters include LineCount, TextMode, Rotation, Alignment. Use PushString() and Show() to display.",
+    "file": "01-setting-up-development-environment"
+  },
+  {
+    "prompt": "How do you use the @brightsign/update-manager module to manage OTA firmware updates?",
+    "label": "bad",
+    "notes": "@brightsign/update-manager is fabricated. Firmware updates are managed through BSN.cloud, BrightAuthor:connected, or by placing firmware files on the SD card. There is no JavaScript module for update management.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "What video event codes does roVideoPlayer generate for playback state changes?",
+    "label": "good",
+    "notes": "Key event codes: 3 (Playing/started), 8 (MediaEnded), 12 (TimeHit from AddEvent), 13 (Timecode position update), 14 (Paused), 15 (PlaybackFailure/error).",
+    "file": "04-playing-video-content"
+  },
+  {
+    "prompt": "What is the roNetworkConfiguration.EnableVPN() method used for on BrightSign?",
+    "label": "bad",
+    "notes": "EnableVPN() is fabricated. VPN configuration on BrightSign is not documented through a direct BrightScript API. Network security uses standard HTTPS, SSH, and BSN.cloud secure communication channels.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "How do you create a multi-zone layout with video and an HTML ticker on BrightSign?",
+    "label": "good",
+    "notes": "Create separate roRectangle objects for each zone, then assign them: videoPlayer.SetRectangle(videoRect) for video and CreateObject('roHtmlWidget', tickerRect, config) for HTML. Zone support is enabled by default in firmware 6.0+.",
+    "file": "07-multi-zone-layouts"
+  },
+  {
+    "prompt": "How do you use the roVideoPlayer.AddOverlay() method to composite graphics on top of video?",
+    "label": "bad",
+    "notes": "AddOverlay() is fabricated. Graphics compositing uses multi-zone layouts with roHtmlWidget or roImagePlayer zones positioned above the video zone, or HWZ z-index attributes on HTML5 video elements.",
+    "file": "07-multi-zone-layouts"
+  },
+  {
+    "prompt": "What BrightScript objects can be used for different zone types in multi-zone layouts?",
+    "label": "good",
+    "notes": "roVideoPlayer (video), roImagePlayer (images), roHtmlWidget (HTML/web content), roTextField (text), roClockWidget (time display), roCanvasWidget (custom graphics).",
+    "file": "07-multi-zone-layouts"
+  },
+  {
+    "prompt": "What is the @brightsign/analytics module used for tracking viewer engagement?",
+    "label": "bad",
+    "notes": "@brightsign/analytics is fabricated. Analytics and engagement tracking require custom implementation using GPIO sensors, camera inputs, or third-party services. BSN.cloud provides basic player health analytics but not viewer engagement.",
+    "file": "01-integrating-with-bsn-cloud"
+  },
+  {
+    "prompt": "What is the roImagePlayer object used for in BrightScript?",
+    "label": "good",
+    "notes": "roImagePlayer displays static images. Use DisplayFile('image.jpg') to show an image. It supports JPEG, PNG, BMP, GIF formats with hardware-accelerated decoding.",
+    "file": "07-multi-zone-layouts"
+  },
+  {
+    "prompt": "How do you use the roHTTPClient.SetConnectionPool() method for persistent HTTP connections?",
+    "label": "bad",
+    "notes": "roHTTPClient is fabricated. HTTP operations use roUrlTransfer which creates individual request objects. Connection pooling is handled at the system level. There is no explicit connection pool configuration.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "How do you use the EnableZoneSupport() function in BrightScript?",
+    "label": "good",
+    "notes": "EnableZoneSupport(true) enables multi-zone layouts. It is enabled by default in firmware 6.0+. For older firmware, call it explicitly before creating multiple player/widget zones.",
+    "file": "07-multi-zone-layouts"
+  },
+  {
+    "prompt": "What is the roDeviceInfo.GetGPUInfo() method used for on BrightSign players?",
+    "label": "bad",
+    "notes": "GetGPUInfo() is fabricated. roDeviceInfo provides GetDeviceUniqueId(), GetModel(), GetFamily(), GetVersion(), GetMemoryLevel(). GPU information is not exposed through the BrightScript API.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "What is the primary BrightScript object for making HTTP requests?",
+    "label": "good",
+    "notes": "roUrlTransfer. Use SetUrl() for the endpoint, AddHeader() for headers, GetToString() or GetToFile() for synchronous requests, and AsyncGetToString()/AsyncGetToFile() for asynchronous requests.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "How do you use the roLoggingService.SetRemoteEndpoint() method for centralized logging?",
+    "label": "bad",
+    "notes": "roLoggingService is fabricated. Centralized logging uses syslog configuration (registry key 'syslog' in networking section) or custom log upload via roUrlTransfer. There is no dedicated logging service object.",
+    "file": "03-debugging-brightscript"
+  },
+  {
+    "prompt": "How do you perform an asynchronous file download in BrightScript?",
+    "label": "good",
+    "notes": "Create roUrlTransfer, set its port to a roMessagePort, call AsyncGetToFile(destination). Monitor roUrlEvent messages for completion. Check GetResponseCode() for HTTP status and GetFailureReason() for errors.",
+    "file": "08-fetching-remote-content"
+  },
+  {
+    "prompt": "What is the @brightsign/camera module used for on BrightSign players?",
+    "label": "bad",
+    "notes": "@brightsign/camera is fabricated. While BrightSign supports USB camera MJPEG streams as video sources, there is no dedicated camera module in the JavaScript API. Camera feeds use standard video element with appropriate source URLs.",
+    "file": "04-hardware-integrations"
+  },
+  {
+    "prompt": "How do you add custom HTTP headers to API requests in BrightScript?",
+    "label": "good",
+    "notes": "Use urlTransfer.AddHeader(key, value). For example: urlTransfer.AddHeader('Authorization', 'Bearer your-token') and urlTransfer.AddHeader('Content-Type', 'application/json').",
+    "file": "09-integrating-rest-apis"
+  },
+  {
+    "prompt": "How do you use the roNetworkConfiguration.SetQoS() method for traffic prioritization?",
+    "label": "bad",
+    "notes": "SetQoS() is fabricated. Network QoS is not configurable through BrightScript. QoS must be configured at the network infrastructure level (switches, routers). BrightSign provides interface metrics for interface priority only.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What BrightScript object is used to interact with touchscreen displays?",
+    "label": "good",
+    "notes": "roTouchScreen. Create it with CreateObject('roTouchScreen'), set resolution with SetResolution(), and add regions with AddRectangleRegion(x, y, w, h, id) or AddCircleRegion(x, y, r, id).",
+    "file": "15-touch-screen-configuration"
+  },
+  {
+    "prompt": "What is the roConfigManager.ExportSettings() method used for on BrightSign?",
+    "label": "bad",
+    "notes": "roConfigManager is fabricated. Configuration export is done by reading all registry sections using roRegistry.GetSectionList() and roRegistrySection.GetKeyList()/Read(). There is no dedicated config manager.",
+    "file": "02-practical-development"
+  },
+  {
+    "prompt": "What is the roSerialPort.SetLineEventPort() method used for?",
+    "label": "good",
+    "notes": "SetLineEventPort(msgPort) configures the serial port to send roStreamLineEvent messages to the specified message port when complete lines are received, using the EOL character set by SetReceiveEol().",
+    "file": "13-serial-communication"
+  },
+  {
+    "prompt": "How do you use the roMediaSync.SetSyncGroup() method for synchronized playback across multiple players?",
+    "label": "bad",
+    "notes": "roMediaSync is fabricated with this API. Multi-player synchronization uses network time protocols, BSN.cloud presentation scheduling, or custom UDP-based sync solutions. There is no built-in multi-player sync API.",
+    "file": "01-brightscript-language-reference"
+  },
+  {
+    "prompt": "How do you create a DHCP server on a BrightSign player?",
+    "label": "good",
+    "notes": "There is no native BrightScript DHCP server object. Use Node.js with the built-in dgram (UDP) module to implement a DHCP server, launched via roNodeJs from BrightScript. The network interface must have a static IP.",
+    "file": "20-dhcp-server-node"
+  },
+  {
+    "prompt": "What is the @brightsign/touchcalibration module used for on BrightSign players?",
+    "label": "bad",
+    "notes": "@brightsign/touchcalibration is fabricated. Touchscreen calibration on BrightSign uses the roTouchScreen object with SetResolution() in BrightScript. There is no dedicated JavaScript calibration module.",
+    "file": "15-touch-screen-configuration"
+  },
+  {
+    "prompt": "How do you create a new GoPurple client and authenticate with BSN.cloud?",
+    "label": "good",
+    "notes": "Use gopurple.New() with optional WithCredentials(), WithNetwork(), WithTimeout() options. By default loads BS_CLIENT_ID and BS_SECRET env vars. Then call client.Authenticate(ctx) to perform OAuth2 authentication. The SDK handles token management automatically.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the gopurple.DeviceStream() method to subscribe to real-time device status events via WebSocket?",
+    "label": "bad",
+    "notes": "DeviceStream() does not exist. The SDK uses polling-based HTTP REST API calls, not WebSocket-based real-time event streams. There is no streaming subscription mechanism in the SDK.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What environment variables does the GoPurple SDK read for configuration?",
+    "label": "good",
+    "notes": "BS_CLIENT_ID for the OAuth2 client ID, BS_SECRET for the client secret, and BS_NETWORK (optional) for the default network name. These are loaded automatically by cfg.LoadFromEnv() in the New() constructor.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure the GoPurple SDK to use the gopurple.WithMTLS() option for mutual TLS authentication with BSN.cloud?",
+    "label": "bad",
+    "notes": "WithMTLS() does not exist. The SDK uses OAuth2 client_credentials flow for authentication, not mutual TLS. The available options are WithCredentials, WithNetwork, WithTimeout, WithRetryCount, WithDebug, WithEndpoints, WithTokenEndpoint, WithOIDCURL, WithDeviceSerial, WithAccessToken.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What are the four reboot types available for device reboots in the GoPurple SDK?",
+    "label": "good",
+    "notes": "RebootTypeNormal ('normal'), RebootTypeCrash ('crash' - saves crash report), RebootTypeFactoryReset ('factoryreset'), and RebootTypeDisableAutorun ('disableautorun'). These are defined as RebootType string constants.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the client.Devices.BulkReboot() method to reboot multiple devices at once?",
+    "label": "bad",
+    "notes": "BulkReboot() does not exist in the DeviceService interface. Reboots must be performed individually per device using Reboot(ctx, id, rebootType) or RebootBySerial(ctx, serial, rebootType).",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the difference between client.Devices.Get() and client.Devices.GetByID()?",
+    "label": "good",
+    "notes": "Get(ctx, serial) retrieves a device by its serial number string. GetByID(ctx, id) retrieves a device by its numeric ID (int). Both return *types.Device and require authentication and network context.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use the gopurple.WithBatchSize() option to control how many devices are fetched per API call?",
+    "label": "bad",
+    "notes": "WithBatchSize() does not exist. For pagination, use WithPageSize() as a ListOption when calling client.Devices.List(). There is no global batch size configuration option.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What are the valid setupType values for a B-Deploy setup configuration?",
+    "label": "good",
+    "notes": "Valid values are: 'bsn' (BrightSign Network - standard BSN.cloud deployment), 'lfn' (Local File Network), 'standalone' (independent operation), 'sfn' (Simple File Network - HTTP/HTTPS web server), and 'partnerApplication' (third-party partner integration).",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the setupType to 'cloudRelay' for a B-Deploy configuration that proxies content through BSN.cloud edge servers?",
+    "label": "bad",
+    "notes": "'cloudRelay' is fabricated. Valid setupType values are 'bsn', 'lfn', 'standalone', 'sfn', and 'partnerApplication'. There is no cloud relay/proxy setup type.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How does player-to-setup association work in the B-Deploy system?",
+    "label": "good",
+    "notes": "Association is DIRECT via the setupId field in the device record. Device.setupId references Setup._id directly. It is NOT through groups. The flow is: Serial Number -> setupId -> Configuration. Groups (bsnGroupName) are only for BSN.cloud dashboard organization.",
+    "file": "bdeploy-association"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.AssociateGroup() to link a BSN group to a setup record for automatic device provisioning?",
+    "label": "bad",
+    "notes": "AssociateGroup() does not exist. Player-to-setup association is direct via setupId, NOT through groups. Groups are separate organizational features. Use UpdateDevice() with a setupId to associate a device with a setup.",
+    "file": "bdeploy-association"
+  },
+  {
+    "prompt": "What types are exported by the gopurple package for device status monitoring?",
+    "label": "good",
+    "notes": "DeviceStatusEmbed (main status container), FirmwareInfo (firmware version), ScriptInfo (BrightScript/plugin info), SyncSettings and SyncPeriod (synchronization), StorageInfo (storage capacity/usage), NetworkInfo (connectivity), NetworkInterfaceBSN (individual interface details).",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How do you use the gopurple.DeviceHealthScore type to get a numeric health score between 0 and 100 for a device?",
+    "label": "bad",
+    "notes": "DeviceHealthScore type does not exist. Device health is represented by a string field (DeviceStatusEmbed.Health) with values like 'Healthy', 'Warning', 'Error'. There is no numeric 0-100 health score.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How do you list all devices with filtering and pagination using the GoPurple SDK?",
+    "label": "good",
+    "notes": "Use client.Devices.List(ctx, opts...) with ListOption values: WithPageSize(50), WithFilter('model=XD1033'), WithSort('lastModifiedDate desc'), WithMarker(nextMarker). Returns *DeviceList with Items, IsTruncated, NextMarker, TotalCount.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use the client.Devices.Search() method with SearchParams to perform full-text search across device names and descriptions?",
+    "label": "bad",
+    "notes": "Search() and SearchParams do not exist. Use client.Devices.List() with WithFilter() option for filtering. The SDK does not provide full-text search capabilities.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What RDWS operations are available for file management on a BrightSign player?",
+    "label": "good",
+    "notes": "ListFiles(ctx, serial, path), UploadFile(ctx, serial, path, fileName, fileContents, fileType), CreateFolder(ctx, serial, path), RenameFile(ctx, serial, path, newName), DeleteFile(ctx, serial, path). All require authentication and network context.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SyncFiles() to automatically synchronize a local directory with the player's storage?",
+    "label": "bad",
+    "notes": "SyncFiles() does not exist. File operations must be performed individually: list files, upload, delete, rename. There is no automatic directory synchronization feature in the RDWS service.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you take a screenshot of a BrightSign player using the RDWS service?",
+    "label": "good",
+    "notes": "Use client.RDWS.Snapshot(ctx, serial) via the RDWS service, or client.Devices.TakeSnapshotBySerial(ctx, serial, req) via the main API. SnapshotRequest supports Format ('png'/'jpeg'), Quality (1-100), Region (x,y,width,height), DisplayID for multi-display.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.VideoCapture() to record a 30-second video clip from the player's display output?",
+    "label": "bad",
+    "notes": "VideoCapture() does not exist. The RDWS service only supports static screenshots via Snapshot(), not video recording. There is no video capture capability in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What are the three methods available in the SubscriptionService?",
+    "label": "good",
+    "notes": "List(ctx, opts...ListOption) returns a paginated list of device subscriptions, GetCount(ctx) returns the subscription count, and GetOperations(ctx) returns operational permissions granted to roles for subscriptions.",
+    "file": "subscriptions"
+  },
+  {
+    "prompt": "How do you use client.Subscriptions.Renew() to extend a device subscription before it expires?",
+    "label": "bad",
+    "notes": "Renew() does not exist. The SubscriptionService only provides read operations: List(), GetCount(), and GetOperations(). There are no write/modification operations for subscriptions in the SDK.",
+    "file": "subscriptions"
+  },
+  {
+    "prompt": "What does the EnsureReady() method on the Client do?",
+    "label": "good",
+    "notes": "EnsureReady(ctx) is a convenience method that calls Authenticate() first, then if a network name is configured but not yet set, it calls SetNetwork(). It ensures the client is both authenticated and has a network context established.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How does the gopurple.NewFromConfig() function create a client from a YAML configuration file?",
+    "label": "bad",
+    "notes": "NewFromConfig() does not exist. The SDK creates clients via gopurple.New(opts...) with functional options, or by using environment variables. There is no YAML configuration file support.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What is the B-Deploy Setup API v3 base URL for setup record operations?",
+    "label": "good",
+    "notes": "https://provision.bsn.cloud/rest-setup/v3/setup/ is the base URL. Supports GET (list), POST (create), PUT (update), DELETE /?_id={id} (delete), and GET /{_id}/ (get by ID).",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you call the B-Deploy v4 setup API at https://provision.bsn.cloud/rest-setup/v4/setup/ to use the latest provisioning features?",
+    "label": "bad",
+    "notes": "There is no v4 setup API. The SDK uses v3 (rest-setup/v3/setup/) for setup records and v2 (rest-device/v2/device/) for device records. The v4 endpoint is fabricated.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you generate a device registration token using the ProvisioningService?",
+    "label": "good",
+    "notes": "Call client.Provisioning.GenerateDeviceToken(ctx). Returns a *BSNTokenEntity with Token, Scope ('cert'), ValidFrom, and ValidTo fields. The token is valid for 2 years by default and is used in B-Deploy setup records for player registration.",
+    "file": "provisioning"
+  },
+  {
+    "prompt": "How do you use client.Provisioning.BulkProvision() to provision multiple devices with a single API call?",
+    "label": "bad",
+    "notes": "BulkProvision() does not exist. The ProvisioningService only offers GenerateDeviceToken(ctx) and ValidateDeviceToken(ctx, token). Device provisioning is done by creating setup records and associating devices individually.",
+    "file": "provisioning"
+  },
+  {
+    "prompt": "What fields are required in a minimal B-Deploy setup configuration JSON?",
+    "label": "good",
+    "notes": "Required fields: bDeploy.username, bDeploy.networkName, bDeploy.packageName, and setupType. All other fields are optional with sensible defaults. The SDK automatically sets version to '3.0.0' if not specified.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the bDeploy.provisioningMode field to 'automatic' to enable zero-touch provisioning in a B-Deploy config?",
+    "label": "bad",
+    "notes": "The provisioningMode field does not exist. Required bDeploy fields are username, networkName, packageName, and optionally client. Zero-touch provisioning is handled by the setupId association mechanism, not a mode field.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure wireless network settings in a B-Deploy setup record?",
+    "label": "good",
+    "notes": "Set useWireless: true, ssid: 'network-name', passphrase: 'password'. For static IP, set useDHCP_2: false with staticIPAddress_2, subnetMask_2, gateway_2, dns1_2, dns2_2, dns3_2. The passphrase is stored in plain text.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the bDeploy.wifiProfile field to reference a pre-configured WiFi profile stored in BSN.cloud?",
+    "label": "bad",
+    "notes": "wifiProfile field does not exist. WiFi configuration is done inline with useWireless, ssid, and passphrase fields directly in the setup record. There is no WiFi profile reference mechanism.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What network diagnostics methods does the RDWS service provide?",
+    "label": "good",
+    "notes": "GetDiagnostics(ctx, serial), DNSLookup(ctx, serial, domain), Ping(ctx, serial, host), TraceRoute(ctx, serial, host), GetNetworkConfig(ctx, serial, iface), SetNetworkConfig(ctx, serial, iface, req), GetNetworkNeighborhood(ctx, serial), plus packet capture operations.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SpeedTest() to measure the network bandwidth of a BrightSign player?",
+    "label": "bad",
+    "notes": "SpeedTest() does not exist. Available diagnostics are DNS lookup, ping, traceroute, network config, network neighborhood, and packet capture. There is no bandwidth speed test feature.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you manage SSH on a BrightSign player through the RDWS service?",
+    "label": "good",
+    "notes": "Use client.RDWS.GetSSHStatus(ctx, serial) to check SSH status, and client.RDWS.SetSSHStatus(ctx, serial, enabled, port, password) to enable/disable SSH with a specific port and password. SSH must be enabled via RDWS after provisioning.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SSHTunnel() to establish a reverse SSH tunnel to a player behind a NAT?",
+    "label": "bad",
+    "notes": "SSHTunnel() does not exist. The RDWS SSH methods only get/set SSH status (enabled, port, password) on the player. There is no SSH tunnel or NAT traversal feature in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use the WithAccessToken option to reuse a cached bearer token?",
+    "label": "good",
+    "notes": "Pass gopurple.WithAccessToken(token) to gopurple.New(). This sets a pre-loaded access token for session reuse, allowing CLI tools to cache the bearer token between invocations and skip the OAuth round-trip when the token is still valid.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithRefreshToken() to enable automatic token refresh using a stored refresh token?",
+    "label": "bad",
+    "notes": "WithRefreshToken() does not exist. The SDK handles token refresh internally through the AuthManager. You can use WithAccessToken() to provide a cached token, but there is no explicit refresh token option.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What is the DeviceWebPageService used for?",
+    "label": "good",
+    "notes": "DeviceWebPageService provides List(ctx), GetByID(ctx, id), and GetDefault(ctx) methods. GetDefault() finds the 'Default_PresentationWebPage' entry. These are needed when creating presentations that reference the default device web page.",
+    "file": "devicewebpages"
+  },
+  {
+    "prompt": "How do you use client.DeviceWebPages.Create() to upload a custom HTML web page to a device?",
+    "label": "bad",
+    "notes": "Create() does not exist in DeviceWebPageService. The service only has List(), GetByID(), and GetDefault(). Web page creation, updates, and deletion are not implemented in the SDK (marked NOT-DONE in all-apis.md).",
+    "file": "devicewebpages"
+  },
+  {
+    "prompt": "How does the BDeployService.GetAllDevices() method work with network context?",
+    "label": "good",
+    "notes": "First call BDeploy.SetNetworkContext(ctx, networkName) to establish the network. Then call GetAllDevices(ctx, opts...). The method includes NetworkName as a query parameter. Without network context, it may return 0 devices. Supports WithSetupName() option.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.MigrateDevices() to move all devices from one setup to another?",
+    "label": "bad",
+    "notes": "MigrateDevices() does not exist. To reassign devices, you must update each device individually using UpdateDevice() with a new setupId. There is no bulk migration method.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What are the logging configuration options available in a B-Deploy setup record?",
+    "label": "good",
+    "notes": "playbackLoggingEnabled, eventLoggingEnabled, diagnosticLoggingEnabled, stateLoggingEnabled, variableLoggingEnabled, uploadLogFilesAtBoot, uploadLogFilesAtSpecificTime, uploadLogFilesTime (hour 0-23), logHandlerUrl (custom URL). All boolean fields default to false.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the logRotationPolicy field in a B-Deploy config to automatically rotate log files when they exceed 10MB?",
+    "label": "bad",
+    "notes": "logRotationPolicy does not exist. Log configuration options include enabling various log types and controlling upload timing. There is no log rotation policy or file size configuration in B-Deploy setups.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What options are available for listing B-Deploy setup records?",
+    "label": "good",
+    "notes": "BDeployListOption with: WithNetworkName(name) to filter by network, WithUsername(user) to filter by username, WithPackageName(pkg) to filter by package name, WithBDeployPageSize(size) for pagination, WithBDeployPage(page) for page number.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use WithSetupType() to filter B-Deploy records by setup type (bsn, lfn, etc.)?",
+    "label": "bad",
+    "notes": "WithSetupType() does not exist as a BDeployListOption. Available options are WithNetworkName(), WithUsername(), WithPackageName(), WithBDeployPageSize(), and WithBDeployPage(). Filtering by setupType must be done client-side.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you delete a B-Deploy device using the SDK?",
+    "label": "good",
+    "notes": "Call client.BDeploy.DeleteDevice(ctx, deviceID, serial). Either deviceID or serial must be provided; if both are provided, deviceID takes precedence. The method sends a DELETE request to /rest-device/v2/device?_id={id} or ?serial={serial}.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.DecommissionDevice() to remove a device and revoke its registration token simultaneously?",
+    "label": "bad",
+    "notes": "DecommissionDevice() does not exist. Deleting a device (DeleteDevice) and revoking tokens are separate operations. Token revocation is not even implemented in the SDK (DELETE /Setups/Tokens/{token}/ is NOT-DONE).",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you access the current firmware version of a device through the DeviceStatusEmbed type?",
+    "label": "good",
+    "notes": "Check device.Status.Firmware != nil, then access device.Status.Firmware.Version. The FirmwareInfo struct only has a Version string field. Always nil-check Status and Firmware since they may be nil.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How do you use device.Status.Firmware.ReleaseDate to check when the current firmware was released?",
+    "label": "bad",
+    "notes": "FirmwareInfo.ReleaseDate does not exist. The FirmwareInfo struct only contains a Version string field. There is no release date, update timestamp, or any other firmware metadata in the type.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How does storage monitoring work with the DeviceStatusEmbed type?",
+    "label": "good",
+    "notes": "Access device.Status.Storage which is []StorageInfo. Each StorageInfo has Interface (string), System (string), Total (int64), Used (int64), Free (int64). Calculate usage: float64(storage.Used) / float64(storage.Total) * 100.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How do you use the StorageInfo.HealthStatus field to check if a storage device is degraded or failing?",
+    "label": "bad",
+    "notes": "StorageInfo.HealthStatus does not exist. StorageInfo only has Interface, System, Total, Used, and Free fields. There is no storage health or SMART-like status reporting in the type.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "What is the WithNetworkContext convenience method used for?",
+    "label": "good",
+    "notes": "client.WithNetworkContext(ctx, fn) ensures both authentication and network context are set before executing the callback function fn. It calls EnsureReady(ctx) first, then checks IsNetworkSet(), and returns an auth error if no network is selected.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.WithTransaction() to wrap multiple API calls in an atomic transaction that can be rolled back?",
+    "label": "bad",
+    "notes": "WithTransaction() does not exist. The SDK has no transaction support. Available convenience methods are WithAuthentication(ctx, fn) and WithNetworkContext(ctx, fn). API calls are independent and not atomic.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you enable remote DWS (Diagnostic Web Server) in a B-Deploy setup configuration?",
+    "label": "good",
+    "notes": "Set remoteDwsEnabled: true in the setup config JSON. Optionally also set dwsEnabled: true for local DWS access and dwsPassword for password protection. Remote DWS is accessed via https://ws.bsn.cloud/.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the remoteDwsPort field to change the remote DWS listening port from the default 8443?",
+    "label": "bad",
+    "notes": "remoteDwsPort does not exist. Remote DWS uses BSN.cloud's ws.bsn.cloud infrastructure and does not allow custom port configuration. The only DWS-related fields are dwsEnabled, dwsPassword, and remoteDwsEnabled.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you get device error logs using the GoPurple SDK?",
+    "label": "good",
+    "notes": "Use client.Devices.GetErrors(ctx, id, opts...) or GetErrorsBySerial(ctx, serial, opts...) with optional ListOption pagination. Returns *DeviceErrorList with Items []DeviceError containing fields like ErrorCode, ErrorType, Severity, Message, Timestamp.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.ClearErrors() to acknowledge and clear all error entries for a device?",
+    "label": "bad",
+    "notes": "ClearErrors() does not exist. The DeviceService only provides read access to errors via GetErrors() and GetErrorsBySerial(). There is no method to clear, acknowledge, or delete error log entries.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the RDWS base URL used by the SDK?",
+    "label": "good",
+    "notes": "https://ws.bsn.cloud/rest/v1/ is the base URL for all RDWS operations. Endpoints include /info/, /time/, /health/, /files/, /control/, /diagnostics/, /logs/, /registry/, /snapshot/, etc. All use destinationType=player&destinationName={serial} query params.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you configure the SDK to use the RDWS v2 API at https://ws.bsn.cloud/rest/v2/ for enhanced diagnostic capabilities?",
+    "label": "bad",
+    "notes": "RDWS v2 does not exist. The SDK uses https://ws.bsn.cloud/rest/v1/ exclusively. The WithEndpoints() option allows custom endpoints but there is no v2 RDWS API.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you retrieve crash dump files from a BrightSign player?",
+    "label": "good",
+    "notes": "Use client.RDWS.GetCrashDump(ctx, serial). Returns *RDWSCrashDump which contains a collection of RDWSCrashDumpFile entries. The corresponding example is rdws-crashdump-get.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.AnalyzeCrashDump() to get a parsed stack trace and root cause analysis from a crash dump?",
+    "label": "bad",
+    "notes": "AnalyzeCrashDump() does not exist. GetCrashDump() returns raw crash dump files. There is no parsing, analysis, or stack trace extraction feature in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How many API endpoints are implemented in the GoPurple SDK out of the total available?",
+    "label": "good",
+    "notes": "43 out of approximately 294 total endpoints. BSN.cloud Main APIs: 16 implemented, B-Deploy Provisioning APIs: 14 endpoints with most DONE, RDWS: most endpoints implemented. Device Management, RDWS, B-Deploy, Groups, and Subscriptions are the most complete.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "Does the GoPurple SDK implement the BSN.cloud Content Upload API for uploading media files to the content library?",
+    "label": "bad",
+    "notes": "Content upload is explicitly noted as excluded/removed. The SDK does not implement content management, presentation creation, or media upload APIs. These are all marked NOT-DONE.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you configure rate limiting for wired and wireless interfaces in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Use rateLimitModeOutsideWindow, rateLimitRateOutsideWindow, rateLimitModeInWindow, rateLimitRateInWindow, rateLimitModeInitialDownloads, rateLimitRateInitialDownloads for wired. Add _2 suffix for wireless. Valid modes: 'default', 'unlimited', 'limited'. Rates in kbps.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the rateLimitBurstSize field to allow short bursts of high-bandwidth downloads?",
+    "label": "bad",
+    "notes": "rateLimitBurstSize does not exist. Rate limiting options are mode (default/unlimited/limited) and rate (kbps) for three contexts: outside window, in window, and initial downloads, per interface.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What is the IdleScreenColor type and how is it used?",
+    "label": "good",
+    "notes": "IdleScreenColor has R, G, B (0-255) and A (0-1) fields for RGBA color specification. It's used in BDeploySetupRecord.IdleScreenColor to set the idle screen color. Default is black: {R:0, G:0, B:0, A:1}.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the IdleScreenColor.Gradient field to set a gradient idle screen background?",
+    "label": "bad",
+    "notes": "IdleScreenColor has no Gradient field. It only supports flat RGBA colors with R, G, B (0-255) and A (0-1). There is no gradient support in the idle screen configuration.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the WithOIDCURL option when creating a client?",
+    "label": "good",
+    "notes": "gopurple.WithOIDCURL(url) sets the OIDC base URL and derives the token endpoint from it. This is useful when connecting to custom or non-standard authentication endpoints instead of the default BSN.cloud OAuth2 endpoint.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithSAMLProvider() to configure SAML-based SSO authentication with BSN.cloud?",
+    "label": "bad",
+    "notes": "WithSAMLProvider() does not exist. The SDK supports OAuth2 client_credentials authentication only. Options for auth customization are WithCredentials(), WithTokenEndpoint(), WithOIDCURL(), and WithAccessToken().",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you create a new device group using the GoPurple SDK?",
+    "label": "good",
+    "notes": "Call client.Devices.CreateGroup(ctx, name) which sends a POST to /Groups/Regular/. Returns *Group with ID, Name, Link fields. Requires authentication and network context.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.CreateNestedGroup() to create a hierarchical group structure with parent-child relationships?",
+    "label": "bad",
+    "notes": "CreateNestedGroup() does not exist. The DeviceService provides flat group management: CreateGroup(name), GetGroup(id), GetGroupByName(name), UpdateGroup(id, group), DeleteGroup(id), ListGroups(). No hierarchy support.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What does the DeviceList type contain when returned from Devices.List()?",
+    "label": "good",
+    "notes": "DeviceList has Items []Device, IsTruncated bool (true if more pages exist), NextMarker string (pagination token for next page), and TotalCount int. Use NextMarker with WithMarker() option for pagination.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use DeviceList.HasMore() and DeviceList.FetchNext() for automatic pagination?",
+    "label": "bad",
+    "notes": "HasMore() and FetchNext() do not exist on DeviceList. Pagination is manual: check IsTruncated, use NextMarker value with WithMarker() in the next List() call. There is no automatic pagination.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you configure content download time windows in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set contentDownloadsRestricted: true, contentDownloadRangeStart (minutes from midnight, e.g. 180 for 3AM), contentDownloadRangeEnd (e.g. 360 for 6AM). Similarly for heartbeats: heartbeatsRestricted, heartbeatsRangeStart, heartbeatsRangeEnd.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the contentDownloadDaysOfWeek field to restrict downloads to specific days (e.g., weekends only)?",
+    "label": "bad",
+    "notes": "contentDownloadDaysOfWeek does not exist. Download windows are configured only by time range (start/end in minutes from midnight) with contentDownloadRangeStart and contentDownloadRangeEnd. There is no day-of-week filtering.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you perform a DNS lookup using the RDWS service?",
+    "label": "good",
+    "notes": "Call client.RDWS.DNSLookup(ctx, serial, domain). Returns *RDWSDNSLookupResult. The API endpoint is GET /diagnostics/dns-lookup/{domain_name}/ with destinationType=player&destinationName={serial}.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ReverseDNS() to perform a reverse DNS lookup from an IP address?",
+    "label": "bad",
+    "notes": "ReverseDNS() does not exist. The RDWS diagnostics only support forward DNS lookup via DNSLookup(ctx, serial, domain). There is no reverse DNS lookup method in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you retrieve and set registry values on a BrightSign player?",
+    "label": "good",
+    "notes": "GetRegistry(ctx, serial) returns full registry dump. GetRegistryValue(ctx, serial, section, key) gets specific value. SetRegistryValue(ctx, serial, section, key, value) writes a value. DeleteRegistryValue removes it. FlushRegistry forces write to disk.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ExportRegistry() to save the entire player registry to a JSON file for backup?",
+    "label": "bad",
+    "notes": "ExportRegistry() does not exist. GetRegistry() returns the registry data as *RDWSRegistry. File saving must be done in user code. There is no built-in export/backup method.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What is the IsRateLimitError function used for?",
+    "label": "good",
+    "notes": "gopurple.IsRateLimitError(err) is mentioned in the README error handling example. However, looking at the actual exported error functions in gopurple.go, only IsAuthenticationError, IsNetworkError, IsConfigurationError, and IsRetryableError are re-exported. IsRateLimitError is shown in README examples.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use gopurple.IsQuotaExceededError() to detect when the API rate quota has been fully consumed?",
+    "label": "bad",
+    "notes": "IsQuotaExceededError() does not exist. The exported error checking functions are IsAuthenticationError, IsNetworkError, IsConfigurationError, and IsRetryableError. There is no quota-specific error type.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you set a custom hostname for a BrightSign player in a B-Deploy config?",
+    "label": "good",
+    "notes": "Set specifyHostname: true and hostname: 'lobby-display-1' in the setup configuration. These are optional fields; when specifyHostname is false, the player uses its default hostname.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the mDNSEnabled field in B-Deploy config to enable multicast DNS discovery for the player?",
+    "label": "bad",
+    "notes": "mDNSEnabled does not exist in the B-Deploy setup configuration. Hostname configuration only supports specifyHostname and hostname fields. There is no mDNS/Bonjour configuration option.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure BrightWall settings in a B-Deploy setup record?",
+    "label": "good",
+    "notes": "Set BrightWallName (string, e.g. 'LobbyWall') for the wall configuration name, and BrightWallScreenNumber (string, e.g. '1' or '3x2' for row x column) for the screen position. Both are optional fields.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the BrightWallSyncSource field to configure which player acts as the synchronization master in a video wall?",
+    "label": "bad",
+    "notes": "BrightWallSyncSource does not exist. BrightWall configuration in B-Deploy only supports BrightWallName and BrightWallScreenNumber. Sync master configuration is not part of the B-Deploy setup.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the WithDebug option to enable HTTP request/response logging?",
+    "label": "good",
+    "notes": "Pass gopurple.WithDebug(true) to gopurple.New(). This enables debug logging of all HTTP requests and responses, useful for troubleshooting API interactions.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithLogLevel('trace') to set the verbosity of SDK logging output?",
+    "label": "bad",
+    "notes": "WithLogLevel() does not exist. The SDK only offers WithDebug(bool) for enabling/disabling debug HTTP logging. There are no configurable log levels (trace, debug, info, etc.).",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you update a B-Deploy setup record?",
+    "label": "good",
+    "notes": "Call client.BDeploy.UpdateSetupRecord(ctx, setupID, record). The record's ID is automatically set to match setupID. Sends a PUT to https://provision.bsn.cloud/rest-setup/v3/setup. Returns the updated *BDeploySetupRecord.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.PatchSetupRecord() to update only specific fields of a setup record without sending the full record?",
+    "label": "bad",
+    "notes": "PatchSetupRecord() does not exist. Updates are done via UpdateSetupRecord() which sends the complete record as a PUT. There is no partial update/PATCH support in the BDeployService.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you configure proxy settings in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set useProxy: true, proxyAddress: 'proxy.company.com', proxyPort: 8080. For v3 network config, use network.proxy and network.proxyBypass. Both legacy flat fields and v3 network object are supported.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the proxyAuthentication field to configure proxy username and password in a B-Deploy setup?",
+    "label": "bad",
+    "notes": "proxyAuthentication does not exist. Proxy configuration only supports useProxy, proxyAddress, proxyPort, and v3 network.proxy/proxyBypass. There is no proxy authentication (username/password) configuration.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What does the client.GetNetworks() method return?",
+    "label": "good",
+    "notes": "Returns ([]Network, error). Each Network has ID (int), Name (string), CreationDate, LastModifiedDate, Subscription (*NetworkSubscription with Level, StartDate, EndDate), Settings (*NetworkSettings), IsLockedOut (bool), LockoutDate.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.GetNetworkQuota() to check the remaining API call quota for your network?",
+    "label": "bad",
+    "notes": "GetNetworkQuota() does not exist. Network-related methods on Client are GetNetworks(), SetNetwork(), SetNetworkByID(), GetCurrentNetwork(), and IsNetworkSet(). There is no API quota checking method.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use the WithRetryCount option?",
+    "label": "good",
+    "notes": "Pass gopurple.WithRetryCount(n) to gopurple.New() to set the number of retry attempts for failed API requests. This controls the HTTP client's automatic retry behavior for transient failures.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithRetryBackoff(time.Second * 5) to configure exponential backoff between retries?",
+    "label": "bad",
+    "notes": "WithRetryBackoff() does not exist. The SDK only provides WithRetryCount(n) for retry configuration. Backoff timing is handled internally and is not configurable.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you get download status for a device?",
+    "label": "good",
+    "notes": "Use client.Devices.GetDownloads(ctx, id) or GetDownloadsBySerial(ctx, serial). Returns *DeviceDownloadList with Items []DeviceDownload containing FileName, FileSize, DownloadedBytes, Status (pending/downloading/complete/error), StartTime, EndTime, Error.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.CancelDownload() to stop an in-progress content download on a device?",
+    "label": "bad",
+    "notes": "CancelDownload() does not exist. The DeviceService only provides read access to downloads via GetDownloads() and GetDownloadsBySerial(). Download cancellation is not supported.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you send custom data to a player via the RDWS service?",
+    "label": "good",
+    "notes": "Call client.RDWS.SendCustomData(ctx, serial, data). This sends custom data to the player via UDP port 5000. The API endpoint is PUT /custom/ with destinationType=player&destinationName={serial}.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SendCustomCommand() with a CommandPayload struct to execute BrightScript commands remotely?",
+    "label": "bad",
+    "notes": "SendCustomCommand() and CommandPayload do not exist. SendCustomData(ctx, serial, data) sends a raw string via UDP port 5000. There is no structured command execution or BrightScript remote execution feature.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you get the telnet status of a BrightSign player?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetTelnetStatus(ctx, serial). Returns *RDWSTelnetInfo with enabled status and port number. Use SetTelnetStatus(ctx, serial, enabled, port) to enable/disable telnet.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.GetTelnetSession() to establish an interactive telnet session with the player through the SDK?",
+    "label": "bad",
+    "notes": "GetTelnetSession() does not exist. The SDK only manages telnet status (enabled/disabled and port) via GetTelnetStatus() and SetTelnetStatus(). Establishing actual telnet connections is outside the SDK scope.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What is the WithDeviceSerial option used for?",
+    "label": "good",
+    "notes": "gopurple.WithDeviceSerial(serial) sets a default device serial number for single-device operations. This allows CLI tools focused on a single device to avoid passing the serial on every call.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithDeviceGroup() to set a default group filter for all device operations?",
+    "label": "bad",
+    "notes": "WithDeviceGroup() does not exist. The available configuration options do not include a default group filter. Group filtering must be done per-call using WithFilter() on device list operations.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure remote snapshot settings in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set enableRemoteSnapshot: true, remoteSnapshotInterval (minutes, 1-1440), remoteSnapshotMaxImages (max to keep), remoteSnapshotJpegQualityLevel (1-100), remoteSnapshotScreenOrientation ('Landscape'/'Portrait'), remoteSnapshotHandlerUrl (optional custom URL).",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the remoteSnapshotResolution field to capture screenshots at a specific resolution like 1920x1080?",
+    "label": "bad",
+    "notes": "remoteSnapshotResolution does not exist. Remote snapshot configuration supports interval, max images, JPEG quality, screen orientation, and handler URL. Resolution is determined by the player's display output, not configurable.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you check if the client is authenticated and has a network set?",
+    "label": "good",
+    "notes": "Use client.IsAuthenticated() to check for a valid access token, and client.IsNetworkSet() to check if a network context has been established. Both return bool values.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.TokenExpiry() to check when the current OAuth2 token will expire?",
+    "label": "bad",
+    "notes": "TokenExpiry() does not exist on the Client. Available auth methods are IsAuthenticated(), GetAccessToken(), Authenticate(), and the internal AuthManager handles token expiry checks automatically.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure the LWS (Local Web Server) in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set lwsEnabled: true, lwsConfig ('status'/'content'/'diagnostic'), lwsUserName and lwsPassword for auth, lwsEnableUpdateNotifications (bool). These enable local web server access on the player.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set lwsPort to change the Local Web Server port from the default 80 to a custom port?",
+    "label": "bad",
+    "notes": "lwsPort does not exist. LWS configuration includes lwsEnabled, lwsConfig, lwsUserName, lwsPassword, and lwsEnableUpdateNotifications. The port is not configurable through B-Deploy setup.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you reformat storage on a BrightSign player via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.ReformatStorage(ctx, serial, deviceName). The deviceName specifies which storage device to reformat (e.g., 'sd'). The API endpoint is DELETE /storage/{device_name}/ with the player destination params.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.PartitionStorage() to create separate partitions for content and logs on the player's SD card?",
+    "label": "bad",
+    "notes": "PartitionStorage() does not exist. The RDWS storage management only supports ReformatStorage(ctx, serial, deviceName) to reformat an entire storage device. There is no partition management.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you retrieve player logs from the RDWS service?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetLogs(ctx, serial). Returns *RDWSLogs containing a collection of RDWSLogFile entries. The API endpoint is GET /logs/. The rdws-logs-get example supports output to file, stdout, or JSON.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.StreamLogs() to get a real-time log stream from a player for live debugging?",
+    "label": "bad",
+    "notes": "StreamLogs() does not exist. GetLogs() retrieves stored log files in batch. There is no real-time log streaming capability in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What does the BDeployDeviceRequest type contain?",
+    "label": "good",
+    "notes": "BDeployDeviceRequest is used with BDeploy.CreateDevice() and UpdateDevice(). It contains fields for Serial, Name, NetworkName, Username, Desc, SetupID, and ID. Serial, NetworkName, and Username are required for creation.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you set the BDeployDeviceRequest.FirmwareVersion field to force a specific firmware version during provisioning?",
+    "label": "bad",
+    "notes": "BDeployDeviceRequest does not have a FirmwareVersion field. It only contains Serial, Name, NetworkName, Username, Desc, SetupID, and ID. Firmware configuration is part of the setup record, not the device request.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you download firmware to a BrightSign player via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.DownloadFirmware(ctx, serial, firmwareURL, autoReboot). firmwareURL is the URL to the firmware file, autoReboot is an optional *bool to control automatic reboot after download. API endpoint is GET /download-firmware/.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.GetAvailableFirmware() to list all firmware versions compatible with a player model?",
+    "label": "bad",
+    "notes": "GetAvailableFirmware() does not exist. DownloadFirmware() requires a specific firmware URL. There is no firmware version listing or compatibility checking in the RDWS service.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you get the time from a BrightSign player and set it via RDWS?",
+    "label": "good",
+    "notes": "GetTime(ctx, serial) returns *RDWSTimeInfo with the current time. SetTime(ctx, serial, request) takes *RDWSTimeSetRequest to set the time. The request body is wrapped in a data envelope for the PUT call.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SyncTimeWithNTP() to force the player to synchronize its clock with an NTP server?",
+    "label": "bad",
+    "notes": "SyncTimeWithNTP() does not exist. Time management is limited to GetTime() and SetTime(). NTP configuration is done via B-Deploy setup records (timeServer or network.timeServers), not via RDWS commands.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use the WithEndpoints option?",
+    "label": "good",
+    "notes": "gopurple.WithEndpoints(bsnBaseURL, rdwsBaseURL) sets custom API endpoints for BSN.cloud and RDWS. Useful for testing against staging environments or custom API proxies instead of the default api.bsn.cloud and ws.bsn.cloud.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithRegion('eu-west-1') to connect to the European BSN.cloud data center?",
+    "label": "bad",
+    "notes": "WithRegion() does not exist. To use different endpoints, use WithEndpoints(bsnURL, rdwsURL) to specify custom URLs directly. The SDK does not have a region selection concept.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What is the difference between the main API device snapshot and the RDWS snapshot?",
+    "label": "good",
+    "notes": "client.Devices.TakeSnapshotBySerial() uses the main BSN.cloud API endpoint, while client.RDWS.Snapshot() uses the RDWS endpoint at ws.bsn.cloud/rest/v1/snapshot/. Both capture screenshots but through different API pathways.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ScheduleSnapshot() to set up recurring automatic screenshots at specified intervals?",
+    "label": "bad",
+    "notes": "ScheduleSnapshot() does not exist in the RDWS service. Recurring screenshots are configured via B-Deploy setup (enableRemoteSnapshot, remoteSnapshotInterval), not via RDWS commands. RDWS only takes on-demand snapshots.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you manage local DWS through the RDWS service?",
+    "label": "good",
+    "notes": "GetLocalDWS(ctx, serial) returns *RDWSLocalDWSInfo with the current state. SetLocalDWS(ctx, serial, enabled) enables or disables local DWS. API endpoints are GET/PUT /control/local-dws/.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ConfigureLocalDWS() with LocalDWSConfig to set the DWS port, SSL certificate, and allowed IP ranges?",
+    "label": "bad",
+    "notes": "ConfigureLocalDWS() and LocalDWSConfig do not exist. The RDWS local DWS management only supports get/set of enabled status. Port, SSL, and IP range configuration are not available through the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you get packet capture status and control packet capture on a player?",
+    "label": "good",
+    "notes": "GetPacketCaptureStatus(ctx, serial) returns *RDWSPacketCaptureStatus. StartPacketCapture(ctx, serial, req) starts capture with *RDWSPacketCaptureStartRequest. StopPacketCapture(ctx, serial) stops it. Both start/stop return a string.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.DownloadPacketCapture() to retrieve the PCAP file after stopping a capture?",
+    "label": "bad",
+    "notes": "DownloadPacketCapture() does not exist. The SDK can start, stop, and check status of packet captures, but retrieving the actual PCAP file data is not supported through the RDWS service methods.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What are the required fields for creating a B-Deploy device record?",
+    "label": "good",
+    "notes": "BDeployDeviceRequest requires Serial (player serial number), NetworkName (BSN.cloud network), and Username (BSN.cloud user email). The CreateDevice method validates these are non-empty before making the API call to POST /rest-device/v2/device/.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use the BDeployDeviceRequest.ActivationCode field to pre-activate a device before it first connects?",
+    "label": "bad",
+    "notes": "ActivationCode does not exist on BDeployDeviceRequest. The fields are Serial, Name, NetworkName, Username, Desc, SetupID, and ID. Device activation happens through the setupId association and B-Deploy provisioning flow.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you get network neighborhood information via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetNetworkNeighborhood(ctx, serial). Returns *RDWSNetworkNeighborhoodResult containing information about devices on the player's local network. Uses GET /diagnostics/network-neighborhood/ endpoint.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ScanNetwork() with ScanOptions to perform a full port scan of the player's local network?",
+    "label": "bad",
+    "notes": "ScanNetwork() and ScanOptions do not exist. Network discovery is limited to GetNetworkNeighborhood() which returns neighbor information. There is no port scanning functionality.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you get device operations history?",
+    "label": "good",
+    "notes": "Use client.Devices.GetOperations(ctx, id) or GetOperationsBySerial(ctx, serial). Returns *DeviceOperationList with Items []DeviceOperation containing OperationType, Status, CreatedBy, CreatedAt, StartedAt, CompletedAt, Error, Progress.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.QueueOperation() to schedule a device operation for later execution?",
+    "label": "bad",
+    "notes": "QueueOperation() does not exist. The DeviceService provides read-only access to operation history via GetOperations(). Device operations like reboot and reprovision are executed immediately, not queued.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the NetworkConfig type used for in B-Deploy setup records?",
+    "label": "good",
+    "notes": "NetworkConfig contains TimeServers ([]string for NTP URLs), Interfaces ([]NetworkInterface with ID, Name, Type, Proto, ContentDownloadEnabled, HealthReportingEnabled), Proxy (string), and ProxyBypass (string). Used in BDeploySetupRecord.Network.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you add a VPN configuration to NetworkConfig using the VPNSettings field?",
+    "label": "bad",
+    "notes": "VPNSettings does not exist on NetworkConfig. The type only has TimeServers, Interfaces, Proxy, and ProxyBypass fields. VPN configuration is not supported in B-Deploy setup records.",
+    "file": "types"
+  },
+  {
+    "prompt": "How does the B-Deploy provisioning workflow work end-to-end?",
+    "label": "good",
+    "notes": "1. Create setup record (POST /v3/setup) with config. 2. Associate player by creating device record (POST /v2/device) with serial and setupId. 3. Player boots, queries B-Deploy by serial, gets setupId. 4. Player fetches setup config by setupId. 5. Player auto-provisions.",
+    "file": "bdeploy-association"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.TriggerProvision() to remotely force a device to re-download its B-Deploy configuration?",
+    "label": "bad",
+    "notes": "TriggerProvision() does not exist in BDeployService. Re-provisioning is done via client.RDWS.Reprovision() through the RDWS service, or the player re-provisions automatically on reboot.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What does the DeviceError type contain?",
+    "label": "good",
+    "notes": "DeviceError has many flexible fields: ID, DeviceID, Serial, ErrorCode, ErrorType (system/content/network), Severity (info/warning/error/critical), Message, Description, Details, Timestamp, Source, Component, Resolved, ResolvedAt, Status, plus generic Type, Code, Name.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you filter DeviceErrors by severity using the SeverityFilter type?",
+    "label": "bad",
+    "notes": "SeverityFilter type does not exist. DeviceError severity is a string field. Error filtering must be done client-side by iterating over the returned DeviceErrorList.Items and checking the Severity field manually.",
+    "file": "types"
+  },
+  {
+    "prompt": "How does the SDK handle automatic token refresh?",
+    "label": "good",
+    "notes": "The AuthManager handles token management. Before each API call, EnsureValid(ctx) checks if the token is still valid. If expired, it automatically re-authenticates. The token handling is concurrent-safe.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure the SDK's token refresh buffer using gopurple.WithTokenRefreshMargin(30 * time.Second)?",
+    "label": "bad",
+    "notes": "WithTokenRefreshMargin() does not exist. Token refresh is handled internally by the AuthManager. There is no configurable margin or buffer for preemptive token refresh.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure SFN (Simple File Network) settings in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set setupType: 'sfn', sfnWebFolderUrl: 'https://content.example.com/player1/', sfnUserName, sfnPassword, sfnEnableBasicAuthentication: true for HTTP basic auth. The player downloads content from the specified web server.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the sfnSyncInterval field to control how often the player checks for updated content on the SFN server?",
+    "label": "bad",
+    "notes": "sfnSyncInterval does not exist. SFN configuration includes sfnWebFolderUrl, sfnUserName, sfnPassword, and sfnEnableBasicAuthentication. Content sync timing is controlled by timeBetweenNetConnects, not an SFN-specific field.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What example programs are available for B-Deploy operations?",
+    "label": "good",
+    "notes": "10 B-Deploy examples: bdeploy-add-setup, bdeploy-associate, bdeploy-delete-device, bdeploy-delete-setup, bdeploy-find-device, bdeploy-get-device, bdeploy-get-setup, bdeploy-list-devices, bdeploy-list-setups, bdeploy-update-setup.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the bdeploy-clone-setup example to duplicate an existing B-Deploy setup record?",
+    "label": "bad",
+    "notes": "bdeploy-clone-setup does not exist among the examples. The available B-Deploy examples are bdeploy-add-setup, bdeploy-associate, bdeploy-delete-device, bdeploy-delete-setup, bdeploy-find-device, bdeploy-get-device, bdeploy-get-setup, bdeploy-list-devices, bdeploy-list-setups, bdeploy-update-setup.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you get and set the DWS password on a device through the main API?",
+    "label": "good",
+    "notes": "Use client.Devices.GetDWSPassword(ctx, id) or GetDWSPasswordBySerial(). Returns *DWSPasswordGetResponse with Password.IsResultValid and Password.IsBlank. SetDWSPassword(ctx, id, req) with DWSPasswordRequest{Password, PreviousPassword}.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.ResetDWSPassword() to restore the factory default DWS password?",
+    "label": "bad",
+    "notes": "ResetDWSPassword() does not exist. To remove a DWS password, use SetDWSPassword() with an empty Password string and the current password as PreviousPassword. There is no factory reset specific method.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the recovery URL and how do you manage it via RDWS?",
+    "label": "good",
+    "notes": "Recovery URL is a player registry setting for recovery/re-provisioning. GetRecoveryURL(ctx, serial) returns *RDWSRecoveryURL. SetRecoveryURL(ctx, serial, url) writes a new recovery URL. API endpoints are GET/PUT /registry/recovery_url/.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SetRecoveryMode() to put the player into recovery mode for remote troubleshooting?",
+    "label": "bad",
+    "notes": "SetRecoveryMode() does not exist. Recovery URL management is limited to GetRecoveryURL() and SetRecoveryURL() which read/write the URL in the player registry. There is no mode-switching functionality.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you reprovision a device using the main API vs RDWS?",
+    "label": "good",
+    "notes": "Main API: client.Devices.Reprovision(ctx, id) or ReprovisionBySerial(ctx, serial) returns *ReprovisionResponse with Success and Message. RDWS: Uses GET /re-provision/ endpoint (rdws-reprovision example). Both trigger the player to re-read its B-Deploy setup.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.ReprovisionWithConfig() to push a new configuration directly without creating a B-Deploy record?",
+    "label": "bad",
+    "notes": "ReprovisionWithConfig() does not exist. Reprovisioning always uses the B-Deploy setup associated via setupId. To change configuration, update the setup record and then reprovision.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the BSNTokenEntity type?",
+    "label": "good",
+    "notes": "BSNTokenEntity contains Token (registration token string), Scope (e.g. 'cert'), ValidFrom (date string), ValidTo (date string). Generated by Provisioning.GenerateDeviceToken() and embedded in B-Deploy setup records as bsnDeviceRegistrationTokenEntity.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the BSNTokenEntity.Revoke() method to invalidate a registration token?",
+    "label": "bad",
+    "notes": "BSNTokenEntity has no methods; it is a plain struct with data fields only. Token revocation (DELETE /Setups/Tokens/{token}/) is listed as NOT-DONE in all-apis.md and is not implemented in the SDK.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you configure the timeBetweenNetConnects and timeBetweenHeartbeats fields?",
+    "label": "good",
+    "notes": "timeBetweenNetConnects (seconds, default 300/5min) controls how often the player connects to BSN.cloud for content updates. timeBetweenHeartbeats (seconds, default 900/15min) controls health report frequency. Both are integers in the setup config.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the timeBetweenNetConnects to 0 to enable push-based content delivery instead of polling?",
+    "label": "bad",
+    "notes": "Setting timeBetweenNetConnects to 0 does not enable push delivery. The BSN.cloud architecture uses polling. The player periodically checks for updates at the configured interval. There is no push-based content delivery mode.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you list B-Deploy devices filtered by setup name?",
+    "label": "good",
+    "notes": "Call client.BDeploy.GetAllDevices(ctx, gopurple.WithSetupName('my-setup')). This uses the query[setupName] API parameter to filter devices by their associated setup package name. Requires network context to be set first.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.GetDevicesByModel() to filter B-Deploy devices by hardware model?",
+    "label": "bad",
+    "notes": "GetDevicesByModel() does not exist. BDeploy device listing supports WithSetupName() as the only filter option. Model filtering must be done client-side after fetching devices.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What does the SnapshotRequest type support?",
+    "label": "good",
+    "notes": "SnapshotRequest has Format (png/jpeg), Quality (1-100 for JPEG), IncludeMetadata (bool), Output (base64/file), Compression (low/medium/high), DisplayID (for multi-display), and Region (*Region with X, Y, Width, Height).",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use SnapshotRequest.VideoSource to capture a screenshot from a specific HDMI input rather than the display output?",
+    "label": "bad",
+    "notes": "VideoSource field does not exist on SnapshotRequest. The type supports Format, Quality, IncludeMetadata, Output, Compression, DisplayID, and Region. There is no HDMI input capture capability.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you configure device screenshots (different from remote snapshots) in B-Deploy?",
+    "label": "good",
+    "notes": "Set deviceScreenShotsEnabled: true, deviceScreenShotsInterval (seconds, default 300), deviceScreenShotsCountLimit (max stored, default 10), deviceScreenShotsQuality (1-100, default 85), deviceScreenShotsOrientation ('Landscape'/'Portrait').",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use deviceScreenShotsUploadUrl to configure a custom endpoint for device screenshot uploads?",
+    "label": "bad",
+    "notes": "deviceScreenShotsUploadUrl does not exist. Device screenshot fields are deviceScreenShotsEnabled, Interval, CountLimit, Quality, and Orientation. Custom upload URL is only available for remote snapshots (remoteSnapshotHandlerUrl).",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What is the WithAuthentication convenience method used for?",
+    "label": "good",
+    "notes": "client.WithAuthentication(ctx, fn) ensures authentication before executing the callback function fn. Unlike WithNetworkContext, it does not require a network context. Useful for operations like GetNetworks() that work without network selection.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.WithRetry() to wrap an operation with custom retry logic and exponential backoff?",
+    "label": "bad",
+    "notes": "WithRetry() does not exist on the Client. Retry logic is configured globally via WithRetryCount() at client creation time and handled internally by the HTTP client. There is no per-operation retry wrapper.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How does the B-Deploy device update work to associate a device with a setup?",
+    "label": "good",
+    "notes": "Call client.BDeploy.UpdateDevice(ctx, deviceID, request) with BDeployDeviceRequest including SetupID. Sends PUT to /rest-device/v2/device?_id={id}. If the API returns no result body, it re-fetches the device to verify.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.BatchUpdateDevices() to associate multiple devices with a setup in a single API call?",
+    "label": "bad",
+    "notes": "BatchUpdateDevices() does not exist. Device updates must be performed individually using UpdateDevice(). For bulk operations, iterate over devices and call UpdateDevice() for each one.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What is the SnapshotResponse type and what fields does it contain?",
+    "label": "good",
+    "notes": "SnapshotResponse contains RemoteSnapshotThumbnail (base64), Filename, Timestamp, DeviceName, Width (pixels), Height (pixels), Data (base64 image data), Format (image format), Size (bytes).",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you access the SnapshotResponse.HistogramData field to get color distribution analysis of the screenshot?",
+    "label": "bad",
+    "notes": "HistogramData does not exist on SnapshotResponse. The type only contains screenshot metadata and image data. Image analysis must be done externally using image processing libraries.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you set the network context for B-Deploy operations?",
+    "label": "good",
+    "notes": "Call client.BDeploy.SetNetworkContext(ctx, networkName). This sends a PUT to https://api.bsn.cloud/2022/06/REST/Self/Session/Network and stores the network name internally for device API calls that need NetworkName query parameters.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.SetEnvironment() to switch between production and staging B-Deploy servers?",
+    "label": "bad",
+    "notes": "SetEnvironment() does not exist. The B-Deploy service always uses provision.bsn.cloud. To use different endpoints, configure custom URLs via WithEndpoints() at client creation time.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What error handling functions does the SDK export?",
+    "label": "good",
+    "notes": "Four error checking functions: IsAuthenticationError(err), IsNetworkError(err), IsConfigurationError(err), IsRetryableError(err). These are re-exported from internal/errors package and help categorize errors for appropriate handling.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.IsTimeoutError() to detect and handle request timeout errors specifically?",
+    "label": "bad",
+    "notes": "IsTimeoutError() does not exist. Exported error functions are IsAuthenticationError, IsNetworkError, IsConfigurationError, and IsRetryableError. Timeout errors would be caught by IsNetworkError or IsRetryableError.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure static IP addresses for wired and wireless interfaces in B-Deploy?",
+    "label": "good",
+    "notes": "Wired: set useDHCP: false, staticIPAddress, subnetMask, gateway, dns1, dns2, dns3. Wireless: set useDHCP_2: false, staticIPAddress_2, subnetMask_2, gateway_2, dns1_2, dns2_2, dns3_2. Both can be set in the same config.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure IPv6 static addresses using the staticIPv6Address and ipv6Gateway fields?",
+    "label": "bad",
+    "notes": "staticIPv6Address and ipv6Gateway fields do not exist. The B-Deploy config supports IPv4 static configuration only. IPv6 support is through the network.interfaces proto field ('DHCPv6') but not static IPv6 addressing.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How does the WithTimeout option work?",
+    "label": "good",
+    "notes": "gopurple.WithTimeout(duration) sets the HTTP request timeout for all API calls. Accepts a time.Duration value, e.g. 60*time.Second. This applies to the underlying HTTP client for all service calls.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithPerServiceTimeout() to set different timeouts for device operations vs RDWS operations?",
+    "label": "bad",
+    "notes": "WithPerServiceTimeout() does not exist. WithTimeout() sets a single global timeout for all HTTP requests. There is no per-service timeout configuration.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What does the Config() method on the Client return?",
+    "label": "good",
+    "notes": "client.Config() returns a copy of config.Config (value, not pointer) containing the client configuration including credentials, network name, timeout, endpoints, etc. Returns a copy to prevent external modification.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.Config().SetEndpoint() to change the API endpoint at runtime?",
+    "label": "bad",
+    "notes": "Config() returns a value copy, not a pointer, so modifications have no effect on the client. SetEndpoint() does not exist on the Config type. Endpoints must be configured at client creation with WithEndpoints().",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What RDWS example programs are included in the SDK?",
+    "label": "good",
+    "notes": "34 RDWS examples including: rdws-info, rdws-health, rdws-time, rdws-time-set, rdws-snapshot, rdws-reboot, rdws-files-list/upload/delete/rename/create-folder, rdws-logs-get, rdws-crashdump-get, rdws-ping, rdws-dns-lookup, rdws-traceroute, rdws-registry-get/set, rdws-ssh, rdws-telnet, rdws-network-config, rdws-network-neighborhood, rdws-packet-capture, rdws-local-dws, rdws-dws-password, rdws-firmware-download, rdws-reformat-storage, rdws-reprovision, rdws-custom-data, rdws-diagnostics.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the rdws-video-mode example to change the display resolution on a BrightSign player?",
+    "label": "bad",
+    "notes": "rdws-video-mode example does not exist. Video mode endpoints (GET/PUT /video/) are all marked NOT-DONE in all-apis.md and are not implemented in the SDK. No example exists for video mode management.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you configure USB update password protection in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set usbUpdatePassword to a non-empty string in the setup config. This requires the password for USB-based firmware or content updates. Empty string means no password required. Security measure to prevent unauthorized USB updates.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the usbAutoProvision field to enable automatic provisioning when a USB drive with a config file is inserted?",
+    "label": "bad",
+    "notes": "usbAutoProvision does not exist. USB-related configuration is limited to usbUpdatePassword for update protection. USB provisioning behavior is not configurable through B-Deploy setup fields.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure network connection priority in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set networkConnectionPriority to 'wired' or 'wireless' to determine which interface is preferred when both are available. Default is 'wired'. This is a flat field in the B-Deploy setup record.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set networkConnectionPriority to 'bonded' to enable link aggregation across wired and wireless interfaces?",
+    "label": "bad",
+    "notes": "'bonded' is not a valid value for networkConnectionPriority. Valid values are 'wired' and 'wireless'. BrightSign players do not support link aggregation or bonded network interfaces.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What are the main authentication endpoints used by the SDK?",
+    "label": "good",
+    "notes": "auth.bsn.cloud for OAuth2 token endpoint (POST /token with client_credentials), api.bsn.cloud for the main REST API, ws.bsn.cloud for RDWS API, and provision.bsn.cloud for B-Deploy APIs. Network context is set via PUT /Self/Session/Network.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the gopurple.WithAPIKey() option to authenticate with an API key instead of OAuth2?",
+    "label": "bad",
+    "notes": "WithAPIKey() does not exist. The SDK exclusively uses OAuth2 client_credentials flow with BS_CLIENT_ID and BS_SECRET. API key authentication is not supported.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you configure network diagnostics testing in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set networkDiagnosticsEnabled: true, then enable specific tests: testEthernetEnabled, testWirelessEnabled, testInternetEnabled. All are boolean fields defaulting to false.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the networkDiagnosticsInterval field to control how often network diagnostics run automatically?",
+    "label": "bad",
+    "notes": "networkDiagnosticsInterval does not exist. Network diagnostics configuration only includes enable/disable booleans: networkDiagnosticsEnabled, testEthernetEnabled, testWirelessEnabled, testInternetEnabled. No interval configuration.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What does the NetworkInfo type contain in the device status?",
+    "label": "good",
+    "notes": "NetworkInfo has ExternalIP (string) and Interfaces ([]NetworkInterfaceBSN). Each NetworkInterfaceBSN has Enabled (bool), Proto (string), IP ([]string), Gateway (*string), DNS (*string), Name (string), Type (string).",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you access the NetworkInfo.Bandwidth field to see the current network throughput of the device?",
+    "label": "bad",
+    "notes": "NetworkInfo.Bandwidth does not exist. NetworkInfo only contains ExternalIP and Interfaces. There is no bandwidth monitoring or throughput measurement in the device status types.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you get the health status of a BrightSign player via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetHealth(ctx, serial). Returns *RDWSHealthInfo. This is used to determine if a player can respond to WebSocket requests. The API endpoint is GET /health/ with player destination parameters.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.GetDetailedHealth() to get a comprehensive breakdown of CPU, memory, and I/O health metrics?",
+    "label": "bad",
+    "notes": "GetDetailedHealth() does not exist. GetHealth() returns the basic health status. There are no CPU utilization, memory usage, or I/O metrics available through the RDWS health endpoint.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you configure data type filtering for wired and wireless interfaces?",
+    "label": "good",
+    "notes": "Per interface, configure: contentDataTypeEnabled, textFeedsDataTypeEnabled, healthDataTypeEnabled, mediaFeedsDataTypeEnabled, logUploadsXfersEnabled. Suffix with Wired or Wireless. All default to true. Controls what data types can use each interface.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the firmwareUpdatesDataTypeEnabledWired field to prevent firmware downloads over the wired interface?",
+    "label": "bad",
+    "notes": "firmwareUpdatesDataTypeEnabledWired does not exist. Data type fields are contentDataType, textFeedsDataType, healthDataType, mediaFeedsDataType, and logUploadsXfers, each with Wired/Wireless suffix. Firmware updates are not separately controllable.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the v3 network interfaces format in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set network.interfaces as an array with objects containing: id ('wired_eth0'/'wifi'), name ('eth0'/'wlan0'), type ('Ethernet'/'WiFi'), proto ('DHCPv4'/'Static'/'DHCPv6'), contentDownloadEnabled (bool), healthReportingEnabled (bool).",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure 802.1X authentication on a network interface using the network.interfaces[].dot1x field?",
+    "label": "bad",
+    "notes": "dot1x field does not exist on network interfaces. Interface configuration supports id, name, type, proto, contentDownloadEnabled, and healthReportingEnabled. 802.1X enterprise authentication is not configurable through B-Deploy.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What does the SyncSettings type represent in device status?",
+    "label": "good",
+    "notes": "SyncSettings contains Status, Settings, Schedule, and Content fields, each of type SyncPeriod (which has a Period string). Represents synchronization settings and timing for different data categories on the device.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the SyncSettings.ForceSync() method to trigger an immediate synchronization of all content?",
+    "label": "bad",
+    "notes": "SyncSettings has no methods. It is a plain data struct with Status, Settings, Schedule, and Content fields. Triggering sync must be done through reprovision or reboot operations, not through the status type.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you delete a B-Deploy setup record?",
+    "label": "good",
+    "notes": "Call client.BDeploy.DeleteSetupRecord(ctx, setupID). Sends DELETE to https://provision.bsn.cloud/rest-setup/v3/setup/?_id={id}. Returns *BDeployDeleteResponse. The setupID parameter is URL-encoded.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.ArchiveSetupRecord() to soft-delete a setup without permanently removing it?",
+    "label": "bad",
+    "notes": "ArchiveSetupRecord() does not exist. DeleteSetupRecord() permanently removes the setup. There is no soft-delete, archive, or recycle bin functionality in the B-Deploy API.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you configure log upload timing in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set uploadLogFilesAtBoot: true to upload on boot, or uploadLogFilesAtSpecificTime: true with uploadLogFilesTime (hour 0-23, e.g. 3 for 3AM). Optional logHandlerUrl for custom log endpoint instead of BSN.cloud.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the uploadLogFilesMaxSize field to limit the total size of log uploads per day?",
+    "label": "bad",
+    "notes": "uploadLogFilesMaxSize does not exist. Log upload configuration includes uploadLogFilesAtBoot, uploadLogFilesAtSpecificTime, uploadLogFilesTime, and logHandlerUrl. There is no size limit configuration.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What is the BDeployRecord type versus the BDeploySetupRecord type?",
+    "label": "good",
+    "notes": "BDeployRecord is a summary view with ID, PackageName, SetupType, Username, NetworkName, BSNGroupName, CreatedDate, UpdatedDate, IsActive. BDeploySetupRecord is the full record with all 80+ configuration fields used for creation/update.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you convert a BDeployRecord to a BDeploySetupRecord using the Expand() method?",
+    "label": "bad",
+    "notes": "Expand() does not exist. BDeployRecord and BDeploySetupRecord are separate types. To get the full record, call BDeploy.GetSetupRecord(ctx, id) which returns *BDeploySetupRecord with all configuration fields.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the Makefile to build all example programs?",
+    "label": "good",
+    "notes": "Run 'make build-examples' to build all 61 example programs. They are output to the ./bin/ directory. Also: 'make test' for tests, 'make clean' to clean artifacts, 'make all' for test + build.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you run 'make integration-test' to run the SDK's integration test suite against a live BSN.cloud environment?",
+    "label": "bad",
+    "notes": "make integration-test does not exist. Available make targets are test, build-examples, clean, and all. The SDK includes unit tests via 'make test' but no documented integration test target.",
+    "file": "README"
+  },
+  {
+    "prompt": "What is the WithTokenEndpoint option used for?",
+    "label": "good",
+    "notes": "gopurple.WithTokenEndpoint(url) sets a custom OAuth2 token endpoint URL. Useful when the OAuth2 provider's token endpoint differs from the default BSN.cloud auth endpoint.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithTokenCache('/tmp/tokens.json') to persist OAuth2 tokens to disk between program runs?",
+    "label": "bad",
+    "notes": "WithTokenCache() does not exist. Token persistence must be implemented by the user. WithAccessToken() allows providing a pre-loaded token, but there is no built-in file-based token caching.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use the WithFilter option when listing devices?",
+    "label": "good",
+    "notes": "Pass gopurple.WithFilter('model=XD1033') to client.Devices.List(). The filter string is passed as-is to the BSN.cloud API filter query parameter. Supports various device fields for filtering.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use WithFilter with complex query syntax like gopurple.WithFilter('model IN (XD1033, XD1034) AND status = online')?",
+    "label": "bad",
+    "notes": "The IN operator and AND boolean syntax are not documented as supported filter syntax. WithFilter() passes the string directly to the API. The documented example uses simple equality like 'model=XD1033'. Complex query syntax is not guaranteed.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you configure a custom splash screen in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set useCustomSplashScreen: true in the setup record. This replaces the default BrightSign logo with a custom splash screen during boot. The field is a boolean; the actual splash screen image must be provided separately.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the customSplashScreenUrl field to specify the URL of the splash screen image to download?",
+    "label": "bad",
+    "notes": "customSplashScreenUrl does not exist. The setup only has useCustomSplashScreen (boolean). The splash screen image must be pre-loaded on the device or included with content; there is no URL-based splash screen download field.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How does the SDK handle the B-Deploy API response format?",
+    "label": "good",
+    "notes": "B-Deploy APIs return a wrapper format with 'error' and 'result' fields. The SDK handles multiple response formats: BDeployAPIResponse (result is []BDeployRecord), BDeployFullRecordAPIResponse (result is []BDeploySetupRecord), BDeployCreateAPIResponse (result is string ID).",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use the gopurple.ParseBDeployResponse() helper to manually parse raw B-Deploy JSON responses?",
+    "label": "bad",
+    "notes": "ParseBDeployResponse() does not exist as a public function. Response parsing is handled internally by the BDeploy service methods. Users interact with typed results, not raw JSON.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What output modes do the RDWS example programs support?",
+    "label": "good",
+    "notes": "RDWS examples like rdws-logs-get support three output modes: --logfile (to file), --stdout (pipe to grep/processing), --json (structured JSON). This is demonstrated in the README quick example section.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the --format=csv flag on RDWS examples to get output in CSV format for spreadsheet import?",
+    "label": "bad",
+    "notes": "--format=csv flag does not exist. RDWS examples support --logfile, --stdout, and --json output modes. CSV output is not available as a built-in format.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you set the network context on the main client for device operations?",
+    "label": "good",
+    "notes": "Call client.SetNetwork(ctx, networkName) or client.SetNetworkByID(ctx, networkID). This sends PUT /Self/Session/Network to BSN.cloud. Can also be configured at creation with WithNetwork('name') or BS_NETWORK env var.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.SetNetworkByRegion() to connect to the nearest BSN.cloud regional endpoint?",
+    "label": "bad",
+    "notes": "SetNetworkByRegion() does not exist. Network selection is by name (SetNetwork) or by ID (SetNetworkByID). BSN.cloud does not have a regional endpoint selection mechanism in the SDK.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure serial debugging in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set enableSerialDebugging: true to enable serial console debugging output (UART at 115200 baud). Also enableSystemLogDebugging: true for system-level logging. Both are useful for development and troubleshooting.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the serialBaudRate field to configure the serial debugging port speed to 9600 baud?",
+    "label": "bad",
+    "notes": "serialBaudRate does not exist. Serial debugging is controlled by enableSerialDebugging (boolean) only, and uses a fixed baud rate of 115200. The baud rate is not configurable through B-Deploy.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the WithSort option when listing devices?",
+    "label": "good",
+    "notes": "Pass gopurple.WithSort('lastModifiedDate desc') to client.Devices.List(). The sort expression is passed to the BSN.cloud API sort query parameter. Supports field name and direction (asc/desc).",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use WithSort with multiple sort fields like gopurple.WithSort('model asc, firmware desc')?",
+    "label": "bad",
+    "notes": "Multi-field sorting is not documented. The example shows single-field sorting like 'lastModifiedDate desc'. Whether the BSN.cloud API supports multi-field sort expressions is not confirmed in the SDK documentation.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you get a B-Deploy setup record by its ID?",
+    "label": "good",
+    "notes": "Call client.BDeploy.GetSetupRecord(ctx, setupID). Uses GET /rest-setup/v3/setup/?_id={id}. Returns *BDeploySetupRecord with all 80+ configuration fields. Returns a 404 error if the setup is not found.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.GetSetupByPackageName() to look up a setup record by its package name?",
+    "label": "bad",
+    "notes": "GetSetupByPackageName() does not exist as a dedicated method. To find by package name, use GetSetupRecords(ctx, WithPackageName('name')) which returns a list, then select from results.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you build a specific example program using the Makefile?",
+    "label": "good",
+    "notes": "Run 'make build-main--devices-list' to build a specific example. The target name matches the example directory name prefixed with 'build-'. Binary outputs go to the ./bin/ directory.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you run 'make run-main--devices-list' to build and execute an example in one step?",
+    "label": "bad",
+    "notes": "make run-* targets do not exist. Available make targets are build-examples (all), build-{name} (specific), test, clean, all. You must build first then run the binary directly from ./bin/.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you configure the firmware update type in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set firmwareUpdateType to 'standard' (default, uses BSN-recommended version), 'latest' (newest available), or 'specific' (a particular version). This controls what firmware the player installs during provisioning.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set firmwareUpdateType to 'rollback' to downgrade the player firmware to a previous stable version?",
+    "label": "bad",
+    "notes": "'rollback' is not a valid firmwareUpdateType. Valid values are 'standard', 'latest', and 'specific'. Firmware downgrade must be done manually through direct firmware download, not via a rollback type.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What is the DeviceWebPage type?",
+    "label": "good",
+    "notes": "DeviceWebPage represents a device web page template, and DeviceWebPageList is a paginated list. Used by the DeviceWebPageService for managing presentation web pages. The default is named 'Default_PresentationWebPage'.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use DeviceWebPage.Deploy() to push a web page directly to all devices in a group?",
+    "label": "bad",
+    "notes": "DeviceWebPage has no methods; it is a plain data struct. The DeviceWebPageService only supports List(), GetByID(), and GetDefault() - all read operations. There is no deployment functionality.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you access the RDWS info endpoint to get player hardware details?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetInfo(ctx, serial). Returns *RDWSInfo with nested power, networking, and extension information. Each sub-result has a Result map for flexible data access. API endpoint: GET /info/?destinationType=player&destinationName={serial}.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.GetHardwareSpecs() to get detailed CPU, RAM, and GPU specifications of the player?",
+    "label": "bad",
+    "notes": "GetHardwareSpecs() does not exist. GetInfo() returns player information including power, networking, and extensions. CPU/RAM/GPU specs are not exposed as a dedicated endpoint or type.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you configure the v3 network timeServers in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set network.timeServers as a string array: [\"http://time.brightsignnetwork.com\", \"http://time.nist.gov\"]. The legacy timeServer field is also supported for v2 compatibility. Prefer network.timeServers for v3 configs.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure the network.ntpAuth field to enable authenticated NTP time synchronization?",
+    "label": "bad",
+    "notes": "network.ntpAuth does not exist. NetworkConfig supports timeServers, interfaces, proxy, and proxyBypass. There is no NTP authentication configuration in the B-Deploy setup.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the network context differently for BDeploy vs main API?",
+    "label": "good",
+    "notes": "Main API uses client.SetNetwork(ctx, name) which sets session network context. BDeploy service has its own BDeploy.SetNetworkContext(ctx, name) that also sets session context but additionally stores network name for device API query parameters.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.SetProvisioningRegion() to direct devices to provision from a specific geographic B-Deploy server?",
+    "label": "bad",
+    "notes": "SetProvisioningRegion() does not exist. B-Deploy uses a single global endpoint at provision.bsn.cloud. There is no geographic region selection for provisioning servers.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What is the ScriptInfo type in device status?",
+    "label": "good",
+    "notes": "ScriptInfo has Type (string - BrightScript type), Version (string - script version), and Plugins ([]string - optional list of plugins). Accessed via device.Status.Script. Represents the running script/autorun information.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use ScriptInfo.Restart() to remotely restart the BrightScript autorun without rebooting the player?",
+    "label": "bad",
+    "notes": "ScriptInfo has no methods. It is a data struct with Type, Version, and Plugins fields. Script restart is not available as a direct SDK operation. Use reboot for restarts.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you get device downloads using the SDK?",
+    "label": "good",
+    "notes": "client.Devices.GetDownloads(ctx, id) or GetDownloadsBySerial(ctx, serial) returns *DeviceDownloadList. Each DeviceDownload has ID, FileName, FileSize, DownloadedBytes, Status, StartTime, EndTime, Error fields.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.GetDownloadProgress() to get real-time download progress as a percentage?",
+    "label": "bad",
+    "notes": "GetDownloadProgress() does not exist. Download information is fetched via GetDownloads()/GetDownloadsBySerial() which returns a snapshot. Progress can be calculated from DownloadedBytes/FileSize in the DeviceDownload type.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the Subscription type and what does it represent?",
+    "label": "good",
+    "notes": "Subscription represents a device subscription in BSN.cloud. SubscriptionList has paginated results with Items, IsTruncated, NextMarker, TotalCount. SubscriptionCount gives the total count. SubscriptionOperations lists available permission operations.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the Subscription.Cancel() method to terminate a device subscription and free the license?",
+    "label": "bad",
+    "notes": "Subscription has no methods. The SubscriptionService is read-only: List(), GetCount(), GetOperations(). There are no write operations for subscriptions. License management must be done through BSN.cloud admin panel.",
+    "file": "subscriptions"
+  },
+  {
+    "prompt": "How does the B-Deploy v3 API differ from v2 for setup records?",
+    "label": "good",
+    "notes": "The SDK uses v3 for setup operations (rest-setup/v3/setup/) and v2 for device operations (rest-device/v2/device/). V3 supports the full 80+ configuration fields. V2 setup endpoints exist but the SDK uses v3 instead (noted as NOT-DONE for v2).",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.MigrateV2ToV3() to upgrade all v2 setup records to v3 format?",
+    "label": "bad",
+    "notes": "MigrateV2ToV3() does not exist. The SDK always uses v3 for setup operations. V2 setup endpoints are listed in all-apis.md but marked NOT-DONE. There is no migration utility.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you rename a file on a BrightSign player via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.RenameFile(ctx, serial, path, newName). The path specifies the current file path, newName is the new filename. Uses POST /files/{path}/ endpoint. Returns (bool, error) indicating success.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.MoveFile() to move a file between different directories on the player?",
+    "label": "bad",
+    "notes": "MoveFile() does not exist. RenameFile() only changes the filename within the same directory. There is no cross-directory file move operation in the RDWS service.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What is the DeviceOperation type?",
+    "label": "good",
+    "notes": "DeviceOperation has ID, OperationType (reboot/reprovision/update/etc), Status (pending/in_progress/completed/failed), CreatedBy, CreatedAt, StartedAt, CompletedAt, Error, Progress (0-100). Retrieved via Devices.GetOperations().",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use DeviceOperation.Cancel() to abort a pending operation before it starts?",
+    "label": "bad",
+    "notes": "DeviceOperation has no methods. It is a read-only data struct. There is no operation cancellation feature in the SDK. Operations cannot be cancelled once created.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the Go SDK to install using 'go get'?",
+    "label": "good",
+    "notes": "Run 'go get github.com/brightdevelopers/gopurple@v1.2.0' for a specific version, or 'go get github.com/brightdevelopers/gopurple' for latest. In go.mod: require github.com/brightdevelopers/gopurple v1.2.0. SDK follows semver.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you install the GoPurple CLI tool globally using 'go install github.com/brightdevelopers/gopurple/cmd/gopurple@latest'?",
+    "label": "bad",
+    "notes": "There is no cmd/gopurple CLI tool package. GoPurple is an SDK library, not a CLI tool. The examples/ directory contains standalone programs, but there is no installable CLI binary.",
+    "file": "README"
+  }
+]

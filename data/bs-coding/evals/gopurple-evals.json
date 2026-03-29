@@ -1,0 +1,1502 @@
+[
+  {
+    "prompt": "How do you create a new GoPurple client and authenticate with BSN.cloud?",
+    "label": "good",
+    "notes": "Use gopurple.New() with optional WithCredentials(), WithNetwork(), WithTimeout() options. By default loads BS_CLIENT_ID and BS_SECRET env vars. Then call client.Authenticate(ctx) to perform OAuth2 authentication. The SDK handles token management automatically.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the gopurple.DeviceStream() method to subscribe to real-time device status events via WebSocket?",
+    "label": "bad",
+    "notes": "DeviceStream() does not exist. The SDK uses polling-based HTTP REST API calls, not WebSocket-based real-time event streams. There is no streaming subscription mechanism in the SDK.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What environment variables does the GoPurple SDK read for configuration?",
+    "label": "good",
+    "notes": "BS_CLIENT_ID for the OAuth2 client ID, BS_SECRET for the client secret, and BS_NETWORK (optional) for the default network name. These are loaded automatically by cfg.LoadFromEnv() in the New() constructor.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure the GoPurple SDK to use the gopurple.WithMTLS() option for mutual TLS authentication with BSN.cloud?",
+    "label": "bad",
+    "notes": "WithMTLS() does not exist. The SDK uses OAuth2 client_credentials flow for authentication, not mutual TLS. The available options are WithCredentials, WithNetwork, WithTimeout, WithRetryCount, WithDebug, WithEndpoints, WithTokenEndpoint, WithOIDCURL, WithDeviceSerial, WithAccessToken.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What are the four reboot types available for device reboots in the GoPurple SDK?",
+    "label": "good",
+    "notes": "RebootTypeNormal ('normal'), RebootTypeCrash ('crash' - saves crash report), RebootTypeFactoryReset ('factoryreset'), and RebootTypeDisableAutorun ('disableautorun'). These are defined as RebootType string constants.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the client.Devices.BulkReboot() method to reboot multiple devices at once?",
+    "label": "bad",
+    "notes": "BulkReboot() does not exist in the DeviceService interface. Reboots must be performed individually per device using Reboot(ctx, id, rebootType) or RebootBySerial(ctx, serial, rebootType).",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the difference between client.Devices.Get() and client.Devices.GetByID()?",
+    "label": "good",
+    "notes": "Get(ctx, serial) retrieves a device by its serial number string. GetByID(ctx, id) retrieves a device by its numeric ID (int). Both return *types.Device and require authentication and network context.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use the gopurple.WithBatchSize() option to control how many devices are fetched per API call?",
+    "label": "bad",
+    "notes": "WithBatchSize() does not exist. For pagination, use WithPageSize() as a ListOption when calling client.Devices.List(). There is no global batch size configuration option.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What are the valid setupType values for a B-Deploy setup configuration?",
+    "label": "good",
+    "notes": "Valid values are: 'bsn' (BrightSign Network - standard BSN.cloud deployment), 'lfn' (Local File Network), 'standalone' (independent operation), 'sfn' (Simple File Network - HTTP/HTTPS web server), and 'partnerApplication' (third-party partner integration).",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the setupType to 'cloudRelay' for a B-Deploy configuration that proxies content through BSN.cloud edge servers?",
+    "label": "bad",
+    "notes": "'cloudRelay' is fabricated. Valid setupType values are 'bsn', 'lfn', 'standalone', 'sfn', and 'partnerApplication'. There is no cloud relay/proxy setup type.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How does player-to-setup association work in the B-Deploy system?",
+    "label": "good",
+    "notes": "Association is DIRECT via the setupId field in the device record. Device.setupId references Setup._id directly. It is NOT through groups. The flow is: Serial Number -> setupId -> Configuration. Groups (bsnGroupName) are only for BSN.cloud dashboard organization.",
+    "file": "bdeploy-association"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.AssociateGroup() to link a BSN group to a setup record for automatic device provisioning?",
+    "label": "bad",
+    "notes": "AssociateGroup() does not exist. Player-to-setup association is direct via setupId, NOT through groups. Groups are separate organizational features. Use UpdateDevice() with a setupId to associate a device with a setup.",
+    "file": "bdeploy-association"
+  },
+  {
+    "prompt": "What types are exported by the gopurple package for device status monitoring?",
+    "label": "good",
+    "notes": "DeviceStatusEmbed (main status container), FirmwareInfo (firmware version), ScriptInfo (BrightScript/plugin info), SyncSettings and SyncPeriod (synchronization), StorageInfo (storage capacity/usage), NetworkInfo (connectivity), NetworkInterfaceBSN (individual interface details).",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How do you use the gopurple.DeviceHealthScore type to get a numeric health score between 0 and 100 for a device?",
+    "label": "bad",
+    "notes": "DeviceHealthScore type does not exist. Device health is represented by a string field (DeviceStatusEmbed.Health) with values like 'Healthy', 'Warning', 'Error'. There is no numeric 0-100 health score.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How do you list all devices with filtering and pagination using the GoPurple SDK?",
+    "label": "good",
+    "notes": "Use client.Devices.List(ctx, opts...) with ListOption values: WithPageSize(50), WithFilter('model=XD1033'), WithSort('lastModifiedDate desc'), WithMarker(nextMarker). Returns *DeviceList with Items, IsTruncated, NextMarker, TotalCount.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use the client.Devices.Search() method with SearchParams to perform full-text search across device names and descriptions?",
+    "label": "bad",
+    "notes": "Search() and SearchParams do not exist. Use client.Devices.List() with WithFilter() option for filtering. The SDK does not provide full-text search capabilities.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What RDWS operations are available for file management on a BrightSign player?",
+    "label": "good",
+    "notes": "ListFiles(ctx, serial, path), UploadFile(ctx, serial, path, fileName, fileContents, fileType), CreateFolder(ctx, serial, path), RenameFile(ctx, serial, path, newName), DeleteFile(ctx, serial, path). All require authentication and network context.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SyncFiles() to automatically synchronize a local directory with the player's storage?",
+    "label": "bad",
+    "notes": "SyncFiles() does not exist. File operations must be performed individually: list files, upload, delete, rename. There is no automatic directory synchronization feature in the RDWS service.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you take a screenshot of a BrightSign player using the RDWS service?",
+    "label": "good",
+    "notes": "Use client.RDWS.Snapshot(ctx, serial) via the RDWS service, or client.Devices.TakeSnapshotBySerial(ctx, serial, req) via the main API. SnapshotRequest supports Format ('png'/'jpeg'), Quality (1-100), Region (x,y,width,height), DisplayID for multi-display.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.VideoCapture() to record a 30-second video clip from the player's display output?",
+    "label": "bad",
+    "notes": "VideoCapture() does not exist. The RDWS service only supports static screenshots via Snapshot(), not video recording. There is no video capture capability in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What are the three methods available in the SubscriptionService?",
+    "label": "good",
+    "notes": "List(ctx, opts...ListOption) returns a paginated list of device subscriptions, GetCount(ctx) returns the subscription count, and GetOperations(ctx) returns operational permissions granted to roles for subscriptions.",
+    "file": "subscriptions"
+  },
+  {
+    "prompt": "How do you use client.Subscriptions.Renew() to extend a device subscription before it expires?",
+    "label": "bad",
+    "notes": "Renew() does not exist. The SubscriptionService only provides read operations: List(), GetCount(), and GetOperations(). There are no write/modification operations for subscriptions in the SDK.",
+    "file": "subscriptions"
+  },
+  {
+    "prompt": "What does the EnsureReady() method on the Client do?",
+    "label": "good",
+    "notes": "EnsureReady(ctx) is a convenience method that calls Authenticate() first, then if a network name is configured but not yet set, it calls SetNetwork(). It ensures the client is both authenticated and has a network context established.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How does the gopurple.NewFromConfig() function create a client from a YAML configuration file?",
+    "label": "bad",
+    "notes": "NewFromConfig() does not exist. The SDK creates clients via gopurple.New(opts...) with functional options, or by using environment variables. There is no YAML configuration file support.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What is the B-Deploy Setup API v3 base URL for setup record operations?",
+    "label": "good",
+    "notes": "https://provision.bsn.cloud/rest-setup/v3/setup/ is the base URL. Supports GET (list), POST (create), PUT (update), DELETE /?_id={id} (delete), and GET /{_id}/ (get by ID).",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you call the B-Deploy v4 setup API at https://provision.bsn.cloud/rest-setup/v4/setup/ to use the latest provisioning features?",
+    "label": "bad",
+    "notes": "There is no v4 setup API. The SDK uses v3 (rest-setup/v3/setup/) for setup records and v2 (rest-device/v2/device/) for device records. The v4 endpoint is fabricated.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you generate a device registration token using the ProvisioningService?",
+    "label": "good",
+    "notes": "Call client.Provisioning.GenerateDeviceToken(ctx). Returns a *BSNTokenEntity with Token, Scope ('cert'), ValidFrom, and ValidTo fields. The token is valid for 2 years by default and is used in B-Deploy setup records for player registration.",
+    "file": "provisioning"
+  },
+  {
+    "prompt": "How do you use client.Provisioning.BulkProvision() to provision multiple devices with a single API call?",
+    "label": "bad",
+    "notes": "BulkProvision() does not exist. The ProvisioningService only offers GenerateDeviceToken(ctx) and ValidateDeviceToken(ctx, token). Device provisioning is done by creating setup records and associating devices individually.",
+    "file": "provisioning"
+  },
+  {
+    "prompt": "What fields are required in a minimal B-Deploy setup configuration JSON?",
+    "label": "good",
+    "notes": "Required fields: bDeploy.username, bDeploy.networkName, bDeploy.packageName, and setupType. All other fields are optional with sensible defaults. The SDK automatically sets version to '3.0.0' if not specified.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the bDeploy.provisioningMode field to 'automatic' to enable zero-touch provisioning in a B-Deploy config?",
+    "label": "bad",
+    "notes": "The provisioningMode field does not exist. Required bDeploy fields are username, networkName, packageName, and optionally client. Zero-touch provisioning is handled by the setupId association mechanism, not a mode field.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure wireless network settings in a B-Deploy setup record?",
+    "label": "good",
+    "notes": "Set useWireless: true, ssid: 'network-name', passphrase: 'password'. For static IP, set useDHCP_2: false with staticIPAddress_2, subnetMask_2, gateway_2, dns1_2, dns2_2, dns3_2. The passphrase is stored in plain text.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the bDeploy.wifiProfile field to reference a pre-configured WiFi profile stored in BSN.cloud?",
+    "label": "bad",
+    "notes": "wifiProfile field does not exist. WiFi configuration is done inline with useWireless, ssid, and passphrase fields directly in the setup record. There is no WiFi profile reference mechanism.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What network diagnostics methods does the RDWS service provide?",
+    "label": "good",
+    "notes": "GetDiagnostics(ctx, serial), DNSLookup(ctx, serial, domain), Ping(ctx, serial, host), TraceRoute(ctx, serial, host), GetNetworkConfig(ctx, serial, iface), SetNetworkConfig(ctx, serial, iface, req), GetNetworkNeighborhood(ctx, serial), plus packet capture operations.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SpeedTest() to measure the network bandwidth of a BrightSign player?",
+    "label": "bad",
+    "notes": "SpeedTest() does not exist. Available diagnostics are DNS lookup, ping, traceroute, network config, network neighborhood, and packet capture. There is no bandwidth speed test feature.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you manage SSH on a BrightSign player through the RDWS service?",
+    "label": "good",
+    "notes": "Use client.RDWS.GetSSHStatus(ctx, serial) to check SSH status, and client.RDWS.SetSSHStatus(ctx, serial, enabled, port, password) to enable/disable SSH with a specific port and password. SSH must be enabled via RDWS after provisioning.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SSHTunnel() to establish a reverse SSH tunnel to a player behind a NAT?",
+    "label": "bad",
+    "notes": "SSHTunnel() does not exist. The RDWS SSH methods only get/set SSH status (enabled, port, password) on the player. There is no SSH tunnel or NAT traversal feature in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use the WithAccessToken option to reuse a cached bearer token?",
+    "label": "good",
+    "notes": "Pass gopurple.WithAccessToken(token) to gopurple.New(). This sets a pre-loaded access token for session reuse, allowing CLI tools to cache the bearer token between invocations and skip the OAuth round-trip when the token is still valid.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithRefreshToken() to enable automatic token refresh using a stored refresh token?",
+    "label": "bad",
+    "notes": "WithRefreshToken() does not exist. The SDK handles token refresh internally through the AuthManager. You can use WithAccessToken() to provide a cached token, but there is no explicit refresh token option.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What is the DeviceWebPageService used for?",
+    "label": "good",
+    "notes": "DeviceWebPageService provides List(ctx), GetByID(ctx, id), and GetDefault(ctx) methods. GetDefault() finds the 'Default_PresentationWebPage' entry. These are needed when creating presentations that reference the default device web page.",
+    "file": "devicewebpages"
+  },
+  {
+    "prompt": "How do you use client.DeviceWebPages.Create() to upload a custom HTML web page to a device?",
+    "label": "bad",
+    "notes": "Create() does not exist in DeviceWebPageService. The service only has List(), GetByID(), and GetDefault(). Web page creation, updates, and deletion are not implemented in the SDK (marked NOT-DONE in all-apis.md).",
+    "file": "devicewebpages"
+  },
+  {
+    "prompt": "How does the BDeployService.GetAllDevices() method work with network context?",
+    "label": "good",
+    "notes": "First call BDeploy.SetNetworkContext(ctx, networkName) to establish the network. Then call GetAllDevices(ctx, opts...). The method includes NetworkName as a query parameter. Without network context, it may return 0 devices. Supports WithSetupName() option.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.MigrateDevices() to move all devices from one setup to another?",
+    "label": "bad",
+    "notes": "MigrateDevices() does not exist. To reassign devices, you must update each device individually using UpdateDevice() with a new setupId. There is no bulk migration method.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What are the logging configuration options available in a B-Deploy setup record?",
+    "label": "good",
+    "notes": "playbackLoggingEnabled, eventLoggingEnabled, diagnosticLoggingEnabled, stateLoggingEnabled, variableLoggingEnabled, uploadLogFilesAtBoot, uploadLogFilesAtSpecificTime, uploadLogFilesTime (hour 0-23), logHandlerUrl (custom URL). All boolean fields default to false.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the logRotationPolicy field in a B-Deploy config to automatically rotate log files when they exceed 10MB?",
+    "label": "bad",
+    "notes": "logRotationPolicy does not exist. Log configuration options include enabling various log types and controlling upload timing. There is no log rotation policy or file size configuration in B-Deploy setups.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What options are available for listing B-Deploy setup records?",
+    "label": "good",
+    "notes": "BDeployListOption with: WithNetworkName(name) to filter by network, WithUsername(user) to filter by username, WithPackageName(pkg) to filter by package name, WithBDeployPageSize(size) for pagination, WithBDeployPage(page) for page number.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use WithSetupType() to filter B-Deploy records by setup type (bsn, lfn, etc.)?",
+    "label": "bad",
+    "notes": "WithSetupType() does not exist as a BDeployListOption. Available options are WithNetworkName(), WithUsername(), WithPackageName(), WithBDeployPageSize(), and WithBDeployPage(). Filtering by setupType must be done client-side.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you delete a B-Deploy device using the SDK?",
+    "label": "good",
+    "notes": "Call client.BDeploy.DeleteDevice(ctx, deviceID, serial). Either deviceID or serial must be provided; if both are provided, deviceID takes precedence. The method sends a DELETE request to /rest-device/v2/device?_id={id} or ?serial={serial}.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.DecommissionDevice() to remove a device and revoke its registration token simultaneously?",
+    "label": "bad",
+    "notes": "DecommissionDevice() does not exist. Deleting a device (DeleteDevice) and revoking tokens are separate operations. Token revocation is not even implemented in the SDK (DELETE /Setups/Tokens/{token}/ is NOT-DONE).",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you access the current firmware version of a device through the DeviceStatusEmbed type?",
+    "label": "good",
+    "notes": "Check device.Status.Firmware != nil, then access device.Status.Firmware.Version. The FirmwareInfo struct only has a Version string field. Always nil-check Status and Firmware since they may be nil.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How do you use device.Status.Firmware.ReleaseDate to check when the current firmware was released?",
+    "label": "bad",
+    "notes": "FirmwareInfo.ReleaseDate does not exist. The FirmwareInfo struct only contains a Version string field. There is no release date, update timestamp, or any other firmware metadata in the type.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How does storage monitoring work with the DeviceStatusEmbed type?",
+    "label": "good",
+    "notes": "Access device.Status.Storage which is []StorageInfo. Each StorageInfo has Interface (string), System (string), Total (int64), Used (int64), Free (int64). Calculate usage: float64(storage.Used) / float64(storage.Total) * 100.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "How do you use the StorageInfo.HealthStatus field to check if a storage device is degraded or failing?",
+    "label": "bad",
+    "notes": "StorageInfo.HealthStatus does not exist. StorageInfo only has Interface, System, Total, Used, and Free fields. There is no storage health or SMART-like status reporting in the type.",
+    "file": "type-safety"
+  },
+  {
+    "prompt": "What is the WithNetworkContext convenience method used for?",
+    "label": "good",
+    "notes": "client.WithNetworkContext(ctx, fn) ensures both authentication and network context are set before executing the callback function fn. It calls EnsureReady(ctx) first, then checks IsNetworkSet(), and returns an auth error if no network is selected.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.WithTransaction() to wrap multiple API calls in an atomic transaction that can be rolled back?",
+    "label": "bad",
+    "notes": "WithTransaction() does not exist. The SDK has no transaction support. Available convenience methods are WithAuthentication(ctx, fn) and WithNetworkContext(ctx, fn). API calls are independent and not atomic.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you enable remote DWS (Diagnostic Web Server) in a B-Deploy setup configuration?",
+    "label": "good",
+    "notes": "Set remoteDwsEnabled: true in the setup config JSON. Optionally also set dwsEnabled: true for local DWS access and dwsPassword for password protection. Remote DWS is accessed via https://ws.bsn.cloud/.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the remoteDwsPort field to change the remote DWS listening port from the default 8443?",
+    "label": "bad",
+    "notes": "remoteDwsPort does not exist. Remote DWS uses BSN.cloud's ws.bsn.cloud infrastructure and does not allow custom port configuration. The only DWS-related fields are dwsEnabled, dwsPassword, and remoteDwsEnabled.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you get device error logs using the GoPurple SDK?",
+    "label": "good",
+    "notes": "Use client.Devices.GetErrors(ctx, id, opts...) or GetErrorsBySerial(ctx, serial, opts...) with optional ListOption pagination. Returns *DeviceErrorList with Items []DeviceError containing fields like ErrorCode, ErrorType, Severity, Message, Timestamp.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.ClearErrors() to acknowledge and clear all error entries for a device?",
+    "label": "bad",
+    "notes": "ClearErrors() does not exist. The DeviceService only provides read access to errors via GetErrors() and GetErrorsBySerial(). There is no method to clear, acknowledge, or delete error log entries.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the RDWS base URL used by the SDK?",
+    "label": "good",
+    "notes": "https://ws.bsn.cloud/rest/v1/ is the base URL for all RDWS operations. Endpoints include /info/, /time/, /health/, /files/, /control/, /diagnostics/, /logs/, /registry/, /snapshot/, etc. All use destinationType=player&destinationName={serial} query params.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you configure the SDK to use the RDWS v2 API at https://ws.bsn.cloud/rest/v2/ for enhanced diagnostic capabilities?",
+    "label": "bad",
+    "notes": "RDWS v2 does not exist. The SDK uses https://ws.bsn.cloud/rest/v1/ exclusively. The WithEndpoints() option allows custom endpoints but there is no v2 RDWS API.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you retrieve crash dump files from a BrightSign player?",
+    "label": "good",
+    "notes": "Use client.RDWS.GetCrashDump(ctx, serial). Returns *RDWSCrashDump which contains a collection of RDWSCrashDumpFile entries. The corresponding example is rdws-crashdump-get.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.AnalyzeCrashDump() to get a parsed stack trace and root cause analysis from a crash dump?",
+    "label": "bad",
+    "notes": "AnalyzeCrashDump() does not exist. GetCrashDump() returns raw crash dump files. There is no parsing, analysis, or stack trace extraction feature in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How many API endpoints are implemented in the GoPurple SDK out of the total available?",
+    "label": "good",
+    "notes": "43 out of approximately 294 total endpoints. BSN.cloud Main APIs: 16 implemented, B-Deploy Provisioning APIs: 14 endpoints with most DONE, RDWS: most endpoints implemented. Device Management, RDWS, B-Deploy, Groups, and Subscriptions are the most complete.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "Does the GoPurple SDK implement the BSN.cloud Content Upload API for uploading media files to the content library?",
+    "label": "bad",
+    "notes": "Content upload is explicitly noted as excluded/removed. The SDK does not implement content management, presentation creation, or media upload APIs. These are all marked NOT-DONE.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you configure rate limiting for wired and wireless interfaces in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Use rateLimitModeOutsideWindow, rateLimitRateOutsideWindow, rateLimitModeInWindow, rateLimitRateInWindow, rateLimitModeInitialDownloads, rateLimitRateInitialDownloads for wired. Add _2 suffix for wireless. Valid modes: 'default', 'unlimited', 'limited'. Rates in kbps.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the rateLimitBurstSize field to allow short bursts of high-bandwidth downloads?",
+    "label": "bad",
+    "notes": "rateLimitBurstSize does not exist. Rate limiting options are mode (default/unlimited/limited) and rate (kbps) for three contexts: outside window, in window, and initial downloads, per interface.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What is the IdleScreenColor type and how is it used?",
+    "label": "good",
+    "notes": "IdleScreenColor has R, G, B (0-255) and A (0-1) fields for RGBA color specification. It's used in BDeploySetupRecord.IdleScreenColor to set the idle screen color. Default is black: {R:0, G:0, B:0, A:1}.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the IdleScreenColor.Gradient field to set a gradient idle screen background?",
+    "label": "bad",
+    "notes": "IdleScreenColor has no Gradient field. It only supports flat RGBA colors with R, G, B (0-255) and A (0-1). There is no gradient support in the idle screen configuration.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the WithOIDCURL option when creating a client?",
+    "label": "good",
+    "notes": "gopurple.WithOIDCURL(url) sets the OIDC base URL and derives the token endpoint from it. This is useful when connecting to custom or non-standard authentication endpoints instead of the default BSN.cloud OAuth2 endpoint.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithSAMLProvider() to configure SAML-based SSO authentication with BSN.cloud?",
+    "label": "bad",
+    "notes": "WithSAMLProvider() does not exist. The SDK supports OAuth2 client_credentials authentication only. Options for auth customization are WithCredentials(), WithTokenEndpoint(), WithOIDCURL(), and WithAccessToken().",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you create a new device group using the GoPurple SDK?",
+    "label": "good",
+    "notes": "Call client.Devices.CreateGroup(ctx, name) which sends a POST to /Groups/Regular/. Returns *Group with ID, Name, Link fields. Requires authentication and network context.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.CreateNestedGroup() to create a hierarchical group structure with parent-child relationships?",
+    "label": "bad",
+    "notes": "CreateNestedGroup() does not exist. The DeviceService provides flat group management: CreateGroup(name), GetGroup(id), GetGroupByName(name), UpdateGroup(id, group), DeleteGroup(id), ListGroups(). No hierarchy support.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What does the DeviceList type contain when returned from Devices.List()?",
+    "label": "good",
+    "notes": "DeviceList has Items []Device, IsTruncated bool (true if more pages exist), NextMarker string (pagination token for next page), and TotalCount int. Use NextMarker with WithMarker() option for pagination.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use DeviceList.HasMore() and DeviceList.FetchNext() for automatic pagination?",
+    "label": "bad",
+    "notes": "HasMore() and FetchNext() do not exist on DeviceList. Pagination is manual: check IsTruncated, use NextMarker value with WithMarker() in the next List() call. There is no automatic pagination.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you configure content download time windows in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set contentDownloadsRestricted: true, contentDownloadRangeStart (minutes from midnight, e.g. 180 for 3AM), contentDownloadRangeEnd (e.g. 360 for 6AM). Similarly for heartbeats: heartbeatsRestricted, heartbeatsRangeStart, heartbeatsRangeEnd.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the contentDownloadDaysOfWeek field to restrict downloads to specific days (e.g., weekends only)?",
+    "label": "bad",
+    "notes": "contentDownloadDaysOfWeek does not exist. Download windows are configured only by time range (start/end in minutes from midnight) with contentDownloadRangeStart and contentDownloadRangeEnd. There is no day-of-week filtering.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you perform a DNS lookup using the RDWS service?",
+    "label": "good",
+    "notes": "Call client.RDWS.DNSLookup(ctx, serial, domain). Returns *RDWSDNSLookupResult. The API endpoint is GET /diagnostics/dns-lookup/{domain_name}/ with destinationType=player&destinationName={serial}.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ReverseDNS() to perform a reverse DNS lookup from an IP address?",
+    "label": "bad",
+    "notes": "ReverseDNS() does not exist. The RDWS diagnostics only support forward DNS lookup via DNSLookup(ctx, serial, domain). There is no reverse DNS lookup method in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you retrieve and set registry values on a BrightSign player?",
+    "label": "good",
+    "notes": "GetRegistry(ctx, serial) returns full registry dump. GetRegistryValue(ctx, serial, section, key) gets specific value. SetRegistryValue(ctx, serial, section, key, value) writes a value. DeleteRegistryValue removes it. FlushRegistry forces write to disk.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ExportRegistry() to save the entire player registry to a JSON file for backup?",
+    "label": "bad",
+    "notes": "ExportRegistry() does not exist. GetRegistry() returns the registry data as *RDWSRegistry. File saving must be done in user code. There is no built-in export/backup method.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What is the IsRateLimitError function used for?",
+    "label": "good",
+    "notes": "gopurple.IsRateLimitError(err) is mentioned in the README error handling example. However, looking at the actual exported error functions in gopurple.go, only IsAuthenticationError, IsNetworkError, IsConfigurationError, and IsRetryableError are re-exported. IsRateLimitError is shown in README examples.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use gopurple.IsQuotaExceededError() to detect when the API rate quota has been fully consumed?",
+    "label": "bad",
+    "notes": "IsQuotaExceededError() does not exist. The exported error checking functions are IsAuthenticationError, IsNetworkError, IsConfigurationError, and IsRetryableError. There is no quota-specific error type.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you set a custom hostname for a BrightSign player in a B-Deploy config?",
+    "label": "good",
+    "notes": "Set specifyHostname: true and hostname: 'lobby-display-1' in the setup configuration. These are optional fields; when specifyHostname is false, the player uses its default hostname.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the mDNSEnabled field in B-Deploy config to enable multicast DNS discovery for the player?",
+    "label": "bad",
+    "notes": "mDNSEnabled does not exist in the B-Deploy setup configuration. Hostname configuration only supports specifyHostname and hostname fields. There is no mDNS/Bonjour configuration option.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure BrightWall settings in a B-Deploy setup record?",
+    "label": "good",
+    "notes": "Set BrightWallName (string, e.g. 'LobbyWall') for the wall configuration name, and BrightWallScreenNumber (string, e.g. '1' or '3x2' for row x column) for the screen position. Both are optional fields.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the BrightWallSyncSource field to configure which player acts as the synchronization master in a video wall?",
+    "label": "bad",
+    "notes": "BrightWallSyncSource does not exist. BrightWall configuration in B-Deploy only supports BrightWallName and BrightWallScreenNumber. Sync master configuration is not part of the B-Deploy setup.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the WithDebug option to enable HTTP request/response logging?",
+    "label": "good",
+    "notes": "Pass gopurple.WithDebug(true) to gopurple.New(). This enables debug logging of all HTTP requests and responses, useful for troubleshooting API interactions.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithLogLevel('trace') to set the verbosity of SDK logging output?",
+    "label": "bad",
+    "notes": "WithLogLevel() does not exist. The SDK only offers WithDebug(bool) for enabling/disabling debug HTTP logging. There are no configurable log levels (trace, debug, info, etc.).",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you update a B-Deploy setup record?",
+    "label": "good",
+    "notes": "Call client.BDeploy.UpdateSetupRecord(ctx, setupID, record). The record's ID is automatically set to match setupID. Sends a PUT to https://provision.bsn.cloud/rest-setup/v3/setup. Returns the updated *BDeploySetupRecord.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.PatchSetupRecord() to update only specific fields of a setup record without sending the full record?",
+    "label": "bad",
+    "notes": "PatchSetupRecord() does not exist. Updates are done via UpdateSetupRecord() which sends the complete record as a PUT. There is no partial update/PATCH support in the BDeployService.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you configure proxy settings in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set useProxy: true, proxyAddress: 'proxy.company.com', proxyPort: 8080. For v3 network config, use network.proxy and network.proxyBypass. Both legacy flat fields and v3 network object are supported.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the proxyAuthentication field to configure proxy username and password in a B-Deploy setup?",
+    "label": "bad",
+    "notes": "proxyAuthentication does not exist. Proxy configuration only supports useProxy, proxyAddress, proxyPort, and v3 network.proxy/proxyBypass. There is no proxy authentication (username/password) configuration.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What does the client.GetNetworks() method return?",
+    "label": "good",
+    "notes": "Returns ([]Network, error). Each Network has ID (int), Name (string), CreationDate, LastModifiedDate, Subscription (*NetworkSubscription with Level, StartDate, EndDate), Settings (*NetworkSettings), IsLockedOut (bool), LockoutDate.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.GetNetworkQuota() to check the remaining API call quota for your network?",
+    "label": "bad",
+    "notes": "GetNetworkQuota() does not exist. Network-related methods on Client are GetNetworks(), SetNetwork(), SetNetworkByID(), GetCurrentNetwork(), and IsNetworkSet(). There is no API quota checking method.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use the WithRetryCount option?",
+    "label": "good",
+    "notes": "Pass gopurple.WithRetryCount(n) to gopurple.New() to set the number of retry attempts for failed API requests. This controls the HTTP client's automatic retry behavior for transient failures.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithRetryBackoff(time.Second * 5) to configure exponential backoff between retries?",
+    "label": "bad",
+    "notes": "WithRetryBackoff() does not exist. The SDK only provides WithRetryCount(n) for retry configuration. Backoff timing is handled internally and is not configurable.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you get download status for a device?",
+    "label": "good",
+    "notes": "Use client.Devices.GetDownloads(ctx, id) or GetDownloadsBySerial(ctx, serial). Returns *DeviceDownloadList with Items []DeviceDownload containing FileName, FileSize, DownloadedBytes, Status (pending/downloading/complete/error), StartTime, EndTime, Error.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.CancelDownload() to stop an in-progress content download on a device?",
+    "label": "bad",
+    "notes": "CancelDownload() does not exist. The DeviceService only provides read access to downloads via GetDownloads() and GetDownloadsBySerial(). Download cancellation is not supported.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you send custom data to a player via the RDWS service?",
+    "label": "good",
+    "notes": "Call client.RDWS.SendCustomData(ctx, serial, data). This sends custom data to the player via UDP port 5000. The API endpoint is PUT /custom/ with destinationType=player&destinationName={serial}.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SendCustomCommand() with a CommandPayload struct to execute BrightScript commands remotely?",
+    "label": "bad",
+    "notes": "SendCustomCommand() and CommandPayload do not exist. SendCustomData(ctx, serial, data) sends a raw string via UDP port 5000. There is no structured command execution or BrightScript remote execution feature.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you get the telnet status of a BrightSign player?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetTelnetStatus(ctx, serial). Returns *RDWSTelnetInfo with enabled status and port number. Use SetTelnetStatus(ctx, serial, enabled, port) to enable/disable telnet.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.GetTelnetSession() to establish an interactive telnet session with the player through the SDK?",
+    "label": "bad",
+    "notes": "GetTelnetSession() does not exist. The SDK only manages telnet status (enabled/disabled and port) via GetTelnetStatus() and SetTelnetStatus(). Establishing actual telnet connections is outside the SDK scope.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What is the WithDeviceSerial option used for?",
+    "label": "good",
+    "notes": "gopurple.WithDeviceSerial(serial) sets a default device serial number for single-device operations. This allows CLI tools focused on a single device to avoid passing the serial on every call.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithDeviceGroup() to set a default group filter for all device operations?",
+    "label": "bad",
+    "notes": "WithDeviceGroup() does not exist. The available configuration options do not include a default group filter. Group filtering must be done per-call using WithFilter() on device list operations.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure remote snapshot settings in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set enableRemoteSnapshot: true, remoteSnapshotInterval (minutes, 1-1440), remoteSnapshotMaxImages (max to keep), remoteSnapshotJpegQualityLevel (1-100), remoteSnapshotScreenOrientation ('Landscape'/'Portrait'), remoteSnapshotHandlerUrl (optional custom URL).",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the remoteSnapshotResolution field to capture screenshots at a specific resolution like 1920x1080?",
+    "label": "bad",
+    "notes": "remoteSnapshotResolution does not exist. Remote snapshot configuration supports interval, max images, JPEG quality, screen orientation, and handler URL. Resolution is determined by the player's display output, not configurable.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you check if the client is authenticated and has a network set?",
+    "label": "good",
+    "notes": "Use client.IsAuthenticated() to check for a valid access token, and client.IsNetworkSet() to check if a network context has been established. Both return bool values.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.TokenExpiry() to check when the current OAuth2 token will expire?",
+    "label": "bad",
+    "notes": "TokenExpiry() does not exist on the Client. Available auth methods are IsAuthenticated(), GetAccessToken(), Authenticate(), and the internal AuthManager handles token expiry checks automatically.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure the LWS (Local Web Server) in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set lwsEnabled: true, lwsConfig ('status'/'content'/'diagnostic'), lwsUserName and lwsPassword for auth, lwsEnableUpdateNotifications (bool). These enable local web server access on the player.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set lwsPort to change the Local Web Server port from the default 80 to a custom port?",
+    "label": "bad",
+    "notes": "lwsPort does not exist. LWS configuration includes lwsEnabled, lwsConfig, lwsUserName, lwsPassword, and lwsEnableUpdateNotifications. The port is not configurable through B-Deploy setup.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you reformat storage on a BrightSign player via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.ReformatStorage(ctx, serial, deviceName). The deviceName specifies which storage device to reformat (e.g., 'sd'). The API endpoint is DELETE /storage/{device_name}/ with the player destination params.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.PartitionStorage() to create separate partitions for content and logs on the player's SD card?",
+    "label": "bad",
+    "notes": "PartitionStorage() does not exist. The RDWS storage management only supports ReformatStorage(ctx, serial, deviceName) to reformat an entire storage device. There is no partition management.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you retrieve player logs from the RDWS service?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetLogs(ctx, serial). Returns *RDWSLogs containing a collection of RDWSLogFile entries. The API endpoint is GET /logs/. The rdws-logs-get example supports output to file, stdout, or JSON.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.StreamLogs() to get a real-time log stream from a player for live debugging?",
+    "label": "bad",
+    "notes": "StreamLogs() does not exist. GetLogs() retrieves stored log files in batch. There is no real-time log streaming capability in the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What does the BDeployDeviceRequest type contain?",
+    "label": "good",
+    "notes": "BDeployDeviceRequest is used with BDeploy.CreateDevice() and UpdateDevice(). It contains fields for Serial, Name, NetworkName, Username, Desc, SetupID, and ID. Serial, NetworkName, and Username are required for creation.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you set the BDeployDeviceRequest.FirmwareVersion field to force a specific firmware version during provisioning?",
+    "label": "bad",
+    "notes": "BDeployDeviceRequest does not have a FirmwareVersion field. It only contains Serial, Name, NetworkName, Username, Desc, SetupID, and ID. Firmware configuration is part of the setup record, not the device request.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you download firmware to a BrightSign player via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.DownloadFirmware(ctx, serial, firmwareURL, autoReboot). firmwareURL is the URL to the firmware file, autoReboot is an optional *bool to control automatic reboot after download. API endpoint is GET /download-firmware/.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.GetAvailableFirmware() to list all firmware versions compatible with a player model?",
+    "label": "bad",
+    "notes": "GetAvailableFirmware() does not exist. DownloadFirmware() requires a specific firmware URL. There is no firmware version listing or compatibility checking in the RDWS service.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you get the time from a BrightSign player and set it via RDWS?",
+    "label": "good",
+    "notes": "GetTime(ctx, serial) returns *RDWSTimeInfo with the current time. SetTime(ctx, serial, request) takes *RDWSTimeSetRequest to set the time. The request body is wrapped in a data envelope for the PUT call.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SyncTimeWithNTP() to force the player to synchronize its clock with an NTP server?",
+    "label": "bad",
+    "notes": "SyncTimeWithNTP() does not exist. Time management is limited to GetTime() and SetTime(). NTP configuration is done via B-Deploy setup records (timeServer or network.timeServers), not via RDWS commands.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use the WithEndpoints option?",
+    "label": "good",
+    "notes": "gopurple.WithEndpoints(bsnBaseURL, rdwsBaseURL) sets custom API endpoints for BSN.cloud and RDWS. Useful for testing against staging environments or custom API proxies instead of the default api.bsn.cloud and ws.bsn.cloud.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithRegion('eu-west-1') to connect to the European BSN.cloud data center?",
+    "label": "bad",
+    "notes": "WithRegion() does not exist. To use different endpoints, use WithEndpoints(bsnURL, rdwsURL) to specify custom URLs directly. The SDK does not have a region selection concept.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What is the difference between the main API device snapshot and the RDWS snapshot?",
+    "label": "good",
+    "notes": "client.Devices.TakeSnapshotBySerial() uses the main BSN.cloud API endpoint, while client.RDWS.Snapshot() uses the RDWS endpoint at ws.bsn.cloud/rest/v1/snapshot/. Both capture screenshots but through different API pathways.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ScheduleSnapshot() to set up recurring automatic screenshots at specified intervals?",
+    "label": "bad",
+    "notes": "ScheduleSnapshot() does not exist in the RDWS service. Recurring screenshots are configured via B-Deploy setup (enableRemoteSnapshot, remoteSnapshotInterval), not via RDWS commands. RDWS only takes on-demand snapshots.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you manage local DWS through the RDWS service?",
+    "label": "good",
+    "notes": "GetLocalDWS(ctx, serial) returns *RDWSLocalDWSInfo with the current state. SetLocalDWS(ctx, serial, enabled) enables or disables local DWS. API endpoints are GET/PUT /control/local-dws/.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ConfigureLocalDWS() with LocalDWSConfig to set the DWS port, SSL certificate, and allowed IP ranges?",
+    "label": "bad",
+    "notes": "ConfigureLocalDWS() and LocalDWSConfig do not exist. The RDWS local DWS management only supports get/set of enabled status. Port, SSL, and IP range configuration are not available through the SDK.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you get packet capture status and control packet capture on a player?",
+    "label": "good",
+    "notes": "GetPacketCaptureStatus(ctx, serial) returns *RDWSPacketCaptureStatus. StartPacketCapture(ctx, serial, req) starts capture with *RDWSPacketCaptureStartRequest. StopPacketCapture(ctx, serial) stops it. Both start/stop return a string.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.DownloadPacketCapture() to retrieve the PCAP file after stopping a capture?",
+    "label": "bad",
+    "notes": "DownloadPacketCapture() does not exist. The SDK can start, stop, and check status of packet captures, but retrieving the actual PCAP file data is not supported through the RDWS service methods.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What are the required fields for creating a B-Deploy device record?",
+    "label": "good",
+    "notes": "BDeployDeviceRequest requires Serial (player serial number), NetworkName (BSN.cloud network), and Username (BSN.cloud user email). The CreateDevice method validates these are non-empty before making the API call to POST /rest-device/v2/device/.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use the BDeployDeviceRequest.ActivationCode field to pre-activate a device before it first connects?",
+    "label": "bad",
+    "notes": "ActivationCode does not exist on BDeployDeviceRequest. The fields are Serial, Name, NetworkName, Username, Desc, SetupID, and ID. Device activation happens through the setupId association and B-Deploy provisioning flow.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you get network neighborhood information via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetNetworkNeighborhood(ctx, serial). Returns *RDWSNetworkNeighborhoodResult containing information about devices on the player's local network. Uses GET /diagnostics/network-neighborhood/ endpoint.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.ScanNetwork() with ScanOptions to perform a full port scan of the player's local network?",
+    "label": "bad",
+    "notes": "ScanNetwork() and ScanOptions do not exist. Network discovery is limited to GetNetworkNeighborhood() which returns neighbor information. There is no port scanning functionality.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you get device operations history?",
+    "label": "good",
+    "notes": "Use client.Devices.GetOperations(ctx, id) or GetOperationsBySerial(ctx, serial). Returns *DeviceOperationList with Items []DeviceOperation containing OperationType, Status, CreatedBy, CreatedAt, StartedAt, CompletedAt, Error, Progress.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.QueueOperation() to schedule a device operation for later execution?",
+    "label": "bad",
+    "notes": "QueueOperation() does not exist. The DeviceService provides read-only access to operation history via GetOperations(). Device operations like reboot and reprovision are executed immediately, not queued.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the NetworkConfig type used for in B-Deploy setup records?",
+    "label": "good",
+    "notes": "NetworkConfig contains TimeServers ([]string for NTP URLs), Interfaces ([]NetworkInterface with ID, Name, Type, Proto, ContentDownloadEnabled, HealthReportingEnabled), Proxy (string), and ProxyBypass (string). Used in BDeploySetupRecord.Network.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you add a VPN configuration to NetworkConfig using the VPNSettings field?",
+    "label": "bad",
+    "notes": "VPNSettings does not exist on NetworkConfig. The type only has TimeServers, Interfaces, Proxy, and ProxyBypass fields. VPN configuration is not supported in B-Deploy setup records.",
+    "file": "types"
+  },
+  {
+    "prompt": "How does the B-Deploy provisioning workflow work end-to-end?",
+    "label": "good",
+    "notes": "1. Create setup record (POST /v3/setup) with config. 2. Associate player by creating device record (POST /v2/device) with serial and setupId. 3. Player boots, queries B-Deploy by serial, gets setupId. 4. Player fetches setup config by setupId. 5. Player auto-provisions.",
+    "file": "bdeploy-association"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.TriggerProvision() to remotely force a device to re-download its B-Deploy configuration?",
+    "label": "bad",
+    "notes": "TriggerProvision() does not exist in BDeployService. Re-provisioning is done via client.RDWS.Reprovision() through the RDWS service, or the player re-provisions automatically on reboot.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What does the DeviceError type contain?",
+    "label": "good",
+    "notes": "DeviceError has many flexible fields: ID, DeviceID, Serial, ErrorCode, ErrorType (system/content/network), Severity (info/warning/error/critical), Message, Description, Details, Timestamp, Source, Component, Resolved, ResolvedAt, Status, plus generic Type, Code, Name.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you filter DeviceErrors by severity using the SeverityFilter type?",
+    "label": "bad",
+    "notes": "SeverityFilter type does not exist. DeviceError severity is a string field. Error filtering must be done client-side by iterating over the returned DeviceErrorList.Items and checking the Severity field manually.",
+    "file": "types"
+  },
+  {
+    "prompt": "How does the SDK handle automatic token refresh?",
+    "label": "good",
+    "notes": "The AuthManager handles token management. Before each API call, EnsureValid(ctx) checks if the token is still valid. If expired, it automatically re-authenticates. The token handling is concurrent-safe.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure the SDK's token refresh buffer using gopurple.WithTokenRefreshMargin(30 * time.Second)?",
+    "label": "bad",
+    "notes": "WithTokenRefreshMargin() does not exist. Token refresh is handled internally by the AuthManager. There is no configurable margin or buffer for preemptive token refresh.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure SFN (Simple File Network) settings in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set setupType: 'sfn', sfnWebFolderUrl: 'https://content.example.com/player1/', sfnUserName, sfnPassword, sfnEnableBasicAuthentication: true for HTTP basic auth. The player downloads content from the specified web server.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the sfnSyncInterval field to control how often the player checks for updated content on the SFN server?",
+    "label": "bad",
+    "notes": "sfnSyncInterval does not exist. SFN configuration includes sfnWebFolderUrl, sfnUserName, sfnPassword, and sfnEnableBasicAuthentication. Content sync timing is controlled by timeBetweenNetConnects, not an SFN-specific field.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What example programs are available for B-Deploy operations?",
+    "label": "good",
+    "notes": "10 B-Deploy examples: bdeploy-add-setup, bdeploy-associate, bdeploy-delete-device, bdeploy-delete-setup, bdeploy-find-device, bdeploy-get-device, bdeploy-get-setup, bdeploy-list-devices, bdeploy-list-setups, bdeploy-update-setup.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the bdeploy-clone-setup example to duplicate an existing B-Deploy setup record?",
+    "label": "bad",
+    "notes": "bdeploy-clone-setup does not exist among the examples. The available B-Deploy examples are bdeploy-add-setup, bdeploy-associate, bdeploy-delete-device, bdeploy-delete-setup, bdeploy-find-device, bdeploy-get-device, bdeploy-get-setup, bdeploy-list-devices, bdeploy-list-setups, bdeploy-update-setup.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you get and set the DWS password on a device through the main API?",
+    "label": "good",
+    "notes": "Use client.Devices.GetDWSPassword(ctx, id) or GetDWSPasswordBySerial(). Returns *DWSPasswordGetResponse with Password.IsResultValid and Password.IsBlank. SetDWSPassword(ctx, id, req) with DWSPasswordRequest{Password, PreviousPassword}.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.ResetDWSPassword() to restore the factory default DWS password?",
+    "label": "bad",
+    "notes": "ResetDWSPassword() does not exist. To remove a DWS password, use SetDWSPassword() with an empty Password string and the current password as PreviousPassword. There is no factory reset specific method.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the recovery URL and how do you manage it via RDWS?",
+    "label": "good",
+    "notes": "Recovery URL is a player registry setting for recovery/re-provisioning. GetRecoveryURL(ctx, serial) returns *RDWSRecoveryURL. SetRecoveryURL(ctx, serial, url) writes a new recovery URL. API endpoints are GET/PUT /registry/recovery_url/.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.SetRecoveryMode() to put the player into recovery mode for remote troubleshooting?",
+    "label": "bad",
+    "notes": "SetRecoveryMode() does not exist. Recovery URL management is limited to GetRecoveryURL() and SetRecoveryURL() which read/write the URL in the player registry. There is no mode-switching functionality.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you reprovision a device using the main API vs RDWS?",
+    "label": "good",
+    "notes": "Main API: client.Devices.Reprovision(ctx, id) or ReprovisionBySerial(ctx, serial) returns *ReprovisionResponse with Success and Message. RDWS: Uses GET /re-provision/ endpoint (rdws-reprovision example). Both trigger the player to re-read its B-Deploy setup.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.ReprovisionWithConfig() to push a new configuration directly without creating a B-Deploy record?",
+    "label": "bad",
+    "notes": "ReprovisionWithConfig() does not exist. Reprovisioning always uses the B-Deploy setup associated via setupId. To change configuration, update the setup record and then reprovision.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the BSNTokenEntity type?",
+    "label": "good",
+    "notes": "BSNTokenEntity contains Token (registration token string), Scope (e.g. 'cert'), ValidFrom (date string), ValidTo (date string). Generated by Provisioning.GenerateDeviceToken() and embedded in B-Deploy setup records as bsnDeviceRegistrationTokenEntity.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the BSNTokenEntity.Revoke() method to invalidate a registration token?",
+    "label": "bad",
+    "notes": "BSNTokenEntity has no methods; it is a plain struct with data fields only. Token revocation (DELETE /Setups/Tokens/{token}/) is listed as NOT-DONE in all-apis.md and is not implemented in the SDK.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you configure the timeBetweenNetConnects and timeBetweenHeartbeats fields?",
+    "label": "good",
+    "notes": "timeBetweenNetConnects (seconds, default 300/5min) controls how often the player connects to BSN.cloud for content updates. timeBetweenHeartbeats (seconds, default 900/15min) controls health report frequency. Both are integers in the setup config.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the timeBetweenNetConnects to 0 to enable push-based content delivery instead of polling?",
+    "label": "bad",
+    "notes": "Setting timeBetweenNetConnects to 0 does not enable push delivery. The BSN.cloud architecture uses polling. The player periodically checks for updates at the configured interval. There is no push-based content delivery mode.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you list B-Deploy devices filtered by setup name?",
+    "label": "good",
+    "notes": "Call client.BDeploy.GetAllDevices(ctx, gopurple.WithSetupName('my-setup')). This uses the query[setupName] API parameter to filter devices by their associated setup package name. Requires network context to be set first.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.GetDevicesByModel() to filter B-Deploy devices by hardware model?",
+    "label": "bad",
+    "notes": "GetDevicesByModel() does not exist. BDeploy device listing supports WithSetupName() as the only filter option. Model filtering must be done client-side after fetching devices.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What does the SnapshotRequest type support?",
+    "label": "good",
+    "notes": "SnapshotRequest has Format (png/jpeg), Quality (1-100 for JPEG), IncludeMetadata (bool), Output (base64/file), Compression (low/medium/high), DisplayID (for multi-display), and Region (*Region with X, Y, Width, Height).",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use SnapshotRequest.VideoSource to capture a screenshot from a specific HDMI input rather than the display output?",
+    "label": "bad",
+    "notes": "VideoSource field does not exist on SnapshotRequest. The type supports Format, Quality, IncludeMetadata, Output, Compression, DisplayID, and Region. There is no HDMI input capture capability.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you configure device screenshots (different from remote snapshots) in B-Deploy?",
+    "label": "good",
+    "notes": "Set deviceScreenShotsEnabled: true, deviceScreenShotsInterval (seconds, default 300), deviceScreenShotsCountLimit (max stored, default 10), deviceScreenShotsQuality (1-100, default 85), deviceScreenShotsOrientation ('Landscape'/'Portrait').",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use deviceScreenShotsUploadUrl to configure a custom endpoint for device screenshot uploads?",
+    "label": "bad",
+    "notes": "deviceScreenShotsUploadUrl does not exist. Device screenshot fields are deviceScreenShotsEnabled, Interval, CountLimit, Quality, and Orientation. Custom upload URL is only available for remote snapshots (remoteSnapshotHandlerUrl).",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What is the WithAuthentication convenience method used for?",
+    "label": "good",
+    "notes": "client.WithAuthentication(ctx, fn) ensures authentication before executing the callback function fn. Unlike WithNetworkContext, it does not require a network context. Useful for operations like GetNetworks() that work without network selection.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.WithRetry() to wrap an operation with custom retry logic and exponential backoff?",
+    "label": "bad",
+    "notes": "WithRetry() does not exist on the Client. Retry logic is configured globally via WithRetryCount() at client creation time and handled internally by the HTTP client. There is no per-operation retry wrapper.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How does the B-Deploy device update work to associate a device with a setup?",
+    "label": "good",
+    "notes": "Call client.BDeploy.UpdateDevice(ctx, deviceID, request) with BDeployDeviceRequest including SetupID. Sends PUT to /rest-device/v2/device?_id={id}. If the API returns no result body, it re-fetches the device to verify.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.BatchUpdateDevices() to associate multiple devices with a setup in a single API call?",
+    "label": "bad",
+    "notes": "BatchUpdateDevices() does not exist. Device updates must be performed individually using UpdateDevice(). For bulk operations, iterate over devices and call UpdateDevice() for each one.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What is the SnapshotResponse type and what fields does it contain?",
+    "label": "good",
+    "notes": "SnapshotResponse contains RemoteSnapshotThumbnail (base64), Filename, Timestamp, DeviceName, Width (pixels), Height (pixels), Data (base64 image data), Format (image format), Size (bytes).",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you access the SnapshotResponse.HistogramData field to get color distribution analysis of the screenshot?",
+    "label": "bad",
+    "notes": "HistogramData does not exist on SnapshotResponse. The type only contains screenshot metadata and image data. Image analysis must be done externally using image processing libraries.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you set the network context for B-Deploy operations?",
+    "label": "good",
+    "notes": "Call client.BDeploy.SetNetworkContext(ctx, networkName). This sends a PUT to https://api.bsn.cloud/2022/06/REST/Self/Session/Network and stores the network name internally for device API calls that need NetworkName query parameters.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.SetEnvironment() to switch between production and staging B-Deploy servers?",
+    "label": "bad",
+    "notes": "SetEnvironment() does not exist. The B-Deploy service always uses provision.bsn.cloud. To use different endpoints, configure custom URLs via WithEndpoints() at client creation time.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What error handling functions does the SDK export?",
+    "label": "good",
+    "notes": "Four error checking functions: IsAuthenticationError(err), IsNetworkError(err), IsConfigurationError(err), IsRetryableError(err). These are re-exported from internal/errors package and help categorize errors for appropriate handling.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.IsTimeoutError() to detect and handle request timeout errors specifically?",
+    "label": "bad",
+    "notes": "IsTimeoutError() does not exist. Exported error functions are IsAuthenticationError, IsNetworkError, IsConfigurationError, and IsRetryableError. Timeout errors would be caught by IsNetworkError or IsRetryableError.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure static IP addresses for wired and wireless interfaces in B-Deploy?",
+    "label": "good",
+    "notes": "Wired: set useDHCP: false, staticIPAddress, subnetMask, gateway, dns1, dns2, dns3. Wireless: set useDHCP_2: false, staticIPAddress_2, subnetMask_2, gateway_2, dns1_2, dns2_2, dns3_2. Both can be set in the same config.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure IPv6 static addresses using the staticIPv6Address and ipv6Gateway fields?",
+    "label": "bad",
+    "notes": "staticIPv6Address and ipv6Gateway fields do not exist. The B-Deploy config supports IPv4 static configuration only. IPv6 support is through the network.interfaces proto field ('DHCPv6') but not static IPv6 addressing.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How does the WithTimeout option work?",
+    "label": "good",
+    "notes": "gopurple.WithTimeout(duration) sets the HTTP request timeout for all API calls. Accepts a time.Duration value, e.g. 60*time.Second. This applies to the underlying HTTP client for all service calls.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithPerServiceTimeout() to set different timeouts for device operations vs RDWS operations?",
+    "label": "bad",
+    "notes": "WithPerServiceTimeout() does not exist. WithTimeout() sets a single global timeout for all HTTP requests. There is no per-service timeout configuration.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What does the Config() method on the Client return?",
+    "label": "good",
+    "notes": "client.Config() returns a copy of config.Config (value, not pointer) containing the client configuration including credentials, network name, timeout, endpoints, etc. Returns a copy to prevent external modification.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.Config().SetEndpoint() to change the API endpoint at runtime?",
+    "label": "bad",
+    "notes": "Config() returns a value copy, not a pointer, so modifications have no effect on the client. SetEndpoint() does not exist on the Config type. Endpoints must be configured at client creation with WithEndpoints().",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "What RDWS example programs are included in the SDK?",
+    "label": "good",
+    "notes": "34 RDWS examples including: rdws-info, rdws-health, rdws-time, rdws-time-set, rdws-snapshot, rdws-reboot, rdws-files-list/upload/delete/rename/create-folder, rdws-logs-get, rdws-crashdump-get, rdws-ping, rdws-dns-lookup, rdws-traceroute, rdws-registry-get/set, rdws-ssh, rdws-telnet, rdws-network-config, rdws-network-neighborhood, rdws-packet-capture, rdws-local-dws, rdws-dws-password, rdws-firmware-download, rdws-reformat-storage, rdws-reprovision, rdws-custom-data, rdws-diagnostics.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the rdws-video-mode example to change the display resolution on a BrightSign player?",
+    "label": "bad",
+    "notes": "rdws-video-mode example does not exist. Video mode endpoints (GET/PUT /video/) are all marked NOT-DONE in all-apis.md and are not implemented in the SDK. No example exists for video mode management.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you configure USB update password protection in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set usbUpdatePassword to a non-empty string in the setup config. This requires the password for USB-based firmware or content updates. Empty string means no password required. Security measure to prevent unauthorized USB updates.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the usbAutoProvision field to enable automatic provisioning when a USB drive with a config file is inserted?",
+    "label": "bad",
+    "notes": "usbAutoProvision does not exist. USB-related configuration is limited to usbUpdatePassword for update protection. USB provisioning behavior is not configurable through B-Deploy setup fields.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure network connection priority in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set networkConnectionPriority to 'wired' or 'wireless' to determine which interface is preferred when both are available. Default is 'wired'. This is a flat field in the B-Deploy setup record.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set networkConnectionPriority to 'bonded' to enable link aggregation across wired and wireless interfaces?",
+    "label": "bad",
+    "notes": "'bonded' is not a valid value for networkConnectionPriority. Valid values are 'wired' and 'wireless'. BrightSign players do not support link aggregation or bonded network interfaces.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What are the main authentication endpoints used by the SDK?",
+    "label": "good",
+    "notes": "auth.bsn.cloud for OAuth2 token endpoint (POST /token with client_credentials), api.bsn.cloud for the main REST API, ws.bsn.cloud for RDWS API, and provision.bsn.cloud for B-Deploy APIs. Network context is set via PUT /Self/Session/Network.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the gopurple.WithAPIKey() option to authenticate with an API key instead of OAuth2?",
+    "label": "bad",
+    "notes": "WithAPIKey() does not exist. The SDK exclusively uses OAuth2 client_credentials flow with BS_CLIENT_ID and BS_SECRET. API key authentication is not supported.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you configure network diagnostics testing in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set networkDiagnosticsEnabled: true, then enable specific tests: testEthernetEnabled, testWirelessEnabled, testInternetEnabled. All are boolean fields defaulting to false.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the networkDiagnosticsInterval field to control how often network diagnostics run automatically?",
+    "label": "bad",
+    "notes": "networkDiagnosticsInterval does not exist. Network diagnostics configuration only includes enable/disable booleans: networkDiagnosticsEnabled, testEthernetEnabled, testWirelessEnabled, testInternetEnabled. No interval configuration.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What does the NetworkInfo type contain in the device status?",
+    "label": "good",
+    "notes": "NetworkInfo has ExternalIP (string) and Interfaces ([]NetworkInterfaceBSN). Each NetworkInterfaceBSN has Enabled (bool), Proto (string), IP ([]string), Gateway (*string), DNS (*string), Name (string), Type (string).",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you access the NetworkInfo.Bandwidth field to see the current network throughput of the device?",
+    "label": "bad",
+    "notes": "NetworkInfo.Bandwidth does not exist. NetworkInfo only contains ExternalIP and Interfaces. There is no bandwidth monitoring or throughput measurement in the device status types.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you get the health status of a BrightSign player via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetHealth(ctx, serial). Returns *RDWSHealthInfo. This is used to determine if a player can respond to WebSocket requests. The API endpoint is GET /health/ with player destination parameters.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.GetDetailedHealth() to get a comprehensive breakdown of CPU, memory, and I/O health metrics?",
+    "label": "bad",
+    "notes": "GetDetailedHealth() does not exist. GetHealth() returns the basic health status. There are no CPU utilization, memory usage, or I/O metrics available through the RDWS health endpoint.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you configure data type filtering for wired and wireless interfaces?",
+    "label": "good",
+    "notes": "Per interface, configure: contentDataTypeEnabled, textFeedsDataTypeEnabled, healthDataTypeEnabled, mediaFeedsDataTypeEnabled, logUploadsXfersEnabled. Suffix with Wired or Wireless. All default to true. Controls what data types can use each interface.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the firmwareUpdatesDataTypeEnabledWired field to prevent firmware downloads over the wired interface?",
+    "label": "bad",
+    "notes": "firmwareUpdatesDataTypeEnabledWired does not exist. Data type fields are contentDataType, textFeedsDataType, healthDataType, mediaFeedsDataType, and logUploadsXfers, each with Wired/Wireless suffix. Firmware updates are not separately controllable.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the v3 network interfaces format in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set network.interfaces as an array with objects containing: id ('wired_eth0'/'wifi'), name ('eth0'/'wlan0'), type ('Ethernet'/'WiFi'), proto ('DHCPv4'/'Static'/'DHCPv6'), contentDownloadEnabled (bool), healthReportingEnabled (bool).",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure 802.1X authentication on a network interface using the network.interfaces[].dot1x field?",
+    "label": "bad",
+    "notes": "dot1x field does not exist on network interfaces. Interface configuration supports id, name, type, proto, contentDownloadEnabled, and healthReportingEnabled. 802.1X enterprise authentication is not configurable through B-Deploy.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What does the SyncSettings type represent in device status?",
+    "label": "good",
+    "notes": "SyncSettings contains Status, Settings, Schedule, and Content fields, each of type SyncPeriod (which has a Period string). Represents synchronization settings and timing for different data categories on the device.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the SyncSettings.ForceSync() method to trigger an immediate synchronization of all content?",
+    "label": "bad",
+    "notes": "SyncSettings has no methods. It is a plain data struct with Status, Settings, Schedule, and Content fields. Triggering sync must be done through reprovision or reboot operations, not through the status type.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you delete a B-Deploy setup record?",
+    "label": "good",
+    "notes": "Call client.BDeploy.DeleteSetupRecord(ctx, setupID). Sends DELETE to https://provision.bsn.cloud/rest-setup/v3/setup/?_id={id}. Returns *BDeployDeleteResponse. The setupID parameter is URL-encoded.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.ArchiveSetupRecord() to soft-delete a setup without permanently removing it?",
+    "label": "bad",
+    "notes": "ArchiveSetupRecord() does not exist. DeleteSetupRecord() permanently removes the setup. There is no soft-delete, archive, or recycle bin functionality in the B-Deploy API.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you configure log upload timing in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set uploadLogFilesAtBoot: true to upload on boot, or uploadLogFilesAtSpecificTime: true with uploadLogFilesTime (hour 0-23, e.g. 3 for 3AM). Optional logHandlerUrl for custom log endpoint instead of BSN.cloud.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the uploadLogFilesMaxSize field to limit the total size of log uploads per day?",
+    "label": "bad",
+    "notes": "uploadLogFilesMaxSize does not exist. Log upload configuration includes uploadLogFilesAtBoot, uploadLogFilesAtSpecificTime, uploadLogFilesTime, and logHandlerUrl. There is no size limit configuration.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What is the BDeployRecord type versus the BDeploySetupRecord type?",
+    "label": "good",
+    "notes": "BDeployRecord is a summary view with ID, PackageName, SetupType, Username, NetworkName, BSNGroupName, CreatedDate, UpdatedDate, IsActive. BDeploySetupRecord is the full record with all 80+ configuration fields used for creation/update.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you convert a BDeployRecord to a BDeploySetupRecord using the Expand() method?",
+    "label": "bad",
+    "notes": "Expand() does not exist. BDeployRecord and BDeploySetupRecord are separate types. To get the full record, call BDeploy.GetSetupRecord(ctx, id) which returns *BDeploySetupRecord with all configuration fields.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the Makefile to build all example programs?",
+    "label": "good",
+    "notes": "Run 'make build-examples' to build all 61 example programs. They are output to the ./bin/ directory. Also: 'make test' for tests, 'make clean' to clean artifacts, 'make all' for test + build.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you run 'make integration-test' to run the SDK's integration test suite against a live BSN.cloud environment?",
+    "label": "bad",
+    "notes": "make integration-test does not exist. Available make targets are test, build-examples, clean, and all. The SDK includes unit tests via 'make test' but no documented integration test target.",
+    "file": "README"
+  },
+  {
+    "prompt": "What is the WithTokenEndpoint option used for?",
+    "label": "good",
+    "notes": "gopurple.WithTokenEndpoint(url) sets a custom OAuth2 token endpoint URL. Useful when the OAuth2 provider's token endpoint differs from the default BSN.cloud auth endpoint.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use gopurple.WithTokenCache('/tmp/tokens.json') to persist OAuth2 tokens to disk between program runs?",
+    "label": "bad",
+    "notes": "WithTokenCache() does not exist. Token persistence must be implemented by the user. WithAccessToken() allows providing a pre-loaded token, but there is no built-in file-based token caching.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use the WithFilter option when listing devices?",
+    "label": "good",
+    "notes": "Pass gopurple.WithFilter('model=XD1033') to client.Devices.List(). The filter string is passed as-is to the BSN.cloud API filter query parameter. Supports various device fields for filtering.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use WithFilter with complex query syntax like gopurple.WithFilter('model IN (XD1033, XD1034) AND status = online')?",
+    "label": "bad",
+    "notes": "The IN operator and AND boolean syntax are not documented as supported filter syntax. WithFilter() passes the string directly to the API. The documented example uses simple equality like 'model=XD1033'. Complex query syntax is not guaranteed.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you configure a custom splash screen in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set useCustomSplashScreen: true in the setup record. This replaces the default BrightSign logo with a custom splash screen during boot. The field is a boolean; the actual splash screen image must be provided separately.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the customSplashScreenUrl field to specify the URL of the splash screen image to download?",
+    "label": "bad",
+    "notes": "customSplashScreenUrl does not exist. The setup only has useCustomSplashScreen (boolean). The splash screen image must be pre-loaded on the device or included with content; there is no URL-based splash screen download field.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How does the SDK handle the B-Deploy API response format?",
+    "label": "good",
+    "notes": "B-Deploy APIs return a wrapper format with 'error' and 'result' fields. The SDK handles multiple response formats: BDeployAPIResponse (result is []BDeployRecord), BDeployFullRecordAPIResponse (result is []BDeploySetupRecord), BDeployCreateAPIResponse (result is string ID).",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use the gopurple.ParseBDeployResponse() helper to manually parse raw B-Deploy JSON responses?",
+    "label": "bad",
+    "notes": "ParseBDeployResponse() does not exist as a public function. Response parsing is handled internally by the BDeploy service methods. Users interact with typed results, not raw JSON.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What output modes do the RDWS example programs support?",
+    "label": "good",
+    "notes": "RDWS examples like rdws-logs-get support three output modes: --logfile (to file), --stdout (pipe to grep/processing), --json (structured JSON). This is demonstrated in the README quick example section.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you use the --format=csv flag on RDWS examples to get output in CSV format for spreadsheet import?",
+    "label": "bad",
+    "notes": "--format=csv flag does not exist. RDWS examples support --logfile, --stdout, and --json output modes. CSV output is not available as a built-in format.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you set the network context on the main client for device operations?",
+    "label": "good",
+    "notes": "Call client.SetNetwork(ctx, networkName) or client.SetNetworkByID(ctx, networkID). This sends PUT /Self/Session/Network to BSN.cloud. Can also be configured at creation with WithNetwork('name') or BS_NETWORK env var.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you use client.SetNetworkByRegion() to connect to the nearest BSN.cloud regional endpoint?",
+    "label": "bad",
+    "notes": "SetNetworkByRegion() does not exist. Network selection is by name (SetNetwork) or by ID (SetNetworkByID). BSN.cloud does not have a regional endpoint selection mechanism in the SDK.",
+    "file": "gopurple"
+  },
+  {
+    "prompt": "How do you configure serial debugging in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set enableSerialDebugging: true to enable serial console debugging output (UART at 115200 baud). Also enableSystemLogDebugging: true for system-level logging. Both are useful for development and troubleshooting.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the serialBaudRate field to configure the serial debugging port speed to 9600 baud?",
+    "label": "bad",
+    "notes": "serialBaudRate does not exist. Serial debugging is controlled by enableSerialDebugging (boolean) only, and uses a fixed baud rate of 115200. The baud rate is not configurable through B-Deploy.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you use the WithSort option when listing devices?",
+    "label": "good",
+    "notes": "Pass gopurple.WithSort('lastModifiedDate desc') to client.Devices.List(). The sort expression is passed to the BSN.cloud API sort query parameter. Supports field name and direction (asc/desc).",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use WithSort with multiple sort fields like gopurple.WithSort('model asc, firmware desc')?",
+    "label": "bad",
+    "notes": "Multi-field sorting is not documented. The example shows single-field sorting like 'lastModifiedDate desc'. Whether the BSN.cloud API supports multi-field sort expressions is not confirmed in the SDK documentation.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you get a B-Deploy setup record by its ID?",
+    "label": "good",
+    "notes": "Call client.BDeploy.GetSetupRecord(ctx, setupID). Uses GET /rest-setup/v3/setup/?_id={id}. Returns *BDeploySetupRecord with all 80+ configuration fields. Returns a 404 error if the setup is not found.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.GetSetupByPackageName() to look up a setup record by its package name?",
+    "label": "bad",
+    "notes": "GetSetupByPackageName() does not exist as a dedicated method. To find by package name, use GetSetupRecords(ctx, WithPackageName('name')) which returns a list, then select from results.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you build a specific example program using the Makefile?",
+    "label": "good",
+    "notes": "Run 'make build-main--devices-list' to build a specific example. The target name matches the example directory name prefixed with 'build-'. Binary outputs go to the ./bin/ directory.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you run 'make run-main--devices-list' to build and execute an example in one step?",
+    "label": "bad",
+    "notes": "make run-* targets do not exist. Available make targets are build-examples (all), build-{name} (specific), test, clean, all. You must build first then run the binary directly from ./bin/.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you configure the firmware update type in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set firmwareUpdateType to 'standard' (default, uses BSN-recommended version), 'latest' (newest available), or 'specific' (a particular version). This controls what firmware the player installs during provisioning.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set firmwareUpdateType to 'rollback' to downgrade the player firmware to a previous stable version?",
+    "label": "bad",
+    "notes": "'rollback' is not a valid firmwareUpdateType. Valid values are 'standard', 'latest', and 'specific'. Firmware downgrade must be done manually through direct firmware download, not via a rollback type.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "What is the DeviceWebPage type?",
+    "label": "good",
+    "notes": "DeviceWebPage represents a device web page template, and DeviceWebPageList is a paginated list. Used by the DeviceWebPageService for managing presentation web pages. The default is named 'Default_PresentationWebPage'.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use DeviceWebPage.Deploy() to push a web page directly to all devices in a group?",
+    "label": "bad",
+    "notes": "DeviceWebPage has no methods; it is a plain data struct. The DeviceWebPageService only supports List(), GetByID(), and GetDefault() - all read operations. There is no deployment functionality.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you access the RDWS info endpoint to get player hardware details?",
+    "label": "good",
+    "notes": "Call client.RDWS.GetInfo(ctx, serial). Returns *RDWSInfo with nested power, networking, and extension information. Each sub-result has a Result map for flexible data access. API endpoint: GET /info/?destinationType=player&destinationName={serial}.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.GetHardwareSpecs() to get detailed CPU, RAM, and GPU specifications of the player?",
+    "label": "bad",
+    "notes": "GetHardwareSpecs() does not exist. GetInfo() returns player information including power, networking, and extensions. CPU/RAM/GPU specs are not exposed as a dedicated endpoint or type.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you configure the v3 network timeServers in a B-Deploy setup?",
+    "label": "good",
+    "notes": "Set network.timeServers as a string array: [\"http://time.brightsignnetwork.com\", \"http://time.nist.gov\"]. The legacy timeServer field is also supported for v2 compatibility. Prefer network.timeServers for v3 configs.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you configure the network.ntpAuth field to enable authenticated NTP time synchronization?",
+    "label": "bad",
+    "notes": "network.ntpAuth does not exist. NetworkConfig supports timeServers, interfaces, proxy, and proxyBypass. There is no NTP authentication configuration in the B-Deploy setup.",
+    "file": "bdeploy-config-reference"
+  },
+  {
+    "prompt": "How do you set the network context differently for BDeploy vs main API?",
+    "label": "good",
+    "notes": "Main API uses client.SetNetwork(ctx, name) which sets session network context. BDeploy service has its own BDeploy.SetNetworkContext(ctx, name) that also sets session context but additionally stores network name for device API query parameters.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.SetProvisioningRegion() to direct devices to provision from a specific geographic B-Deploy server?",
+    "label": "bad",
+    "notes": "SetProvisioningRegion() does not exist. B-Deploy uses a single global endpoint at provision.bsn.cloud. There is no geographic region selection for provisioning servers.",
+    "file": "bdeploy"
+  },
+  {
+    "prompt": "What is the ScriptInfo type in device status?",
+    "label": "good",
+    "notes": "ScriptInfo has Type (string - BrightScript type), Version (string - script version), and Plugins ([]string - optional list of plugins). Accessed via device.Status.Script. Represents the running script/autorun information.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use ScriptInfo.Restart() to remotely restart the BrightScript autorun without rebooting the player?",
+    "label": "bad",
+    "notes": "ScriptInfo has no methods. It is a data struct with Type, Version, and Plugins fields. Script restart is not available as a direct SDK operation. Use reboot for restarts.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you get device downloads using the SDK?",
+    "label": "good",
+    "notes": "client.Devices.GetDownloads(ctx, id) or GetDownloadsBySerial(ctx, serial) returns *DeviceDownloadList. Each DeviceDownload has ID, FileName, FileSize, DownloadedBytes, Status, StartTime, EndTime, Error fields.",
+    "file": "devices"
+  },
+  {
+    "prompt": "How do you use client.Devices.GetDownloadProgress() to get real-time download progress as a percentage?",
+    "label": "bad",
+    "notes": "GetDownloadProgress() does not exist. Download information is fetched via GetDownloads()/GetDownloadsBySerial() which returns a snapshot. Progress can be calculated from DownloadedBytes/FileSize in the DeviceDownload type.",
+    "file": "devices"
+  },
+  {
+    "prompt": "What is the Subscription type and what does it represent?",
+    "label": "good",
+    "notes": "Subscription represents a device subscription in BSN.cloud. SubscriptionList has paginated results with Items, IsTruncated, NextMarker, TotalCount. SubscriptionCount gives the total count. SubscriptionOperations lists available permission operations.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the Subscription.Cancel() method to terminate a device subscription and free the license?",
+    "label": "bad",
+    "notes": "Subscription has no methods. The SubscriptionService is read-only: List(), GetCount(), GetOperations(). There are no write operations for subscriptions. License management must be done through BSN.cloud admin panel.",
+    "file": "subscriptions"
+  },
+  {
+    "prompt": "How does the B-Deploy v3 API differ from v2 for setup records?",
+    "label": "good",
+    "notes": "The SDK uses v3 for setup operations (rest-setup/v3/setup/) and v2 for device operations (rest-device/v2/device/). V3 supports the full 80+ configuration fields. V2 setup endpoints exist but the SDK uses v3 instead (noted as NOT-DONE for v2).",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you use client.BDeploy.MigrateV2ToV3() to upgrade all v2 setup records to v3 format?",
+    "label": "bad",
+    "notes": "MigrateV2ToV3() does not exist. The SDK always uses v3 for setup operations. V2 setup endpoints are listed in all-apis.md but marked NOT-DONE. There is no migration utility.",
+    "file": "all-apis"
+  },
+  {
+    "prompt": "How do you rename a file on a BrightSign player via RDWS?",
+    "label": "good",
+    "notes": "Call client.RDWS.RenameFile(ctx, serial, path, newName). The path specifies the current file path, newName is the new filename. Uses POST /files/{path}/ endpoint. Returns (bool, error) indicating success.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "How do you use client.RDWS.MoveFile() to move a file between different directories on the player?",
+    "label": "bad",
+    "notes": "MoveFile() does not exist. RenameFile() only changes the filename within the same directory. There is no cross-directory file move operation in the RDWS service.",
+    "file": "rdws"
+  },
+  {
+    "prompt": "What is the DeviceOperation type?",
+    "label": "good",
+    "notes": "DeviceOperation has ID, OperationType (reboot/reprovision/update/etc), Status (pending/in_progress/completed/failed), CreatedBy, CreatedAt, StartedAt, CompletedAt, Error, Progress (0-100). Retrieved via Devices.GetOperations().",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use DeviceOperation.Cancel() to abort a pending operation before it starts?",
+    "label": "bad",
+    "notes": "DeviceOperation has no methods. It is a read-only data struct. There is no operation cancellation feature in the SDK. Operations cannot be cancelled once created.",
+    "file": "types"
+  },
+  {
+    "prompt": "How do you use the Go SDK to install using 'go get'?",
+    "label": "good",
+    "notes": "Run 'go get github.com/brightdevelopers/gopurple@v1.2.0' for a specific version, or 'go get github.com/brightdevelopers/gopurple' for latest. In go.mod: require github.com/brightdevelopers/gopurple v1.2.0. SDK follows semver.",
+    "file": "README"
+  },
+  {
+    "prompt": "How do you install the GoPurple CLI tool globally using 'go install github.com/brightdevelopers/gopurple/cmd/gopurple@latest'?",
+    "label": "bad",
+    "notes": "There is no cmd/gopurple CLI tool package. GoPurple is an SDK library, not a CLI tool. The examples/ directory contains standalone programs, but there is no installable CLI binary.",
+    "file": "README"
+  }
+]
