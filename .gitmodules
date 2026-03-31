@@ -16,3 +16,9 @@
 [submodule "llama.cpp"]
 	path = llama.cpp
 	url = ssh://git@github.com/ggml-org/llama.cpp
+[submodule "data/bs-coding/gopurple"]
+	path = data/bs-coding/gopurple
+	url = git@github.com:BrightDevelopers/gopurple.git
+[submodule "data/bs-coding/technical-documentation"]
+	path = data/bs-coding/technical-documentation
+	url = git@github.com:BrightDevelopers/technical-documentation.git
