@@ -247,6 +247,124 @@ sequenceDiagram
 
 ---
 
+## Guardrails
+
+The RAG MCP server supports two levels of guardrails that filter queries before
+results are returned to the caller. Both are opt-in and configured in
+`stack.toml` under `[rag_mcp_server.guardrails]`.
+
+### How guardrails work
+
+**Level 1 -- Topic relevance** prevents off-topic queries from ever reaching
+the database. At startup the server embeds the `corpus_topic` string into a
+vector. For each incoming query, the cosine similarity between the query vector
+and the topic vector is computed. If the score falls below `min_topic_score`,
+the server returns an `off_topic` error immediately -- no database query is
+executed.
+
+**Level 2 -- Match quality** runs after the database search. If the top
+result's cosine similarity score is below `min_match_score`, the server returns
+a `below_threshold` error instead of low-quality results. The actual best score
+is included in the error response so the caller can log or display it.
+
+### Enabling guardrails
+
+Edit your `stack.toml`:
+
+```toml
+[rag_mcp_server.guardrails]
+# Level 1: describe what your corpus is about.
+# Leave empty to disable Level 1.
+corpus_topic    = "Story lines, characters, plots and details of a set of mystery fiction books"
+# Minimum cosine similarity between query and corpus_topic to proceed.
+min_topic_score = 0.25
+
+# Level 2: minimum cosine similarity for the best search result.
+# Set to 0.0 to disable Level 2.
+min_match_score = 0.15
+```
+
+Then regenerate configs and restart:
+
+```sh
+make generate
+make down && make up
+```
+
+### Tuning thresholds
+
+Set `log_level = "debug"` in `stack.toml` under `[rag_mcp_server]` to see
+scores for every query:
+
+```json
+{"level":"DEBUG","msg":"topic check","score":0.42,"threshold":0.25,"action":"passed"}
+{"level":"DEBUG","msg":"match quality check","best_score":0.71,"threshold":0.15,"action":"passed"}
+```
+
+Use the eval harness to calibrate thresholds against known good, bad, and
+off-topic queries:
+
+```sh
+make eval
+```
+
+Eval cases with `label: "off_topic"` are printed but excluded from the
+pass/fail score, so you can observe what scores off-topic queries receive and
+adjust `min_topic_score` accordingly.
+
+**Starting points:**
+- `min_topic_score = 0.25` -- works well for narrowly scoped corpora
+- `min_match_score = 0.15` -- catches queries that match the topic but have no
+  relevant content in the database
+- Lower values are more permissive; higher values are stricter
+
+### Adding a system prompt (HyDE)
+
+HyDE (Hypothetical Document Embeddings) generates a hypothetical answer to the
+query before embedding it, which can improve retrieval quality. When enabled,
+the `system_prompt` field constrains what the LLM will discuss, acting as an
+additional guardrail at the generation layer.
+
+```toml
+[rag_mcp_server.hyde]
+enabled       = true
+model         = "claude-haiku-4-5-20251001"
+base_url      = ""       # empty = default Anthropic endpoint
+system_prompt = "You are only to discuss mystery books. Do not discuss anything else."
+```
+
+HyDE requires the `ANTHROPIC_API_KEY` environment variable. Add it to your
+`.envrc`:
+
+```sh
+export ANTHROPIC_API_KEY="sk-ant-..."
+```
+
+Then `direnv allow` and restart the stack.
+
+### Complete example
+
+A fully configured guardrails + HyDE setup in `stack.toml`:
+
+```toml
+[rag_mcp_server]
+port      = 15080
+log_level = "debug"    # use debug while tuning, switch to info for production
+
+[rag_mcp_server.guardrails]
+corpus_topic    = "Story lines, characters, plots and details of a set of mystery fiction books"
+min_topic_score = 0.25
+min_match_score = 0.15
+
+[rag_mcp_server.hyde]
+enabled       = true
+model         = "claude-haiku-4-5-20251001"
+base_url      = ""
+system_prompt = "You are only to discuss mystery books. Do not discuss anything else."
+```
+
+---
+
 ## Architecture
 
 See [docs/DESIGN.md](docs/DESIGN.md) for full architecture.

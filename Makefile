@@ -205,7 +205,7 @@ endif
 	KEYCLOAK_CLIENT_ID=$(KC_CLIENT_ID) \
 	KEYCLOAK_CLIENT_SECRET=$(KC_CLIENT_SECRET) \
 	EVAL_LIMIT=$${EVAL_LIMIT:-20} \
-	./rag-mcp-server/scripts/eval.sh $(ARGS) $(EVAL_FILE)
+	./rag-mcp-server/bin/eval $(ARGS) $(EVAL_FILE)
 
 install-postgres: ## Install PostgreSQL and pgvector (macOS or Linux)
 	./scripts/install-postgres.sh
