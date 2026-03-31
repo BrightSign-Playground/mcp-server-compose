@@ -83,6 +83,7 @@ KC_PORT       = $(or $(shell awk '/^\[keycloak\]/{f=1} f && /^port/{print $$3; e
 KC_REALM      = $(or $(shell awk '/^\[keycloak\]/{f=1} f && /^realm/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null),dev)
 KC_CLIENT_ID  = $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_id/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null)
 KC_CLIENT_SECRET = $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_secret/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null)
+DEFAULT_EVAL_FILE = $(shell awk '/^\[rag_mcp_server\]/{f=1} f && /^eval_file/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null)
 
 # ── Ingest pre-flight checks ─────────────────────────────────────────────────
 # Verifies docs_dir exists, PostgreSQL is reachable, and llama-server is up.
@@ -185,10 +186,18 @@ ingest-add: $(BINARY) ## Add/upsert docs without dropping existing data (ARGS="-
 
 # ── Eval targets ─────────────────────────────────────────────────────────────
 
-eval: ## Run RAG evals (EVAL_FILE=path/to/evals.json, optional ARGS="--verbose")
-ifndef EVAL_FILE
-	$(error EVAL_FILE is required: make eval EVAL_FILE=path/to/evals.json)
-endif
+EVAL_FILE ?= $(DEFAULT_EVAL_FILE)
+
+eval: ## Run RAG evals (EVAL_FILE=path or rag_mcp_server.eval_file in stack.toml)
+	@if [ -z "$(EVAL_FILE)" ]; then \
+		echo "ERROR: no eval file specified."; \
+		echo ""; \
+		echo "  Either pass it on the command line:"; \
+		echo "    make eval EVAL_FILE=path/to/evals.json"; \
+		echo ""; \
+		echo "  Or set rag_mcp_server.eval_file in $(CONFIG)."; \
+		exit 1; \
+	fi
 	MCP_SERVER_URL=http://localhost:$(MCP_PORT) \
 	OIDC_PROVIDER=keycloak \
 	KEYCLOAK_ISSUER=http://localhost:$(KC_PORT)/realms/$(KC_REALM) \

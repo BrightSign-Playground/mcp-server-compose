@@ -73,6 +73,9 @@ log_level     = "info"
 # Must match one of the active profiles, or set the override fields below.
 auth_provider = "keycloak"
 
+# Default eval file for `make eval`. Override on the command line with EVAL_FILE=.
+eval_file     = ""
+
 # Override auth fields when auth_provider profile is NOT in profiles
 # (i.e. using an external OIDC instance):
 # auth_jwks_url = "https://external-keycloak/realms/myrealm/protocol/openid-connect/certs"

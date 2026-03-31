@@ -311,7 +311,15 @@ Use the eval harness to calibrate thresholds against known good, bad, and
 off-topic queries:
 
 ```sh
-make eval
+make eval                                       # uses eval_file from stack.toml
+make eval EVAL_FILE=data/my-evals/evals.json    # override on command line
+```
+
+Set the default eval file in `stack.toml` so you can just run `make eval`:
+
+```toml
+[rag_mcp_server]
+eval_file = "data/mystery-books/evals.json"
 ```
 
 Eval cases with `label: "off_topic"` are printed but excluded from the
@@ -537,7 +545,7 @@ Key fields:
 | `llama.host_port` | Port where host-native llama-server listens |
 | `keycloak.*` | Keycloak + internal postgres (mutually exclusive with logto) |
 | `logto.*` | Logto + internal postgres (mutually exclusive with keycloak) |
-| `rag_mcp_server.*` | RAG MCP server settings, auth provider, search tuning |
+| `rag_mcp_server.*` | RAG MCP server settings, auth provider, search tuning, eval_file |
 | `docs2vector.*` | Document ingestion settings |
 
 ## Commands
@@ -627,7 +635,7 @@ The project has two Makefiles. The root Makefile is for using the tool; the
 | `validate` | Validate stack.toml |
 | `ingest` | Drop and reingest docs |
 | `ingest-add` | Add/upsert docs without dropping |
-| `eval` | Run RAG evals |
+| `eval` | Run RAG evals (EVAL_FILE= or from stack.toml) |
 | `eval-stability` | Run evals N times with pass-rate stats |
 | `run-inference-servers` | Start embedding and reranker servers in the background |
 
