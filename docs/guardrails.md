@@ -131,59 +131,38 @@ is no interface dispatch, no map lookup, no allocation.
 
 ### Pipeline Diagram
 
+```mermaid
+flowchart TD
+    REQ["POST /mcp (with Bearer JWT)"] --> AUTH["Auth Middleware"]
+    AUTH -->|"401 if invalid JWT"| REJECT_AUTH["401 Unauthorized"]
+    AUTH -->|valid| INPUT["Input Validation"]
+    INPUT -->|"empty/oversized query"| REJECT_INPUT["invalid_query error"]
+    INPUT -->|valid| HYDE["HyDE Expansion (optional)\ngenerate hypothesis passage"]
+    HYDE --> EMBED["Embed Query\nPOST llama-server /v1/embeddings"]
+    EMBED --> L2["L2-Normalize query vector"]
+
+    L2 --> G1{"GUARDRAIL LEVEL 1\nTopic Relevance\ndot_product(queryVec, topicVec)"}
+    G1 -->|"score < min_topic_score"| OFF["off_topic error"]
+    G1 -->|"pass (or TopicVector nil)"| COUNT["Count chunks"]
+
+    COUNT -->|"DB empty"| NODATA["no_data error"]
+    COUNT -->|"chunks exist"| SEARCH["Hybrid Search (parallel)"]
+
+    SEARCH --> VEC["Vector KNN\npgvector <=>"]
+    SEARCH --> FTS["Full-Text Search\nPostgreSQL tsvector"]
+    VEC --> RRF["RRF Merge\nReciprocal Rank Fusion"]
+    FTS --> RRF
+
+    RRF --> RERANK["Reranker (optional)\ncross-encoder re-scoring"]
+
+    RERANK --> G2{"GUARDRAIL LEVEL 2\nMatch Quality\nmerged[0].Score < min_match_score?"}
+    G2 -->|"below threshold"| BELOW["below_threshold error\n(includes best_score)"]
+    G2 -->|"pass (or threshold = 0)"| RESULT["Apply limit, return results"]
 ```
-POST /mcp  (with Bearer JWT)
-  |
-  v
-Auth Middleware ── 401 if invalid JWT
-  |
-  v
-Input Validation ── reject empty/oversized query, bad limit
-  |
-  v
-HyDE Expansion (optional) ── generate hypothesis passage
-  |
-  v
-Embed Query ── POST llama-server /v1/embeddings
-  |
-  v
-L2-Normalize query vector
-  |
-  v
-┌─────────────────────────────────────────┐
-│ GUARDRAIL LEVEL 1 -- Topic Relevance    │
-│ dot_product(queryVec, topicVec)          │
-│ score < min_topic_score? → off_topic    │
-│ Cost: ~768 multiply-adds (one dot prod) │
-│ Skipped entirely if TopicVector is nil  │
-└─────────────────────────────────────────┘
-  |
-  v
-Count chunks ── return no_data if DB is empty
-  |
-  v
-Hybrid Search (parallel)
-  ├── Vector KNN (pgvector <=>)
-  └── Full-Text Search (PostgreSQL tsvector)
-  |
-  v
-RRF Merge ── Reciprocal Rank Fusion
-  |
-  v
-Reranker (optional) ── cross-encoder re-scoring
-  |
-  v
-┌─────────────────────────────────────────┐
-│ GUARDRAIL LEVEL 2 -- Match Quality      │
-│ merged[0].Score < min_match_score?      │
-│ → below_threshold (includes best_score) │
-│ Cost: one float comparison              │
-│ Skipped entirely if min_match_score = 0 │
-└─────────────────────────────────────────┘
-  |
-  v
-Apply limit, return results
-```
+
+**Guardrail costs:**
+- Level 1: ~768 multiply-adds (one dot product). Skipped entirely if `TopicVector` is nil.
+- Level 2: one float comparison. Skipped entirely if `min_match_score = 0`.
 
 ### Startup Behavior
 

@@ -77,20 +77,21 @@ container with `<engine> run --rm`. Streams stdout/stderr live.
 
 ## 4. Config Struct Tree
 
-```
-Config
-├── Runtime      (engine string)
-├── Profiles     []string
-├── Postgres     (image, host, port, user, password, database, data_volume, data_dir)
-├── Llama        (image, host_port, models_dir, embed_model, gen_model, extra_flags)
-├── Keycloak     (port, db_port, admin_user, admin_password, realm, api_client_id,
-│                 m2m_client_id, m2m_client_secret, token_lifetime, hostname)
-├── Logto        (port, admin_port, db_port, endpoint, admin_endpoint, app_id,
-│                 app_secret, audience, mgmt_app_id, mgmt_app_secret)
-├── RagMCP       (port, log_level, auth_provider, auth_jwks_url, auth_issuer,
-│                 auth_audience, Search, Reranker, Guardrails, HyDE)
-├── Docs2Vector  (docs_dir, chunk_size, embed_model, embed_dim, query_prefix, passage_prefix)
-└── Secrets      (anthropic_api_key)
+```mermaid
+graph TD
+    C["Config"] --> RT["Runtime\n(engine)"]
+    C --> PR["Profiles\n[]string"]
+    C --> PG["Postgres\n(image, host, port, user,\npassword, database,\ndata_volume, data_dir)"]
+    C --> LL["Llama\n(image, host_port, models_dir,\nembed_model, gen_model, extra_flags)"]
+    C --> KC["Keycloak\n(port, db_port, admin_user,\nadmin_password, realm,\napi_client_id, m2m_client_id,\nm2m_client_secret, token_lifetime,\nhostname)"]
+    C --> LO["Logto\n(port, admin_port, db_port,\nendpoint, admin_endpoint,\napp_id, app_secret, audience,\nmgmt_app_id, mgmt_app_secret)"]
+    C --> RM["RagMCP\n(port, log_level, auth_provider,\nauth_jwks_url, auth_issuer,\nauth_audience)"]
+    C --> DV["Docs2Vector\n(docs_dir, chunk_size,\nembed_model, embed_dim,\nquery_prefix, passage_prefix)"]
+    C --> SE["Secrets\n(anthropic_api_key)"]
+    RM --> RMS["Search"]
+    RM --> RMR["Reranker"]
+    RM --> RMG["Guardrails"]
+    RM --> RMH["HyDE"]
 ```
 
 ---
@@ -243,23 +244,14 @@ The resolved dimension is stored in `Config.Docs2Vector.EmbedDim` after Load/Val
 
 ### Config pipeline
 
-```
-stack.toml [docs2vector]
-  embed_model = "nomic-embed-text-v1.5"
-  # embed_dim omitted → resolved to 768 from lookup
-        │
-        ▼
-  Config.Docs2Vector.EmbedDim = 768
-        │
-        ├─→ docs2vector/config.toml    [embed] embed_dim = 768
-        │       │
-        │       ▼
-        │   docs2vector reads embed_dim from config
-        │   → DDL uses fmt.Sprintf("vector(%d)", embedDim)
-        │   → build_metadata records "embedding_dimension" = "768"
-        │
-        └─→ rag-mcp-server/config.toml  [embed] embed_dim = 768
-                (informational; rag-mcp-server is read-only against the schema)
+```mermaid
+flowchart TD
+    ST["stack.toml<br>embed_model = nomic-embed-text-v1.5<br>(embed_dim omitted)"] --> RESOLVE["Lookup: KnownEmbedDims<br>→ 768"]
+    RESOLVE --> CFG["Config.Docs2Vector.EmbedDim = 768"]
+    CFG --> D2V["docs2vector/config.toml<br>[embed] embed_dim = 768"]
+    CFG --> RAG["rag-mcp-server/config.toml<br>[embed] embed_dim = 768<br>(informational; read-only)"]
+    D2V --> DDL["DDL: vector(768)"]
+    D2V --> META["build_metadata:<br>embedding_dimension = 768"]
 ```
 
 ### docs2vector changes
