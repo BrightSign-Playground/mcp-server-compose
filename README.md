@@ -4,6 +4,223 @@ Single-binary CLI tool that orchestrates the MCP server stack for local developm
 integration testing, and RAG dataset building. Reads `stack.toml`, derives all component
 configuration from it, and drives podman/docker compose to start or stop the full stack.
 
+## Quick Start
+
+### 1. Prerequisites
+
+Install [Go](https://go.dev/), [Podman](https://podman.io/) (or Docker), and
+[uv](https://docs.astral.sh/uv/getting-started/installation/), then:
+
+```sh
+make prereqs          # installs huggingface_hub CLI + podman-compose
+make build            # produces ./bin/stack
+```
+
+### 2. Configure and start the stack
+
+```sh
+cp stack.toml.example stack.toml
+$EDITOR stack.toml    # set llama.models_dir, adjust passwords
+
+make up               # generates configs, creates network, starts all services
+make ingest           # ingest documents into the vector database
+```
+
+Wait for `make up` to report all services healthy. The MCP endpoint is now
+listening at `http://localhost:15080/mcp`.
+
+### 3. Get a JWT token
+
+Every request to the MCP server requires a valid JWT. The stack includes
+Keycloak (default) or Logto as an OIDC provider. Keycloak is fully automated --
+realm, clients, and audience are provisioned on first start.
+
+```sh
+# With the default Keycloak config from stack.toml.example:
+export OIDC_PROVIDER=keycloak
+export KEYCLOAK_ISSUER=http://localhost:8080/realms/dev
+export KEYCLOAK_CLIENT_ID=my-app
+export KEYCLOAK_CLIENT_SECRET=changeme-dev-secret
+
+TOKEN=$(./rag-mcp-server/scripts/get-token.sh)
+echo "$TOKEN"
+```
+
+### 4. Test with curl
+
+```sh
+# Initialize MCP session
+SESSION=$(curl -s -X POST http://localhost:15080/mcp \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"test","version":"0.1"}}}' \
+  -D - -o /dev/null 2>&1 | grep -i mcp-session-id | tr -d '\r' | awk '{print $2}')
+
+# Send initialized notification
+curl -s -X POST http://localhost:15080/mcp \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "Mcp-Session-Id: $SESSION" \
+  -d '{"jsonrpc":"2.0","method":"notifications/initialized"}'
+
+# Search documents
+curl -s -X POST http://localhost:15080/mcp \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "Mcp-Session-Id: $SESSION" \
+  -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"search_documents","arguments":{"query":"how do I reset my password","limit":5}}}' | jq .
+```
+
+### 5. Connect from Claude Code
+
+Claude Code supports MCP servers over Streamable HTTP. Because this server
+requires JWT authentication, you need to supply a token via headers.
+
+**Option A: Dynamic token refresh with `headersHelper` (recommended)**
+
+Create a script that outputs auth headers as JSON. Claude Code calls it
+automatically before each MCP request, so tokens are always fresh:
+
+```sh
+#!/usr/bin/env bash
+# get-mcp-headers.sh — outputs JSON headers for Claude Code headersHelper
+set -euo pipefail
+
+export OIDC_PROVIDER=keycloak
+export KEYCLOAK_ISSUER=http://localhost:8080/realms/dev
+export KEYCLOAK_CLIENT_ID=my-app
+export KEYCLOAK_CLIENT_SECRET=changeme-dev-secret
+
+TOKEN=$(./rag-mcp-server/scripts/get-token.sh)
+echo "{\"Authorization\": \"Bearer ${TOKEN}\"}"
+```
+
+```sh
+chmod +x get-mcp-headers.sh
+```
+
+Then add to `.mcp.json` in your project root (or `~/.claude/mcp.json`
+for global):
+
+```json
+{
+  "mcpServers": {
+    "rag-search": {
+      "type": "http",
+      "url": "http://localhost:15080/mcp",
+      "headersHelper": "./get-mcp-headers.sh"
+    }
+  }
+}
+```
+
+This is the best approach -- tokens are fetched on demand and never go stale.
+
+**Option B: Static token via environment variable**
+
+If you prefer a simpler setup and can tolerate manual token refresh:
+
+```json
+{
+  "mcpServers": {
+    "rag-search": {
+      "type": "http",
+      "url": "http://localhost:15080/mcp",
+      "headers": {
+        "Authorization": "Bearer ${RAG_MCP_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+Claude Code expands `${RAG_MCP_TOKEN}` from your environment. Set it
+before launching:
+
+```sh
+export RAG_MCP_TOKEN=$(./rag-mcp-server/scripts/get-token.sh)
+claude
+```
+
+Or automate it in `.envrc` (direnv refreshes on every shell entry):
+
+```sh
+# .envrc — auto-refresh token on every shell entry
+export OIDC_PROVIDER=keycloak
+export KEYCLOAK_ISSUER=http://localhost:8080/realms/dev
+export KEYCLOAK_CLIENT_ID=my-app
+export KEYCLOAK_CLIENT_SECRET=changeme-dev-secret
+export RAG_MCP_TOKEN=$(./rag-mcp-server/scripts/get-token.sh)
+```
+
+Tokens expire after 1 hour (default `keycloak.token_lifetime` in
+`stack.toml`). With Option B you must re-export `RAG_MCP_TOKEN` and
+restart Claude Code when the token expires.
+
+**Option C: CLI one-liner**
+
+```sh
+claude mcp add --transport http rag-search http://localhost:15080/mcp \
+  --header "Authorization: Bearer $(./rag-mcp-server/scripts/get-token.sh)"
+```
+
+### 6. Connect from VS Code (Copilot / Continue / other MCP clients)
+
+VS Code MCP clients that support Streamable HTTP can connect the same way.
+Add to your VS Code `settings.json`:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "rag-search": {
+        "type": "http",
+        "url": "http://localhost:15080/mcp",
+        "headers": {
+          "Authorization": "Bearer ${RAG_MCP_TOKEN}"
+        }
+      }
+    }
+  }
+}
+```
+
+Set `RAG_MCP_TOKEN` in your environment before launching VS Code, or use
+a `.env` file if your MCP client supports it.
+
+For MCP clients that only support stdio transport, use
+[mcp-remote](https://github.com/anthropics/mcp-remote) as a bridge:
+
+```sh
+TOKEN=$(./rag-mcp-server/scripts/get-token.sh)
+
+npx mcp-remote http://localhost:15080/mcp \
+  --header "Authorization: Bearer $TOKEN"
+```
+
+Then configure the stdio client to run the `npx mcp-remote` command.
+
+### Authentication summary
+
+```mermaid
+sequenceDiagram
+    participant C as Claude Code / VS Code
+    participant P as mcp-auth-proxy.sh
+    participant KC as Keycloak (:8080)
+    participant R as rag-mcp-server (:15080)
+
+    C->>P: Need token (or .envrc auto-runs)
+    P->>KC: POST /token (client_credentials)
+    KC-->>P: JWT access_token
+    P-->>C: RAG_MCP_TOKEN set
+
+    C->>R: POST /mcp + Bearer JWT + query
+    R->>R: Validate JWT (JWKS cached)
+    R-->>C: search results (MCP JSON-RPC)
+```
+
+---
+
 ## Architecture
 
 See [docs/DESIGN.md](docs/DESIGN.md) for full architecture.
