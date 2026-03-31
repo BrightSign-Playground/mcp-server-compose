@@ -7,7 +7,7 @@ import (
 )
 
 const validTOML = `
-profiles = ["postgres", "keycloak", "llama"]
+profiles = ["postgres", "keycloak"]
 
 [runtime]
 engine = "podman"
@@ -22,11 +22,7 @@ database = "support"
 data_volume = "stack-pgdata"
 
 [llama]
-image       = "ghcr.io/ggml-org/llama.cpp:server"
 host_port   = 16000
-models_dir  = "/tmp"
-embed_model = "model.gguf"
-extra_flags = ""
 
 [keycloak]
 port             = 8080
@@ -97,8 +93,8 @@ func TestLoad_valid(t *testing.T) {
 	if cfg.Runtime.Engine != "podman" {
 		t.Errorf("runtime.engine: got %q, want %q", cfg.Runtime.Engine, "podman")
 	}
-	if len(cfg.Profiles) != 3 {
-		t.Errorf("profiles length: got %d, want 3", len(cfg.Profiles))
+	if len(cfg.Profiles) != 2 {
+		t.Errorf("profiles length: got %d, want 2", len(cfg.Profiles))
 	}
 	if cfg.Postgres.Port != 5432 {
 		t.Errorf("postgres.port: got %d, want 5432", cfg.Postgres.Port)
@@ -218,22 +214,6 @@ func TestValidate_authProviderOverridesProvided(t *testing.T) {
 	}
 	if err := Validate(cfg); err != nil {
 		t.Fatalf("unexpected validation error: %v", err)
-	}
-}
-
-func TestValidate_extraFlagsMetachars(t *testing.T) {
-	cfg := &Config{
-		Profiles: []string{"postgres", "keycloak", "llama"},
-		Postgres: PostgresConfig{Host: "h", Port: 1, User: "u", Password: "p", Database: "d"},
-		Llama: LlamaConfig{
-			ModelsDir:  "/tmp",
-			EmbedModel: "model.gguf",
-			ExtraFlags: "-ngl 99; rm -rf /",
-		},
-		RagMCP: RagMCPConfig{AuthProvider: "keycloak"},
-	}
-	if err := Validate(cfg); err == nil {
-		t.Fatal("expected error for shell metacharacters in extra_flags")
 	}
 }
 

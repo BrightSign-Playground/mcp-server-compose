@@ -70,22 +70,8 @@ func TestActiveProjects_logtoAdded(t *testing.T) {
 	}
 }
 
-func TestActiveProjects_llamaAdded(t *testing.T) {
-	cfg := makeConfig("llama")
-	projects := activeProjects(cfg, "/repo")
-	found := false
-	for _, p := range projects {
-		if p.name == "stack-llama" {
-			found = true
-		}
-	}
-	if !found {
-		t.Error("expected stack-llama in active projects")
-	}
-}
-
 func TestActiveProjects_ragIsLast(t *testing.T) {
-	cfg := makeConfig("postgres", "keycloak", "llama")
+	cfg := makeConfig("postgres", "keycloak")
 	projects := activeProjects(cfg, "/repo")
 	last := projects[len(projects)-1]
 	if last.name != "stack-rag" {

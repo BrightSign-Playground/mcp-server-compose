@@ -25,13 +25,12 @@ The stack consists of the following components. Each maps to one subdirectory un
 |---|---|---|---|
 | `keycloak` | `keycloak-testing/` | `keycloak` | OIDC/JWT provider using Keycloak + internal PostgreSQL. Provides automated realm/client setup via init container. |
 | `logto` | `logto-testing/` | `logto` | Alternative OIDC/JWT provider using Logto + internal PostgreSQL. Requires one-time manual admin setup after first boot. |
-| `llama-server` | `llama.cpp/` | `llama` | llama.cpp inference server providing OpenAI-compatible API for embeddings (and optionally generation). Use when the host does not run llama-server natively. |
 | `postgres` | _(managed by orchestrator)_ | `postgres` | Shared PostgreSQL instance with pgvector extension. Use when the host does not provide a PostgreSQL server. |
 
 **Constraints:**
 - `keycloak` and `logto` are mutually exclusive; only one may be active at a time.
 - If `postgres` profile is disabled, `DATABASE_URL` in the master config must point to a host-provided PostgreSQL instance.
-- If `llama` profile is disabled, `embed.host` must point to an existing llama-server instance.
+- llama-server always runs on the host (not in a container). `embed.host` is derived from `[llama].host_port`.
 
 ---
 
@@ -58,10 +57,9 @@ engine = "podman"
 # List the optional components to enable. Valid values:
 #   "keycloak"  — start Keycloak + its internal PostgreSQL
 #   "logto"     — start Logto + its internal PostgreSQL  (mutually exclusive with keycloak)
-#   "llama"     — start llama-server container
 #   "postgres"  — start a shared PostgreSQL container with pgvector
 # Order does not matter. Dependency ordering is handled by the orchestrator.
-profiles = ["postgres", "keycloak", "llama"]
+profiles = ["postgres", "keycloak"]
 
 # ── PostgreSQL (shared) ─────────────────────────────────────────────────────────
 # Used when "postgres" is in profiles. Also used to build DATABASE_URL for
@@ -77,19 +75,11 @@ database = "support"
 data_volume = "stack-pgdata"   # named volume; omit or set "" to use a bind mount
 # data_dir = "/path/on/host"   # use this instead of data_volume for bind mount
 
-# ── llama-server ────────────────────────────────────────────────────────────────
+# ── llama-server (host-native) ─────────────────────────────────────────────────
 [llama]
-# Used when "llama" is in profiles.
-image = "ghcr.io/ggml-org/llama.cpp:server"   # official llama.cpp server image
-host_port = 16000              # port exposed on the host
-# Path to the directory containing GGUF model files on the host.
-models_dir = "/path/to/models"
-# Filename of the embedding model GGUF to load.
-embed_model = "mxbai-embed-large-v1-f16.gguf"
-# Optional: filename of a generation model. Leave empty to disable generation.
-gen_model = ""
-# Extra flags passed verbatim to llama-server (e.g. "-ngl 99 --cont-batching")
-extra_flags = ""
+# llama-server runs directly on the host, not in a container.
+# Build with: make build-llama. Start with: make run-inference-servers.
+host_port = 16000              # port the embedding server listens on
 
 # ── Keycloak ────────────────────────────────────────────────────────────────────
 [keycloak]
@@ -245,16 +235,14 @@ The `up` and `generate` commands must write the following files before starting 
 | `docs2vector/.env` | Env vars for docs2vector (DATABASE_URL) |
 | `docs2vector/config.toml` | Config for docs2vector, generated from `[docs2vector]` and `[llama]` |
 | `.stack/postgres.env` | Env vars for the optional shared postgres service |
-| `.stack/llama.env` | Env vars for the optional llama-server service |
 
 Auth-related fields in `rag-mcp-server/config.toml` (`[auth]` section) must be derived automatically:
 - If `auth_provider = "keycloak"` and keycloak profile is active, derive `jwks_url`, `issuer`, and `audience` from `[keycloak]` values.
 - If `auth_provider = "logto"` and logto profile is active, derive from `[logto]` values.
 - If the profile is not active (external provider), the override fields `auth_jwks_url`, `auth_issuer`, `auth_audience` in `[rag_mcp_server]` are used and must be non-empty or validation fails.
 
-The `embed.host` in generated configs must account for the container network:
-- When `llama` profile is active, use the service name as hostname within compose network.
-- When `llama` profile is inactive (host-provided), use `host.containers.internal` (podman) or `host-gateway` (docker) to reach the host. The tool must substitute the correct value based on the engine.
+The `embed.host` in generated configs must account for the container network.
+Since llama-server runs on the host, use `host.containers.internal` (podman) or `host-gateway` (docker) to reach it. The tool must substitute the correct value based on the engine.
 
 ### Compose Orchestration
 
@@ -265,7 +253,6 @@ Each component runs as a **separate compose project** (`-p stack-<name>`) rather
 | `stack-postgres`  | `.stack/compose.postgres.yml`  | `postgres` in profiles |
 | `stack-keycloak`  | `keycloak-testing/compose.yml` | `keycloak` in profiles |
 | `stack-logto`     | `logto-testing/compose.yml`    | `logto` in profiles    |
-| `stack-llama`     | `.stack/compose.llama.yml`     | `llama` in profiles    |
 | `stack-rag`       | `rag-mcp-server/compose.yaml`  | always                 |
 
 Each project is started with its own compose invocation:
@@ -275,9 +262,8 @@ podman compose -p stack-keycloak --env-file keycloak-testing/.env -f keycloak-te
 podman compose -p stack-rag --env-file rag-mcp-server/.env -f rag-mcp-server/compose.yaml up -d
 ```
 
-The tool synthesizes compose files for components that do not have their own (shared postgres, llama-server):
+The tool synthesizes compose files for components that do not have their own:
 - `.stack/compose.postgres.yml` — shared PostgreSQL with pgvector
-- `.stack/compose.llama.yml` — llama-server
 
 Each component's existing compose file is used as-is where it exists. The tool must not modify them.
 
@@ -287,10 +273,11 @@ Service startup must respect these dependencies:
 
 1. `postgres` (if profile active) → all other services
 2. `keycloak` or `logto` → `rag-mcp-server`
-3. `llama-server` → `rag-mcp-server`, `docs2vector`
-4. `rag-mcp-server` — last to start
+3. `rag-mcp-server` — last to start
 
-These are enforced by starting compose projects **sequentially** and health-polling between steps. After starting `stack-postgres`, the orchestrator polls the container health status (via `<engine> inspect --format '{{.State.Health.Status}}'`) with a 180-second timeout before proceeding to the next project. The same applies after `stack-keycloak` or `stack-logto`. `stack-llama` is started without a blocking health wait. `stack-rag` is always started last.
+llama-server runs on the host (not managed by compose). It must be started separately before `ingest` or queries.
+
+These are enforced by starting compose projects **sequentially** and health-polling between steps. After starting `stack-postgres`, the orchestrator polls the container health status (via `<engine> inspect --format '{{.State.Health.Status}}'`) with a 180-second timeout before proceeding to the next project. The same applies after `stack-keycloak` or `stack-logto`. `stack-rag` is always started last.
 
 ### Shared Network
 
@@ -339,37 +326,6 @@ services:
       - stack-net
     restart: unless-stopped
 ```
-
-### `.stack/compose.llama.yml`
-
-```yaml
-name: stack-llama
-
-networks:
-  stack-net:
-    external: true
-
-services:
-  llama-server:
-    image: ${LLAMA_IMAGE}
-    ports:
-      - "127.0.0.1:${LLAMA_HOST_PORT}:8080"
-    volumes:
-      - ${LLAMA_MODELS_DIR}:/models:ro
-    command:
-      - "--model"
-      - "/models/${LLAMA_EMBED_MODEL}"
-      - "--host"
-      - "0.0.0.0"
-      - "--port"
-      - "8080"
-      - "--embeddings"
-    networks:
-      - stack-net
-    restart: unless-stopped
-```
-
-When `llama.extra_flags` is non-empty, the tool splits it on whitespace and appends each token as a separate array element to the `command` list. This avoids shell interpolation.
 
 ---
 
@@ -425,11 +381,7 @@ audience  = <logto.audience>
 
 ### embed.host in rag-mcp-server config.toml
 
-When `llama` profile is active:
-```
-http://llama-server:8080
-```
-When `llama` profile is inactive:
+llama-server runs on the host. Containers reach it via:
 - Podman: `http://host.containers.internal:<llama.host_port>`
 - Docker: `http://host-gateway:<llama.host_port>` (requires `extra_hosts: host-gateway:host-gateway` in compose)
 
@@ -460,13 +412,12 @@ stack ingest [--no-drop] [--docs-dir /path/override]
 
 1. `profiles` contains at most one of `keycloak`, `logto`.
 2. If `postgres` profile is inactive, `postgres.host`, `postgres.port`, `postgres.user`, `postgres.password`, `postgres.database` are all non-empty.
-3. If `llama` profile is active, `llama.models_dir` exists on the host and `llama.embed_model` is non-empty.
-4. If `llama` profile is inactive, the orchestrator defaults to `llama.host_port = 16000` for the embed host when not explicitly set. No validation error is raised.
-5. If `rag_mcp_server.hyde.enabled = true`, `secrets.anthropic_api_key` is non-empty.
-6. If `auth_provider` refers to a profile not in `profiles`, the override fields (`auth_jwks_url`, `auth_issuer`, `auth_audience`) must all be non-empty.
-7. `keycloak.m2m_client_secret` must not equal `"changeme-dev-secret"` when a future `strict` mode flag is added (warn but do not fail in default mode).
-8. `postgres.password` must not equal `"changeme"` in strict mode (warn in default mode).
-9. The resolved embedding dimension must be a positive integer. If `docs2vector.embed_model` is not in the known-model lookup table and `docs2vector.embed_dim` is not explicitly set, validation must fail with a descriptive error naming the unknown model and instructing the user to set `embed_dim` explicitly.
+3. If `llama.host_port` is not set, the orchestrator defaults to `16000` for the embed host. No validation error is raised.
+4. If `rag_mcp_server.hyde.enabled = true`, `secrets.anthropic_api_key` is non-empty.
+5. If `auth_provider` refers to a profile not in `profiles`, the override fields (`auth_jwks_url`, `auth_issuer`, `auth_audience`) must all be non-empty.
+6. `keycloak.m2m_client_secret` must not equal `"changeme-dev-secret"` when a future `strict` mode flag is added (warn but do not fail in default mode).
+7. `postgres.password` must not equal `"changeme"` in strict mode (warn in default mode).
+8. The resolved embedding dimension must be a positive integer. If `docs2vector.embed_model` is not in the known-model lookup table and `docs2vector.embed_dim` is not explicitly set, validation must fail with a descriptive error naming the unknown model and instructing the user to set `embed_dim` explicitly.
 
 ---
 

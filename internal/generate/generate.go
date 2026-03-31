@@ -45,21 +45,6 @@ func All(cfg *config.Config, eng engine.Engine, repoRoot string) ([]string, erro
 		return nil, err
 	}
 
-	// Llama files.
-	llamaEnvPath := filepath.Join(stackDir, "llama.env")
-	if err := write(llamaEnvPath, func() error {
-		return writeEnvFile(llamaEnvPath, llamaEnvVars(cfg))
-	}); err != nil {
-		return nil, err
-	}
-
-	llamaComposePath := filepath.Join(stackDir, "compose.llama.yml")
-	if err := write(llamaComposePath, func() error {
-		return writeTextFile(llamaComposePath, llamaComposeYAML(strings.Fields(cfg.Llama.ExtraFlags)), 0644)
-	}); err != nil {
-		return nil, err
-	}
-
 	// Keycloak .env.
 	keycloakEnvPath := filepath.Join(repoRoot, "keycloak-testing", ".env")
 	if err := write(keycloakEnvPath, func() error {
@@ -156,26 +141,6 @@ func postgresEnvVars(cfg *config.Config) map[string]string {
 		"POSTGRES_PASSWORD": pg.Password,
 		"POSTGRES_DB":       pg.Database,
 		"POSTGRES_PORT":     fmt.Sprintf("%d", pg.Port),
-	}
-}
-
-func llamaEnvVars(cfg *config.Config) map[string]string {
-	ll := cfg.Llama
-	image := ll.Image
-	if image == "" {
-		image = "ghcr.io/ggml-org/llama.cpp:server"
-	}
-	port := ll.HostPort
-	if port == 0 {
-		port = 16000
-	}
-	return map[string]string{
-		"LLAMA_IMAGE":       image,
-		"LLAMA_HOST_PORT":   fmt.Sprintf("%d", port),
-		"LLAMA_MODELS_DIR":  ll.ModelsDir,
-		"LLAMA_EMBED_MODEL": ll.EmbedModel,
-		"LLAMA_GEN_MODEL":   ll.GenModel,
-		"LLAMA_EXTRA_FLAGS": ll.ExtraFlags,
 	}
 }
 
@@ -331,38 +296,3 @@ services:
 `
 }
 
-// llamaComposeYAML returns the YAML for the llama-server service.
-// extraFlags contains pre-split flags appended verbatim to the command.
-func llamaComposeYAML(extraFlags []string) string {
-	var buf strings.Builder
-	buf.WriteString(`name: stack-llama
-
-networks:
-  stack-net:
-    external: true
-
-services:
-  llama-server:
-    image: ${LLAMA_IMAGE}
-    ports:
-      - "127.0.0.1:${LLAMA_HOST_PORT}:8080"
-    volumes:
-      - ${LLAMA_MODELS_DIR}:/models:ro
-    command:
-      - "--model"
-      - "/models/${LLAMA_EMBED_MODEL}"
-      - "--host"
-      - "0.0.0.0"
-      - "--port"
-      - "8080"
-      - "--embeddings"
-`)
-	for _, flag := range extraFlags {
-		fmt.Fprintf(&buf, "      - %q\n", flag)
-	}
-	buf.WriteString(`    networks:
-      - stack-net
-    restart: unless-stopped
-`)
-	return buf.String()
-}

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/BurntSushi/toml"
 )
@@ -39,12 +38,7 @@ type PostgresConfig struct {
 }
 
 type LlamaConfig struct {
-	Image      string
-	HostPort   int
-	ModelsDir  string
-	EmbedModel string
-	GenModel   string
-	ExtraFlags string
+	HostPort int
 }
 
 type KeycloakConfig struct {
@@ -150,12 +144,7 @@ type fileConfig struct {
 		DataDir    string `toml:"data_dir"`
 	} `toml:"postgres"`
 	Llama struct {
-		Image      string `toml:"image"`
-		HostPort   int    `toml:"host_port"`
-		ModelsDir  string `toml:"models_dir"`
-		EmbedModel string `toml:"embed_model"`
-		GenModel   string `toml:"gen_model"`
-		ExtraFlags string `toml:"extra_flags"`
+		HostPort int `toml:"host_port"`
 	} `toml:"llama"`
 	Keycloak struct {
 		Port            int    `toml:"port"`
@@ -245,12 +234,7 @@ func Load(path string) (*Config, error) {
 			DataDir:    fc.Postgres.DataDir,
 		},
 		Llama: LlamaConfig{
-			Image:      fc.Llama.Image,
-			HostPort:   fc.Llama.HostPort,
-			ModelsDir:  fc.Llama.ModelsDir,
-			EmbedModel: fc.Llama.EmbedModel,
-			GenModel:   fc.Llama.GenModel,
-			ExtraFlags: fc.Llama.ExtraFlags,
+			HostPort: fc.Llama.HostPort,
 		},
 		Keycloak: KeycloakConfig{
 			Port:            fc.Keycloak.Port,
@@ -355,23 +339,6 @@ func Validate(cfg *Config) error {
 		}
 	}
 
-	// Rule 3: if llama active, models_dir and embed_model must be set.
-	if cfg.LlamaActive() {
-		if cfg.Llama.ModelsDir == "" {
-			return errors.New("llama.models_dir: required when llama profile is active")
-		}
-		if cfg.Llama.EmbedModel == "" {
-			return errors.New("llama.embed_model: required when llama profile is active")
-		}
-		info, err := os.Stat(cfg.Llama.ModelsDir)
-		if err != nil {
-			return fmt.Errorf("llama.models_dir: %w", err)
-		}
-		if !info.IsDir() {
-			return fmt.Errorf("llama.models_dir: %q is not a directory", cfg.Llama.ModelsDir)
-		}
-	}
-
 	// Rule 4: hyde requires anthropic_api_key.
 	if cfg.RagMCP.HyDE.Enabled && cfg.Secrets.AnthropicAPIKey == "" {
 		return errors.New("secrets.anthropic_api_key: required when rag_mcp_server.hyde.enabled is true")
@@ -389,11 +356,6 @@ func Validate(cfg *Config) error {
 		if cfg.RagMCP.AuthAudience == "" {
 			return errors.New("rag_mcp_server.auth_audience: required when auth_provider profile is not active")
 		}
-	}
-
-	// Rule 8: extra_flags must not contain shell metacharacters.
-	if err := validateExtraFlags(cfg.Llama.ExtraFlags); err != nil {
-		return fmt.Errorf("llama.extra_flags: %w", err)
 	}
 
 	// Port range checks: validate any explicitly set port value.
@@ -452,24 +414,11 @@ func (cfg *Config) HasProfile(name string) bool {
 // PostgresActive reports whether the postgres profile is enabled.
 func (cfg *Config) PostgresActive() bool { return cfg.HasProfile("postgres") }
 
-// LlamaActive reports whether the llama profile is enabled.
-func (cfg *Config) LlamaActive() bool { return cfg.HasProfile("llama") }
-
 // KeycloakActive reports whether the keycloak profile is enabled.
 func (cfg *Config) KeycloakActive() bool { return cfg.HasProfile("keycloak") }
 
 // LogtoActive reports whether the logto profile is enabled.
 func (cfg *Config) LogtoActive() bool { return cfg.HasProfile("logto") }
-
-// shellMetachars are characters that must not appear in extra_flags.
-const shellMetachars = ";|`$><&"
-
-func validateExtraFlags(flags string) error {
-	if strings.ContainsAny(flags, shellMetachars) {
-		return errors.New("shell metacharacters are not allowed")
-	}
-	return nil
-}
 
 // validatePort returns an error if the port is set (non-zero) and out of range.
 func validatePort(name string, value int) error {

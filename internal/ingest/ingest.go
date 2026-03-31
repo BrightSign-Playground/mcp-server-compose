@@ -50,7 +50,7 @@ func Run(cfg *config.Config, eng engine.Engine, repoRoot string, opts Options) e
 	}
 
 	// Check llama-server reachability.
-	embedHost := embedHostFromConfig(cfg, eng)
+	embedHost := embedHostFromConfig(cfg)
 	if err := checkLlamaReachable(embedHost); err != nil {
 		return fmt.Errorf("llama-server not reachable at %s: %w", embedHost, err)
 	}
@@ -87,8 +87,8 @@ func Run(cfg *config.Config, eng engine.Engine, repoRoot string, opts Options) e
 		Args: containerArgs,
 	}
 
-	// Docker needs extra_hosts for host-gateway when llama is not containerised.
-	if !eng.IsPodman() && !cfg.LlamaActive() {
+	// Docker needs extra_hosts for host-gateway since llama runs on the host.
+	if !eng.IsPodman() {
 		if h := eng.HostGatewayExtraHost(); h != "" {
 			runOpts.ExtraHosts = []string{h}
 		}
@@ -182,17 +182,8 @@ func databaseURLForContainer(cfg *config.Config) string {
 }
 
 // embedHostFromConfig returns the embed host for reachability checks.
-// When llama is not containerised, the host URL uses localhost.
-func embedHostFromConfig(cfg *config.Config, eng engine.Engine) string {
-	if cfg.LlamaActive() {
-		// If llama is containerised, it's on stack-net. Use localhost+port for
-		// the pre-flight check (the check runs from the host, not from a container).
-		port := cfg.Llama.HostPort
-		if port == 0 {
-			port = 16000
-		}
-		return fmt.Sprintf("http://localhost:%d", port)
-	}
+// llama-server runs on the host, so always use localhost.
+func embedHostFromConfig(cfg *config.Config) string {
 	port := cfg.Llama.HostPort
 	if port == 0 {
 		port = 16000

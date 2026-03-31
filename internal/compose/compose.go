@@ -62,14 +62,6 @@ func activeProjects(cfg *config.Config, repoRoot string) []project {
 		})
 	}
 
-	if cfg.LlamaActive() {
-		projects = append(projects, project{
-			name:         "stack-llama",
-			envFile:      filepath.Join(stackDir, "llama.env"),
-			composeFiles: []string{filepath.Join(stackDir, "compose.llama.yml")},
-		})
-	}
-
 	// rag-mcp-server is always included.
 	projects = append(projects, project{
 		name:         "stack-rag",

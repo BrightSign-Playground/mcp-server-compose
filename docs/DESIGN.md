@@ -82,7 +82,7 @@ graph TD
     C["Config"] --> RT["Runtime\n(engine)"]
     C --> PR["Profiles\n[]string"]
     C --> PG["Postgres\n(image, host, port, user,\npassword, database,\ndata_volume, data_dir)"]
-    C --> LL["Llama\n(image, host_port, models_dir,\nembed_model, gen_model, extra_flags)"]
+    C --> LL["Llama\n(host_port)"]
     C --> KC["Keycloak\n(port, db_port, admin_user,\nadmin_password, realm,\napi_client_id, m2m_client_id,\nm2m_client_secret, token_lifetime,\nhostname)"]
     C --> LO["Logto\n(port, admin_port, db_port,\nendpoint, admin_endpoint,\napp_id, app_secret, audience,\nmgmt_app_id, mgmt_app_secret)"]
     C --> RM["RagMCP\n(port, log_level, auth_provider,\nauth_jwks_url, auth_issuer,\nauth_audience)"]
@@ -107,7 +107,6 @@ Each component runs as its own compose project to avoid service name collisions:
 | `stack-postgres`  | `.stack/compose.postgres.yml`  | `postgres` in profiles |
 | `stack-keycloak`  | `keycloak-testing/compose.yml` | `keycloak` in profiles |
 | `stack-logto`     | `logto-testing/compose.yml`    | `logto` in profiles    |
-| `stack-llama`     | `.stack/compose.llama.yml`     | `llama` in profiles    |
 | `stack-rag`       | `rag-mcp-server/compose.yaml`  | always                 |
 
 Both keycloak-testing and logto-testing contain a service named `postgres`.
@@ -127,8 +126,7 @@ podman network create stack-net
 
 1. `stack-postgres` → health poll (max 180 s)
 2. `stack-keycloak` or `stack-logto` → health poll (max 180 s)
-3. `stack-llama` (no blocking wait)
-4. `stack-rag` (always last)
+3. `stack-rag` (always last)
 
 Health polling inspects the container state via `<engine> inspect`.
 
@@ -163,9 +161,9 @@ audience = <logto.audience>
 ```
 
 ### embed.host
-- llama profile active: `http://llama-server:8080`
-- llama inactive + podman: `http://host.containers.internal:<host_port>`
-- llama inactive + docker: `http://host-gateway:<host_port>`
+llama-server runs on the host (not in a container):
+- podman: `http://host.containers.internal:<host_port>`
+- docker: `http://host-gateway:<host_port>`
 
 ---
 
@@ -183,8 +181,6 @@ audience = <logto.audience>
 
 - All exec.Command calls use explicit `[]string` argv — never `sh -c` with user input.
 - Secrets only in `.env` files (mode 0600); never in compose YAML or config.toml.
-- `llama.extra_flags` split on whitespace into discrete argv elements.
-- `extra_flags` validated to reject shell metacharacters (`;|` `` ` `` `$><&`).
 - Host paths validated with `os.Stat` before use.
 - All ports bound to `127.0.0.1` in generated compose files.
 - Generated files use atomic write (tmp + rename).
@@ -195,7 +191,7 @@ audience = <logto.audience>
 
 1. At most one of `keycloak`, `logto` in profiles.
 2. If postgres inactive: host, port, user, password, database must be set.
-3. If llama active: models_dir must exist and be a directory; embed_model non-empty.
+3. If `llama.host_port` is not set, default to 16000.
 4. If hyde.enabled: anthropic_api_key non-empty.
 5. If auth_provider not in profiles: auth_jwks_url, auth_issuer, auth_audience all non-empty.
 6. auth_provider must be "keycloak" or "logto".

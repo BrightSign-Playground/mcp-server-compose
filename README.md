@@ -12,15 +12,41 @@ Install [Go](https://go.dev/), [Podman](https://podman.io/) (or Docker), and
 [uv](https://docs.astral.sh/uv/getting-started/installation/), then:
 
 ```sh
+make submodules       # clones all git submodules
 make prereqs          # installs huggingface_hub CLI + podman-compose
 make build            # produces ./bin/stack
 ```
 
-### 2. Configure and start the stack
+### 2. Local development setup (optional)
+
+> **Skip this section** if you are connecting to a shared team development
+> server that already provides PostgreSQL, llama-server, and Keycloak.
+> Jump to [Configure and start the stack](#3-configure-and-start-the-stack)
+> and point `stack.toml` at the shared services.
+
+**PostgreSQL + pgvector:**
+
+```sh
+make install-postgres # installs PostgreSQL and pgvector (macOS or Linux)
+make prep-database    # creates raguser, ragdb, and enables pgvector
+```
+
+**Inference servers (embedding + reranker):**
+
+```sh
+make build-llama      # builds llama-server from the llama.cpp submodule
+make download-models  # downloads all required GGUF models
+make run-inference-servers  # starts both servers in the background
+```
+
+**Keycloak** is started automatically by `make up` when `"keycloak"` is in
+your `stack.toml` profiles. No manual setup is needed.
+
+### 3. Configure and start the stack
 
 ```sh
 cp stack.toml.example stack.toml
-$EDITOR stack.toml    # set llama.models_dir, adjust passwords
+$EDITOR stack.toml    # adjust passwords; on a team server, point to shared services
 
 make up               # generates configs, creates network, starts all services
 make ingest           # ingest documents into the vector database
@@ -233,9 +259,13 @@ graph TB
         ST["stack.toml"] --> GEN["Config Generator"]
     end
 
+    subgraph host["Host (native processes)"]
+        LL["llama-server\n(embeddings)\n:16000"]
+        RR["llama-server\n(reranker)\n:16001"]
+    end
+
     subgraph net["stack-net (shared container network)"]
         PG[("PostgreSQL\n+ pgvector\n:5432")]
-        LL["llama-server\n(embeddings)\n:8080"]
         KC["Keycloak / Logto\n(OIDC provider)"]
         RAG["rag-mcp-server\n(MCP endpoint)\n:15080"]
         D2V["docs2vector\n(one-shot ingest)"]
@@ -380,10 +410,10 @@ Key fields:
 
 | Field | Description |
 |---|---|
-| `profiles` | Active components: `postgres`, `keycloak`, `logto`, `llama` |
+| `profiles` | Active components: `postgres`, `keycloak`, `logto` |
 | `runtime.engine` | `podman` or `docker`; omit to auto-detect (prefers podman) |
 | `postgres.*` | Shared PostgreSQL+pgvector container or external connection |
-| `llama.*` | llama-server container; `extra_flags` appended to invocation |
+| `llama.host_port` | Port where host-native llama-server listens |
 | `keycloak.*` | Keycloak + internal postgres (mutually exclusive with logto) |
 | `logto.*` | Logto + internal postgres (mutually exclusive with keycloak) |
 | `rag_mcp_server.*` | RAG MCP server settings, auth provider, search tuning |
@@ -439,8 +469,6 @@ stack --dry-run up
 |---|---|
 | `.stack/postgres.env` | Postgres container env vars |
 | `.stack/compose.postgres.yml` | Postgres compose file |
-| `.stack/llama.env` | llama-server env vars |
-| `.stack/compose.llama.yml` | llama-server compose file (includes extra_flags) |
 | `keycloak-testing/.env` | Keycloak env vars |
 | `logto-testing/.env` | Logto env vars |
 | `rag-mcp-server/.env` | RAG server env vars (DATABASE_URL, API keys) |

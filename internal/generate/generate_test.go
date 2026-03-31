@@ -38,7 +38,7 @@ func buildTestEngine(kind engine.Kind, binary string) engine.Engine {
 
 func baseConfig() *config.Config {
 	return &config.Config{
-		Profiles: []string{"postgres", "keycloak", "llama"},
+		Profiles: []string{"postgres", "keycloak"},
 		Postgres: config.PostgresConfig{
 			Image:    "docker.io/pgvector/pgvector:pg17",
 			Host:     "localhost",
@@ -48,10 +48,7 @@ func baseConfig() *config.Config {
 			Database: "support",
 		},
 		Llama: config.LlamaConfig{
-			Image:      "ghcr.io/ggml-org/llama.cpp:server",
-			HostPort:   16000,
-			ModelsDir:  "/models",
-			EmbedModel: "model.gguf",
+			HostPort: 16000,
 		},
 		Keycloak: config.KeycloakConfig{
 			Port:            8080,
@@ -151,34 +148,23 @@ func TestDeriveAll_logtoAuth(t *testing.T) {
 	}
 }
 
-func TestDeriveAll_llamaActive_embedHost(t *testing.T) {
+func TestDeriveAll_embedHost_podman(t *testing.T) {
 	cfg := baseConfig()
-	eng := makePodmanEngine()
-	d := deriveAll(cfg, eng)
-	if d.EmbedHost != "http://llama-server:8080" {
-		t.Errorf("EmbedHost with llama active: got %q", d.EmbedHost)
-	}
-}
-
-func TestDeriveAll_llamaInactive_podman(t *testing.T) {
-	cfg := baseConfig()
-	cfg.Profiles = []string{"postgres", "keycloak"}
 	eng := makePodmanEngine()
 	d := deriveAll(cfg, eng)
 	want := "http://host.containers.internal:16000"
 	if d.EmbedHost != want {
-		t.Errorf("EmbedHost (llama inactive, podman): got %q want %q", d.EmbedHost, want)
+		t.Errorf("EmbedHost (podman): got %q want %q", d.EmbedHost, want)
 	}
 }
 
-func TestDeriveAll_llamaInactive_docker(t *testing.T) {
+func TestDeriveAll_embedHost_docker(t *testing.T) {
 	cfg := baseConfig()
-	cfg.Profiles = []string{"postgres", "keycloak"}
 	eng := makeDockerEngine()
 	d := deriveAll(cfg, eng)
 	want := "http://host-gateway:16000"
 	if d.EmbedHost != want {
-		t.Errorf("EmbedHost (llama inactive, docker): got %q want %q", d.EmbedHost, want)
+		t.Errorf("EmbedHost (docker): got %q want %q", d.EmbedHost, want)
 	}
 }
 
@@ -273,38 +259,6 @@ func TestPostgresComposeYAML_containsServiceName(t *testing.T) {
 	}
 	if !strings.Contains(yaml, "127.0.0.1") {
 		t.Errorf("expected loopback port binding in compose YAML")
-	}
-}
-
-func TestLlamaComposeYAML_containsServiceName(t *testing.T) {
-	yaml := llamaComposeYAML(nil)
-	if !strings.Contains(yaml, "llama-server:") {
-		t.Errorf("expected service name 'llama-server' in compose YAML")
-	}
-	if !strings.Contains(yaml, "stack-net") {
-		t.Errorf("expected stack-net network in compose YAML")
-	}
-}
-
-func TestLlamaComposeYAML_injectsExtraFlags(t *testing.T) {
-	flags := []string{"-ngl", "99", "--threads", "4"}
-	yaml := llamaComposeYAML(flags)
-	for _, flag := range flags {
-		quoted := `"` + flag + `"`
-		if !strings.Contains(yaml, quoted) {
-			t.Errorf("expected flag %s in compose YAML, got:\n%s", quoted, yaml)
-		}
-	}
-	// Flags must appear after --embeddings and before networks section.
-	embeddingsPos := strings.Index(yaml, `"--embeddings"`)
-	networksPos := strings.Index(yaml, "    networks:")
-	nglPos := strings.Index(yaml, `"-ngl"`)
-	if embeddingsPos < 0 || networksPos < 0 || nglPos < 0 {
-		t.Fatalf("missing expected YAML sections")
-	}
-	if !(embeddingsPos < nglPos && nglPos < networksPos) {
-		t.Errorf("extra flags not in correct position: embeddings=%d ngl=%d networks=%d",
-			embeddingsPos, nglPos, networksPos)
 	}
 }
 

@@ -6,8 +6,7 @@
 #   "postgres"  — start a shared PostgreSQL+pgvector container
 #   "keycloak"  — start Keycloak + its internal PostgreSQL (mutually exclusive with logto)
 #   "logto"     — start Logto + its internal PostgreSQL  (mutually exclusive with keycloak)
-#   "llama"     — start llama-server container for embeddings
-profiles = ["postgres", "keycloak", "llama"]
+profiles = ["postgres", "keycloak"]
 
 # ── Runtime ────────────────────────────────────────────────────────────────────
 [runtime]
@@ -27,14 +26,17 @@ database = "support"
 data_volume = "stack-pgdata"  # named volume; leave empty to use data_dir instead
 # data_dir = "/path/on/host"
 
-# ── llama-server ────────────────────────────────────────────────────────────────
+# ── llama-server (host-native) ─────────────────────────────────────────────────
+# llama-server runs directly on the host (not in a container).
+# Build it with: make build-llama
+# Start it with: make run-inference-servers
 [llama]
-image       = "ghcr.io/ggml-org/llama.cpp:server"
-host_port   = 16000
-models_dir  = "/path/to/models"          # REQUIRED: directory containing GGUF files
-embed_model = "mxbai-embed-large-v1-f16.gguf"
-gen_model   = ""                          # optional generation model; leave empty to disable
-extra_flags = ""                          # verbatim flags appended to llama-server (e.g. "-ngl 99")
+host_port   = 16000                       # port the embedding server listens on
+
+# ── Reranker (host-native) ────────────────────────────────────────────────────
+# Reranker runs directly on the host alongside the embedding server.
+[reranker]
+host_port   = 16001                       # port the reranker server listens on
 
 # ── Keycloak ────────────────────────────────────────────────────────────────────
 [keycloak]

@@ -109,12 +109,9 @@ func logtoIssuerHost(endpoint string, port int) string {
 }
 
 // embedHost returns the value for [embed].host in rag-mcp-server and docs2vector
-// config.toml. When llama is active, use the compose service name. Otherwise,
-// use the engine-specific host-gateway address.
+// config.toml. llama-server runs on the host, so containers reach it via the
+// engine-specific host-gateway address.
 func embedHost(cfg *config.Config, eng engine.Engine) string {
-	if cfg.LlamaActive() {
-		return "http://llama-server:8080"
-	}
 	port := cfg.Llama.HostPort
 	if port == 0 {
 		port = 16000 // default

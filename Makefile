@@ -65,11 +65,12 @@ restart: $(BINARY) ## Restart all services
 status: $(BINARY) ## Show service status
 	$(BINARY) --config $(CONFIG) status
 
-DOCS_DIR := $(shell awk '/^\[docs2vector\]/{f=1} f && /^docs_dir/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
-PG_HOST  := $(shell awk '/^\[postgres\]/{f=1} f && /^host/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
-PG_PORT  := $(shell awk '/^\[postgres\]/{f=1} f && /^port/{print $$3; exit}' $(CONFIG))
-LLAMA_HOST := $(shell awk '/^\[llama\]/{f=1} f && /^host[^_]/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
-LLAMA_PORT := $(shell awk '/^\[llama\]/{f=1} f && /^host_port/{print $$3; exit}' $(CONFIG))
+DOCS_DIR = $(shell awk '/^\[docs2vector\]/{f=1} f && /^docs_dir/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null)
+PG_HOST  = $(or $(shell awk '/^\[postgres\]/{f=1} f && /^host/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null),localhost)
+PG_PORT  = $(or $(shell awk '/^\[postgres\]/{f=1} f && /^port/{print $$3; exit}' $(CONFIG) 2>/dev/null),5432)
+LLAMA_HOST = $(or $(shell awk '/^\[llama\]/{f=1} f && /^host[^_]/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null),localhost)
+LLAMA_PORT = $(or $(shell awk '/^\[llama\]/{f=1} f && /^host_port/{print $$3; exit}' $(CONFIG) 2>/dev/null),16000)
+RERANKER_PORT = $(or $(shell awk '/^\[reranker\]/{f=1} f && /^host_port/{print $$3; exit}' $(CONFIG) 2>/dev/null),16001)
 
 # Reusable pre-flight check for ingest targets.
 # Verifies docs_dir exists, PostgreSQL is reachable, and llama-server is up.
@@ -185,11 +186,11 @@ generate: $(BINARY) ## Generate component configs without starting
 validate: $(BINARY) ## Validate stack.toml
 	$(BINARY) --config $(CONFIG) validate
 
-MCP_PORT          := $(shell awk '/^\[rag_mcp_server\]/{f=1} f && /^port/{print $$3; exit}' $(CONFIG))
-KC_PORT           := $(shell awk '/^\[keycloak\]/{f=1} f && /^port/{print $$3; exit}' $(CONFIG))
-KC_REALM          := $(shell awk '/^\[keycloak\]/{f=1} f && /^realm/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
-KC_CLIENT_ID      := $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_id/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
-KC_CLIENT_SECRET  := $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_secret/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG))
+MCP_PORT          = $(or $(shell awk '/^\[rag_mcp_server\]/{f=1} f && /^port/{print $$3; exit}' $(CONFIG) 2>/dev/null),15080)
+KC_PORT           = $(or $(shell awk '/^\[keycloak\]/{f=1} f && /^port/{print $$3; exit}' $(CONFIG) 2>/dev/null),8080)
+KC_REALM          = $(or $(shell awk '/^\[keycloak\]/{f=1} f && /^realm/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null),dev)
+KC_CLIENT_ID      = $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_id/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null)
+KC_CLIENT_SECRET  = $(shell awk '/^\[keycloak\]/{f=1} f && /^m2m_client_secret/{gsub(/"/, "", $$3); print $$3; exit}' $(CONFIG) 2>/dev/null)
 
 eval-stability: ## Run evals N times and report pass-rate stats (EVAL_FILE=..., RUNS=25)
 	./scripts/eval-stability.sh $(RUNS) $(EVAL_FILE)
@@ -217,47 +218,91 @@ prep-database: ## Create raguser, ragdb, and enable pgvector on the host postgre
 	psql postgres -c "CREATE DATABASE ragdb OWNER raguser;"
 	psql ragdb   -c "CREATE EXTENSION IF NOT EXISTS vector;"
 
-llama-server: ## Run llama-server with nomic-embed-text-v1.5 on port 16000
+llama-server: ## Run llama-server with nomic-embed-text-v1.5
+	@if ! command -v llama-server >/dev/null 2>&1; then \
+		echo ""; \
+		echo "ERROR: llama-server is not installed."; \
+		echo ""; \
+		echo "  Build it from the llama.cpp submodule:"; \
+		echo "    make build-llama"; \
+		echo ""; \
+		exit 1; \
+	fi
 	@if [ ! -f ./models/nomic-embed-text-v1.5.Q8_0.gguf ]; then \
 		echo "Model not found, downloading..."; \
-		$(MAKE) download-nomic-model; \
+		$(MAKE) download-models; \
 	fi
 	@eval $$(./scripts/detect-gpu.sh); \
 	echo "starting embed server: parallel=$${LLAMA_PARALLEL} batch=$${LLAMA_BATCH} ubatch=$${LLAMA_UBATCH}"; \
 	llama-server \
 		--model ./models/nomic-embed-text-v1.5.Q8_0.gguf \
 		--embeddings --pooling mean \
-		--host 0.0.0.0 --port 16000 \
+		--host 0.0.0.0 --port $(LLAMA_PORT) \
 		--ctx-size 8192 \
 		--n-gpu-layers 99 \
 		$${LLAMA_GPU_FLAGS}
 
-llama-server-mxbai: ## Run llama-server with mxbai-embed-large-v1 on port 16000 (legacy)
-	@eval $$(./scripts/detect-gpu.sh); \
-	llama-server \
-		--model ./models/mxbai-embed-large-v1.Q8_0.gguf \
-		--embeddings --pooling cls \
-		--host 0.0.0.0 --port 16000 \
-		--ctx-size 8192 \
-		--n-gpu-layers 99 \
-		$${LLAMA_GPU_FLAGS}
-
-reranker-server: ## Run llama-server with bge-reranker-v2-m3 on port 16001
+reranker-server: ## Run llama-server with bge-reranker-v2-m3
+	@if ! command -v llama-server >/dev/null 2>&1; then \
+		echo ""; \
+		echo "ERROR: llama-server is not installed."; \
+		echo ""; \
+		echo "  Build it from the llama.cpp submodule:"; \
+		echo "    make build-llama"; \
+		echo ""; \
+		exit 1; \
+	fi
 	@if [ ! -f ./models/bge-reranker-v2-m3-Q8_0.gguf ]; then \
 		echo "Model not found, downloading..."; \
-		$(MAKE) download-reranker-model; \
+		$(MAKE) download-models; \
 	fi
 	@eval $$(./scripts/detect-gpu.sh); \
 	echo "starting reranker: parallel=$${LLAMA_PARALLEL} batch=$${LLAMA_BATCH} ubatch=$${LLAMA_UBATCH}"; \
 	llama-server \
 		--model ./models/bge-reranker-v2-m3-Q8_0.gguf \
 		--reranking \
-		--host 0.0.0.0 --port 16001 \
+		--host 0.0.0.0 --port $(RERANKER_PORT) \
 		--ctx-size 8192 \
 		--n-gpu-layers 99 \
 		$${LLAMA_GPU_FLAGS}
 
-download-nomic-model: ## Download nomic-embed-text-v1.5 GGUF model into ./models
+run-inference-servers: ## Start embedding and reranker servers in the background
+	@if ! command -v llama-server >/dev/null 2>&1; then \
+		echo ""; \
+		echo "ERROR: llama-server is not installed."; \
+		echo ""; \
+		echo "  Build it from the llama.cpp submodule:"; \
+		echo "    make build-llama"; \
+		echo ""; \
+		exit 1; \
+	fi
+	@if [ ! -f ./models/nomic-embed-text-v1.5.Q8_0.gguf ] || [ ! -f ./models/bge-reranker-v2-m3-Q8_0.gguf ]; then \
+		echo "Models not found, downloading..."; \
+		$(MAKE) download-models; \
+	fi
+	@eval $$(./scripts/detect-gpu.sh); \
+	echo "starting embed server on port $(LLAMA_PORT)..."; \
+	nohup llama-server \
+		--model ./models/nomic-embed-text-v1.5.Q8_0.gguf \
+		--embeddings --pooling mean \
+		--host 0.0.0.0 --port $(LLAMA_PORT) \
+		--ctx-size 8192 \
+		--n-gpu-layers 99 \
+		$${LLAMA_GPU_FLAGS} \
+		> /tmp/llama-embed.log 2>&1 & \
+	echo "  PID: $$!  log: /tmp/llama-embed.log"; \
+	echo "starting reranker server on port $(RERANKER_PORT)..."; \
+	nohup llama-server \
+		--model ./models/bge-reranker-v2-m3-Q8_0.gguf \
+		--reranking \
+		--host 0.0.0.0 --port $(RERANKER_PORT) \
+		--ctx-size 8192 \
+		--n-gpu-layers 99 \
+		$${LLAMA_GPU_FLAGS} \
+		> /tmp/llama-reranker.log 2>&1 & \
+	echo "  PID: $$!  log: /tmp/llama-reranker.log"
+
+download-models: ## Download all GGUF models into ./models
 	@if ! command -v hf >/dev/null 2>&1; then \
 		echo "Error: hf (Hugging Face CLI) is not installed."; \
 		echo ""; \
@@ -269,32 +314,9 @@ download-nomic-model: ## Download nomic-embed-text-v1.5 GGUF model into ./models
 	hf download nomic-ai/nomic-embed-text-v1.5-GGUF \
 		nomic-embed-text-v1.5.Q8_0.gguf \
 		--local-dir ./models
-
-download-reranker-model: ## Download bge-reranker-v2-m3 GGUF model into ./models
-	@if ! command -v hf >/dev/null 2>&1; then \
-		echo "Error: hf (Hugging Face CLI) is not installed."; \
-		echo ""; \
-		echo "Install it with:"; \
-		echo "  uv tool install \"huggingface_hub[cli]\""; \
-		exit 1; \
-	fi
-	mkdir -p ./models
 	hf download gpustack/bge-reranker-v2-m3-GGUF \
 		bge-reranker-v2-m3-Q8_0.gguf \
 		--local-dir ./models
-
-download-model: ## Download mxbai-embed-large-v1 GGUF model into ./models
-	@if ! command -v hf >/dev/null 2>&1; then \
-		echo "Error: hf (Hugging Face CLI) is not installed."; \
-		echo ""; \
-		echo "Install it with:"; \
-		echo "  uv tool install \"huggingface_hub[cli]\""; \
-		echo ""; \
-		echo "If you don't have uv:"; \
-		echo "  curl -LsSf https://astral.sh/uv/install.sh | sh"; \
-		exit 1; \
-	fi
-	mkdir -p ./models
 	hf download ChristianAzinn/mxbai-embed-large-v1-gguf \
 		mxbai-embed-large-v1.Q8_0.gguf \
 		--local-dir ./models
