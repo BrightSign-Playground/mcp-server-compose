@@ -257,54 +257,65 @@ graph TB
 
 ### End-to-End Call Sequence
 
+See [docs/overall-sequence-diagram.md](docs/overall-sequence-diagram.md) for the
+full three-phase startup → ingestion → query sequence.
+
+### Eval Sequence
+
+The eval harness (`rag-mcp-server/scripts/eval.sh`) measures retrieval quality and
+hallucination resistance by running each eval case through the live stack. Each case
+has a `label` — `good` (answerable), `bad` (fabricated), or `off_topic` — that
+determines how the LLM judge scores the answer.
+
+1. The harness authenticates once with the OIDC provider, then iterates over the
+   eval JSON array.
+2. For each case it sends three MCP messages (`initialize`, `notifications/initialized`,
+   `tools/call` with `search_documents`) to retrieve chunks from the running
+   rag-mcp-server.
+3. For `good` and `bad` cases, the retrieved chunks and the eval prompt are sent to
+   Claude, which generates an answer and self-judges whether it passes (correct answer
+   for `good`; refusal to confirm the false premise for `bad`).
+4. `off_topic` cases skip the judge — the raw MCP response is printed for guardrail
+   tuning and excluded from the pass/fail denominator.
+5. The harness reports an overall pass rate and per-label breakdown.
+
 ```mermaid
 sequenceDiagram
-    participant U as User / Operator
-    participant S as stack CLI
-    participant PG as PostgreSQL + pgvector
+    participant E as eval.sh
     participant KC as Keycloak / Logto
-    participant LL as llama-server
     participant R as rag-mcp-server
-    participant D as docs2vector
-    participant A as AI Agent
+    participant LL as llama-server
+    participant PG as PostgreSQL + pgvector
+    participant C as Claude (LLM Judge)
 
-    Note over U,R: Phase 1 — Stack Startup
-    U->>S: stack up
-    S->>S: Parse stack.toml, validate, generate configs
-    S->>PG: Start (compose up), health poll
-    PG-->>S: healthy
-    S->>KC: Start (compose up), health poll
-    KC-->>S: healthy
-    S->>LL: Start (compose up)
-    S->>R: Start (compose up)
-    S-->>U: Stack is up
+    E->>E: Load evals.json array
+    E->>KC: POST /token (client_credentials)
+    KC-->>E: JWT access_token
 
-    Note over U,D: Phase 2 — Document Ingestion
-    U->>S: stack ingest --docs-dir /path
-    S->>D: Build image, run container
-    D->>D: Walk files, chunk content
-    loop For each chunk
-        D->>LL: POST /v1/embeddings (chunk text)
-        LL-->>D: float32 vector
-        D->>D: L2-normalize
-        D->>PG: INSERT chunk + embedding
+    loop For each eval case
+        E->>R: POST /mcp — initialize
+        R-->>E: OK
+        E->>R: POST /mcp — notifications/initialized
+        R-->>E: OK
+        E->>R: POST /mcp — tools/call search_documents(prompt)
+        R->>LL: POST /v1/embeddings (query)
+        LL-->>R: float32 query vector
+        R->>R: L2-normalize, guardrail L1 (topic check)
+        R->>PG: Vector KNN + full-text search (parallel)
+        PG-->>R: Matching chunks
+        R->>R: RRF merge, guardrail L2 (match quality)
+        R-->>E: Ranked chunks (or off_topic / below_threshold error)
+
+        alt label = good or bad
+            E->>C: Prompt + chunks + eval notes → generate answer + judge pass/fail
+            C-->>E: {answer, pass, reason}
+            E->>E: Record pass or fail
+        else label = off_topic
+            E->>E: Print raw response, skip judge
+        end
     end
-    D->>PG: Build IVFFlat index
-    D-->>U: Ingest complete
 
-    Note over A,R: Phase 3 — Agent Query
-    A->>KC: POST /token (client_credentials)
-    KC-->>A: JWT access_token
-    A->>R: POST /mcp + Bearer JWT + query
-    R->>R: Validate JWT (sig, iss, aud, exp)
-    R->>LL: POST /v1/embeddings (query)
-    LL-->>R: float32 query vector
-    R->>R: L2-normalize, guardrail L1 check
-    R->>PG: Vector KNN search (parallel)
-    R->>PG: Full-text search (parallel)
-    PG-->>R: Matching chunks (both arms)
-    R->>R: RRF merge, optional rerank, guardrail L2
-    R-->>A: Ranked document chunks (JSON)
+    E->>E: Report pass rate (overall + per-label)
 ```
 
 ### Internal Packages
