@@ -1,0 +1,152 @@
+[
+  {
+    "prompt": "What is the optimal temperature for proofing sourdough bread?",
+    "label": "off_topic",
+    "notes": "Cooking question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "How does photosynthesis convert carbon dioxide into glucose?",
+    "label": "off_topic",
+    "notes": "Biology question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What are the rules for the offside trap in association football?",
+    "label": "off_topic",
+    "notes": "Sports question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "Explain the difference between TCP and UDP at the transport layer.",
+    "label": "off_topic",
+    "notes": "Networking question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What voltage does a standard US household outlet provide?",
+    "label": "off_topic",
+    "notes": "Electrical engineering question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "How do you configure a Kubernetes pod affinity rule?",
+    "label": "off_topic",
+    "notes": "DevOps question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What is the half-life of carbon-14 and how is it used in radiometric dating?",
+    "label": "off_topic",
+    "notes": "Physics question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "Describe the process of mitosis in human cells.",
+    "label": "off_topic",
+    "notes": "Cell biology question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What SQL statement creates a composite index on two columns?",
+    "label": "off_topic",
+    "notes": "Database question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "How many moons does Jupiter have and which is the largest?",
+    "label": "off_topic",
+    "notes": "Astronomy question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What is the current world record time for the men's 100 meter sprint?",
+    "label": "off_topic",
+    "notes": "Athletics question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "Explain how a catalytic converter reduces vehicle emissions.",
+    "label": "off_topic",
+    "notes": "Automotive engineering question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What are the primary differences between Arabica and Robusta coffee beans?",
+    "label": "off_topic",
+    "notes": "Agriculture question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "How does the Federal Reserve adjust the federal funds rate?",
+    "label": "off_topic",
+    "notes": "Economics question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What is the boiling point of ethanol at standard atmospheric pressure?",
+    "label": "off_topic",
+    "notes": "Chemistry question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "Describe the three branches of the United States federal government.",
+    "label": "off_topic",
+    "notes": "Civics question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What are the ACID properties in database transaction management?",
+    "label": "off_topic",
+    "notes": "Computer science question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "How do tectonic plates cause earthquakes along fault lines?",
+    "label": "off_topic",
+    "notes": "Geology question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What nutrients are found in highest concentration in spinach?",
+    "label": "off_topic",
+    "notes": "Nutrition question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "Explain how asymmetric encryption works using public and private keys.",
+    "label": "off_topic",
+    "notes": "Cryptography question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What is the difference between a hurricane, a typhoon, and a cyclone?",
+    "label": "off_topic",
+    "notes": "Meteorology question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "How do you calculate compound interest over multiple periods?",
+    "label": "off_topic",
+    "notes": "Finance question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What is the recommended daily water intake for an adult human?",
+    "label": "off_topic",
+    "notes": "Health question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "Describe the lifecycle of a Docker container from creation to removal.",
+    "label": "off_topic",
+    "notes": "Container technology question unrelated to the mystery fiction corpus.",
+    "file": ""
+  },
+  {
+    "prompt": "What causes the aurora borealis to appear in polar regions?",
+    "label": "off_topic",
+    "notes": "Atmospheric science question unrelated to the mystery fiction corpus.",
+    "file": ""
+  }
+]

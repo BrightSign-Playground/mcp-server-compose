@@ -2,7 +2,7 @@
 
 ## Overview
 
-Eval files are JSON arrays of evaluation cases used to measure RAG retrieval and answer quality. Each case poses a question against the ingested document corpus and declares whether the question is answerable (`good`) or contains fabricated details (`bad`). The eval harness (`rag-mcp-server/scripts/eval.sh`) runs each case through the MCP server's `search_documents` tool, generates an answer via Claude, and judges whether the answer passes.
+Eval files are JSON arrays of evaluation cases used to measure RAG retrieval and answer quality. Each case poses a question against the ingested document corpus and declares whether the question is answerable (`good`), contains fabricated details (`bad`), or is unrelated to the corpus topic (`off_topic`). The eval harness (`rag-mcp-server/scripts/eval.sh`) runs each case through the MCP server's `search_documents` tool, generates an answer via Claude, and judges whether the answer passes.
 
 ## File Location
 
@@ -36,7 +36,7 @@ The file is a JSON array of objects. Each object has exactly four fields:
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `prompt` | string | yes | The natural language question to ask the RAG system. Typically 40-150 characters. |
-| `label` | string | yes | Either `"good"` or `"bad"`. Determines how the answer is judged. |
+| `label` | string | yes | One of `"good"`, `"bad"`, or `"off_topic"`. Determines how the answer is judged (or whether judging is skipped). |
 | `notes` | string | yes | Explains what a correct answer must contain (for `good`) or what is fabricated (for `bad`). Used by the LLM judge to evaluate the answer. |
 | `file` | string | yes | The source document filename (without extension) that the eval targets. Used for traceability — identifies which document in the corpus the question was derived from. |
 
@@ -51,6 +51,13 @@ The file is a JSON array of objects. Each object has exactly four fields:
 
 - The `notes` field explains what is fabricated and why the question is unanswerable.
 - The eval passes only if the answer refuses to confirm the false premise. An answer that invents a plausible-sounding response (hallucination) fails.
+
+**`off_topic`** — The prompt is intentionally unrelated to the corpus topic. It asks about a subject the corpus does not cover at all (e.g., a cooking question against a mystery fiction corpus).
+
+- The eval harness skips the LLM judge entirely -- no answer is generated or evaluated.
+- The raw MCP response (either the `off_topic` error from the Level 1 guardrail or the search results if the guardrail did not fire) is printed indented under `REPLY:` for inspection.
+- Off-topic evals are excluded from the pass/fail denominator. They do not affect the reported pass rate.
+- Use case: tuning `guardrails.min_topic_score`. Run an off-topic eval file with `log_level = "debug"` to observe the cosine similarity scores the guardrail computes, then adjust the threshold so off-topic queries are rejected while on-topic queries pass.
 
 ## Design principles
 
@@ -76,7 +83,7 @@ An eval file is valid when:
 
 1. It is a JSON array (not an object or scalar).
 2. Every element has all four fields: `prompt`, `label`, `notes`, `file`.
-3. Every `label` is either `"good"` or `"bad"`.
+3. Every `label` is one of `"good"`, `"bad"`, or `"off_topic"`.
 4. Every `prompt` is a non-empty string.
 5. Every `notes` is a non-empty string.
 6. The array contains at least one element.
@@ -102,6 +109,7 @@ Results: 190/200 passed (95%)
 
   good (answerable):    90/100 (90%)
   bad  (fabricated):   100/100 (100%)
+  off_topic:            25
 
 Failed eval indices: 25,30,36,39,43,62,72,73,80,85
 ────────────────────────────────────────────────────────
