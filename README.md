@@ -12,9 +12,11 @@ Install [Go](https://go.dev/), [Podman](https://podman.io/) (or Docker), and
 [uv](https://docs.astral.sh/uv/getting-started/installation/), then:
 
 ```sh
+cd installers
 make submodules       # clones all git submodules
 make prereqs          # installs huggingface_hub CLI + podman-compose
-make build            # produces ./bin/stack
+cd ..
+make build            # produces ./bin/stack + rag-mcp-server tools
 ```
 
 ### 2. Local development setup (optional)
@@ -27,15 +29,19 @@ make build            # produces ./bin/stack
 **PostgreSQL + pgvector:**
 
 ```sh
+cd installers
 make install-postgres # installs PostgreSQL and pgvector (macOS or Linux)
-make prep-database    # creates raguser, ragdb, and enables pgvector
+make prep-database    # creates role, database, enables pgvector (reads from stack.toml)
+cd ..
 ```
 
 **Inference servers (embedding + reranker):**
 
 ```sh
+cd installers
 make build-llama      # builds llama-server from the llama.cpp submodule
 make download-models  # downloads all required GGUF models
+cd ..
 make run-inference-servers  # starts both servers in the background
 ```
 
@@ -484,21 +490,18 @@ The stack requires the following tools installed on your system:
 - **Podman** (or Docker) — container engine
 - **uv** — Python tool installer ([install](https://docs.astral.sh/uv/getting-started/installation/))
 
-Once `uv` is installed, run:
+Once `uv` is installed, run the setup targets from the `installers/` directory:
 
 ```sh
-make prereqs
+cd installers
+make prereqs          # installs huggingface_hub CLI + podman-compose
+make submodules       # clones all git submodules (if not already done)
 ```
-
-This installs:
-
-- `huggingface_hub[cli]` — used to download GGUF model files
-- `podman-compose` — required for container orchestration with Podman
 
 ## Build
 
 ```sh
-make build          # produces ./bin/stack
+make build          # produces ./bin/stack + rag-mcp-server tools
 make test           # runs all unit tests
 make clean          # removes ./bin/ and .stack/
 ```
@@ -602,6 +605,44 @@ All components join an external Docker/Podman network named `stack-net`. The net
 is created automatically by `stack up`. Each component runs as a separate compose
 project (`stack-postgres`, `stack-keycloak`, `stack-logto`, `stack-llama`, `stack-rag`)
 to avoid service name collisions on the shared network.
+
+## Makefile Targets
+
+The project has two Makefiles. The root Makefile is for using the tool; the
+`installers/` Makefile is for setting up and installing prerequisites.
+
+**Root Makefile** (`make help`):
+
+| Target | Description |
+|---|---|
+| `build` | Build the stack CLI and rag-mcp-server tools |
+| `test` | Run unit tests |
+| `clean` | Remove generated files and binaries |
+| `up` | Start all enabled services |
+| `down` | Stop all services |
+| `restart` | Restart all services |
+| `status` | Show service status |
+| `logs` | Tail logs (COMPONENT= to filter) |
+| `generate` | Generate component configs without starting |
+| `validate` | Validate stack.toml |
+| `ingest` | Drop and reingest docs |
+| `ingest-add` | Add/upsert docs without dropping |
+| `eval` | Run RAG evals |
+| `eval-stability` | Run evals N times with pass-rate stats |
+| `run-inference-servers` | Start embedding and reranker servers in the background |
+
+**Installers Makefile** (`cd installers && make help`):
+
+| Target | Description |
+|---|---|
+| `prereqs` | Install Python tool prerequisites (uv, huggingface_hub, podman-compose) |
+| `submodules` | Initialize and update all git submodules |
+| `install-postgres` | Install PostgreSQL and pgvector (macOS or Linux) |
+| `prep-database` | Create database role, database, and enable pgvector (reads from stack.toml) |
+| `build-llama` | Build llama-server from the llama.cpp submodule |
+| `download-models` | Download all GGUF models |
+| `llama-server` | Run embedding server (foreground) |
+| `reranker-server` | Run reranker server (foreground) |
 
 ## Development
 
