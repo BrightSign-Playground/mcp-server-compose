@@ -99,8 +99,10 @@ type GuardrailsConfig struct {
 
 type HyDEConfig struct {
 	Enabled      bool
+	Provider     string // "anthropic" (default) or "bedrock"
 	Model        string
 	BaseURL      string
+	AWSRegion    string // required when Provider is "bedrock"
 	SystemPrompt string
 }
 
@@ -193,8 +195,10 @@ type fileConfig struct {
 		} `toml:"guardrails"`
 		HyDE struct {
 			Enabled      bool   `toml:"enabled"`
+			Provider     string `toml:"provider"`
 			Model        string `toml:"model"`
 			BaseURL      string `toml:"base_url"`
+			AWSRegion    string `toml:"aws_region"`
 			SystemPrompt string `toml:"system_prompt"`
 		} `toml:"hyde"`
 	} `toml:"rag_mcp_server"`
@@ -283,8 +287,10 @@ func Load(path string) (*Config, error) {
 			},
 			HyDE: HyDEConfig{
 				Enabled:      fc.RagMCPServer.HyDE.Enabled,
+				Provider:     fc.RagMCPServer.HyDE.Provider,
 				Model:        fc.RagMCPServer.HyDE.Model,
 				BaseURL:      fc.RagMCPServer.HyDE.BaseURL,
+				AWSRegion:    fc.RagMCPServer.HyDE.AWSRegion,
 				SystemPrompt: fc.RagMCPServer.HyDE.SystemPrompt,
 			},
 		},
@@ -339,9 +345,20 @@ func Validate(cfg *Config) error {
 		}
 	}
 
-	// Rule 4: hyde requires anthropic_api_key.
-	if cfg.RagMCP.HyDE.Enabled && cfg.Secrets.AnthropicAPIKey == "" {
-		return errors.New("secrets.anthropic_api_key: required when rag_mcp_server.hyde.enabled is true")
+	// Validate hyde.provider if set.
+	if p := cfg.RagMCP.HyDE.Provider; p != "" && p != "anthropic" && p != "bedrock" {
+		return fmt.Errorf("rag_mcp_server.hyde.provider: must be \"anthropic\" or \"bedrock\", got %q", p)
+	}
+
+	// Rule 4: hyde requires anthropic_api_key when provider is "anthropic".
+	// Bedrock uses the AWS credential chain instead.
+	if cfg.RagMCP.HyDE.Enabled && cfg.RagMCP.HyDE.Provider != "bedrock" && cfg.Secrets.AnthropicAPIKey == "" {
+		return errors.New("secrets.anthropic_api_key: required when rag_mcp_server.hyde.enabled is true and provider is \"anthropic\"")
+	}
+
+	// Bedrock requires aws_region.
+	if cfg.RagMCP.HyDE.Enabled && cfg.RagMCP.HyDE.Provider == "bedrock" && cfg.RagMCP.HyDE.AWSRegion == "" {
+		return errors.New("rag_mcp_server.hyde.aws_region: required when hyde.provider is \"bedrock\"")
 	}
 
 	// Rule 5: if auth_provider profile is not active, override fields must be set.

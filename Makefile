@@ -25,7 +25,8 @@ prereqs: ## Install Python tool prerequisites via uv
 submodules: ## Initialize and update all git submodules
 	git submodule update --init --recursive
 
-build: $(BINARY) ## Build the stack CLI tool
+build: $(BINARY) ## Build the stack CLI and rag-mcp-server tools
+	$(MAKE) -C rag-mcp-server build
 
 test: ## Run unit tests for the stack tool
 	go test ./...

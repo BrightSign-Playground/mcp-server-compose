@@ -95,8 +95,10 @@ min_match_score = 0.0
 
 [rag_mcp_server.hyde]
 enabled       = false
+provider      = "anthropic"       # "anthropic" (default) or "bedrock"
 model         = "claude-haiku-4-5-20251001"
-base_url      = ""
+base_url      = ""                # override Anthropic endpoint (anthropic provider only)
+aws_region    = ""                # required for bedrock (e.g. "us-east-1")
 system_prompt = ""
 
 # ── docs2vector ─────────────────────────────────────────────────────────────────

@@ -64,8 +64,9 @@ min_topic_score = 0.25
 min_match_score = 0.0
 
 [rag_mcp_server.hyde]
-enabled = false
-model   = "claude-haiku-4-5-20251001"
+enabled  = false
+provider = "anthropic"
+model    = "claude-haiku-4-5-20251001"
 
 [docs2vector]
 docs_dir   = "/docs"
@@ -182,9 +183,40 @@ func TestValidate_hydeRequiresKey(t *testing.T) {
 		RagMCP:   RagMCPConfig{AuthProvider: "keycloak"},
 	}
 	cfg.RagMCP.HyDE.Enabled = true
+	cfg.RagMCP.HyDE.Provider = "anthropic"
 	cfg.Secrets.AnthropicAPIKey = ""
 	if err := Validate(cfg); err == nil {
 		t.Fatal("expected error when hyde enabled without api key")
+	}
+}
+
+func TestValidate_hydeBedrockNoKeyRequired(t *testing.T) {
+	cfg := &Config{
+		Profiles:    []string{"postgres", "keycloak"},
+		Postgres:    PostgresConfig{Host: "h", Port: 1, User: "u", Password: "p", Database: "d"},
+		Docs2Vector: Docs2VectorConfig{EmbedModel: "mxbai-embed-large-v1"},
+		RagMCP:      RagMCPConfig{AuthProvider: "keycloak"},
+	}
+	cfg.RagMCP.HyDE.Enabled = true
+	cfg.RagMCP.HyDE.Provider = "bedrock"
+	cfg.RagMCP.HyDE.AWSRegion = "us-east-1"
+	cfg.Secrets.AnthropicAPIKey = ""
+	if err := Validate(cfg); err != nil {
+		t.Fatalf("unexpected error for bedrock without api key: %v", err)
+	}
+}
+
+func TestValidate_hydeBedrockRequiresRegion(t *testing.T) {
+	cfg := &Config{
+		Profiles: []string{"postgres", "keycloak"},
+		Postgres: PostgresConfig{Host: "h", Port: 1, User: "u", Password: "p", Database: "d"},
+		RagMCP:   RagMCPConfig{AuthProvider: "keycloak"},
+	}
+	cfg.RagMCP.HyDE.Enabled = true
+	cfg.RagMCP.HyDE.Provider = "bedrock"
+	cfg.RagMCP.HyDE.AWSRegion = ""
+	if err := Validate(cfg); err == nil {
+		t.Fatal("expected error when bedrock has no aws_region")
 	}
 }
 

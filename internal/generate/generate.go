@@ -183,6 +183,16 @@ func ragEnvVars(cfg *config.Config, d derived) map[string]string {
 	if cfg.Secrets.AnthropicAPIKey != "" {
 		vars["ANTHROPIC_API_KEY"] = cfg.Secrets.AnthropicAPIKey
 	}
+	// Pass AWS credential env vars through for Bedrock provider.
+	// On IAM-role environments (EC2/ECS/EKS) these are empty and the SDK
+	// resolves credentials via the instance metadata service instead.
+	if cfg.RagMCP.HyDE.Provider == "bedrock" {
+		for _, key := range []string{"AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN"} {
+			if v := os.Getenv(key); v != "" {
+				vars[key] = v
+			}
+		}
+	}
 	return vars
 }
 
@@ -227,8 +237,12 @@ func ragConfigTOML(cfg *config.Config, d derived) string {
 	fmt.Fprintf(&buf, "[guardrails]\ncorpus_topic = %q\nmin_topic_score = %g\nmin_match_score = %g\n\n",
 		rag.Guardrails.CorpusTopic, rag.Guardrails.MinTopicScore, rag.Guardrails.MinMatchScore)
 
-	fmt.Fprintf(&buf, "[hyde]\nenabled = %v\nmodel = %q\nbase_url = %q\nsystem_prompt = %q\n\n",
-		rag.HyDE.Enabled, rag.HyDE.Model, rag.HyDE.BaseURL, rag.HyDE.SystemPrompt)
+	hydeProvider := rag.HyDE.Provider
+	if hydeProvider == "" {
+		hydeProvider = "anthropic"
+	}
+	fmt.Fprintf(&buf, "[hyde]\nenabled = %v\nprovider = %q\nmodel = %q\nbase_url = %q\naws_region = %q\nsystem_prompt = %q\n\n",
+		rag.HyDE.Enabled, hydeProvider, rag.HyDE.Model, rag.HyDE.BaseURL, rag.HyDE.AWSRegion, rag.HyDE.SystemPrompt)
 
 	fmt.Fprintf(&buf, "[auth]\njwks_url = %q\nissuer   = %q\naudience = %q\n",
 		d.AuthJWKSURL, d.AuthIssuer, d.AuthAudience)
