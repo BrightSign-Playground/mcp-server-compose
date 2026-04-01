@@ -79,7 +79,7 @@ func baseConfig() *config.Config {
 				RetrievalPoolSize: 20,
 				RRFConstant:       60,
 			},
-			Reranker:   config.RerankerConfig{Host: "http://localhost:8081"},
+			Reranker:   config.RerankerConfig{Port: 16001},
 			Guardrails: config.GuardrailsConfig{MinTopicScore: 0.25},
 			HyDE:       config.HyDEConfig{Model: "claude-haiku-4-5-20251001"},
 		},

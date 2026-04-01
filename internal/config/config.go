@@ -88,7 +88,7 @@ type SearchConfig struct {
 
 type RerankerConfig struct {
 	Enabled bool
-	Host    string
+	Port    int
 }
 
 type GuardrailsConfig struct {
@@ -185,8 +185,8 @@ type fileConfig struct {
 			RRFConstant       int `toml:"rrf_constant"`
 		} `toml:"search"`
 		Reranker struct {
-			Enabled bool   `toml:"enabled"`
-			Host    string `toml:"host"`
+			Enabled bool `toml:"enabled"`
+			Port    int  `toml:"port"`
 		} `toml:"reranker"`
 		Guardrails struct {
 			CorpusTopic   string  `toml:"corpus_topic"`
@@ -278,7 +278,7 @@ func Load(path string) (*Config, error) {
 			},
 			Reranker: RerankerConfig{
 				Enabled: fc.RagMCPServer.Reranker.Enabled,
-				Host:    fc.RagMCPServer.Reranker.Host,
+				Port:    fc.RagMCPServer.Reranker.Port,
 			},
 			Guardrails: GuardrailsConfig{
 				CorpusTopic:   fc.RagMCPServer.Guardrails.CorpusTopic,

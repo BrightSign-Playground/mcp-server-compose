@@ -22,6 +22,9 @@ type derived struct {
 
 	// embed.host value for rag-mcp-server and docs2vector config.toml.
 	EmbedHost string
+
+	// reranker.host value for rag-mcp-server config.toml.
+	RerankerHost string
 }
 
 // deriveAll computes all derived values from cfg and eng.
@@ -32,6 +35,7 @@ func deriveAll(cfg *config.Config, eng engine.Engine) derived {
 	d.DatabaseURLHost = databaseURLHost(cfg)
 	d.AuthJWKSURL, d.AuthIssuer, d.AuthAudience = authFields(cfg)
 	d.EmbedHost = embedHost(cfg, eng)
+	d.RerankerHost = rerankerHost(cfg, eng)
 
 	return d
 }
@@ -120,5 +124,18 @@ func embedHost(cfg *config.Config, eng engine.Engine) string {
 		return fmt.Sprintf("http://host.containers.internal:%d", port)
 	}
 	// Docker uses host-gateway (requires extra_hosts in compose).
+	return fmt.Sprintf("http://host-gateway:%d", port)
+}
+
+// rerankerHost returns the value for [reranker].host in rag-mcp-server
+// config.toml. Like llama-server, the reranker runs on the host.
+func rerankerHost(cfg *config.Config, eng engine.Engine) string {
+	port := cfg.RagMCP.Reranker.Port
+	if port == 0 {
+		port = 16001
+	}
+	if eng.IsPodman() {
+		return fmt.Sprintf("http://host.containers.internal:%d", port)
+	}
 	return fmt.Sprintf("http://host-gateway:%d", port)
 }

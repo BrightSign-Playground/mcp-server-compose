@@ -89,7 +89,7 @@ rrf_constant       = 60
 
 [rag_mcp_server.reranker]
 enabled = false
-host    = "http://localhost:8081"
+port    = 16001
 
 [rag_mcp_server.guardrails]
 corpus_topic    = ""

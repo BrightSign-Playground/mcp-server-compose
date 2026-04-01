@@ -232,7 +232,7 @@ func ragConfigTOML(cfg *config.Config, d derived) string {
 		rag.Search.Probes, rag.Search.RetrievalPoolSize, rag.Search.RRFConstant)
 
 	fmt.Fprintf(&buf, "[reranker]\nenabled = %v\nhost = %q\n\n",
-		rag.Reranker.Enabled, rag.Reranker.Host)
+		rag.Reranker.Enabled, d.RerankerHost)
 
 	fmt.Fprintf(&buf, "[guardrails]\ncorpus_topic = %q\nmin_topic_score = %g\nmin_match_score = %g\n\n",
 		rag.Guardrails.CorpusTopic, rag.Guardrails.MinTopicScore, rag.Guardrails.MinMatchScore)

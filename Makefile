@@ -58,8 +58,37 @@ down: $(BINARY) ## Stop all services
 restart: $(BINARY) ## Restart all services
 	$(BINARY) --config $(CONFIG) restart
 
-status: $(BINARY) ## Show service status
-	$(BINARY) --config $(CONFIG) status
+status: ## Show status of all services (containers, inference servers, database)
+	@echo "── MCP Server (container) ──"
+	@if curl -sf http://localhost:$(MCP_PORT)/healthz >/dev/null 2>&1; then \
+		echo "  rag-mcp-server :$(MCP_PORT)  UP"; \
+	else \
+		echo "  rag-mcp-server :$(MCP_PORT)  DOWN"; \
+	fi
+	@echo ""
+	@echo "── Inference Servers (host) ──"
+	@if curl -sf http://localhost:$(LLAMA_PORT)/health >/dev/null 2>&1; then \
+		echo "  embed-server   :$(LLAMA_PORT)  UP"; \
+	else \
+		echo "  embed-server   :$(LLAMA_PORT)  DOWN"; \
+	fi
+	@if curl -sf http://localhost:$(RERANKER_PORT)/health >/dev/null 2>&1; then \
+		echo "  reranker       :$(RERANKER_PORT)  UP"; \
+	else \
+		echo "  reranker       :$(RERANKER_PORT)  DOWN"; \
+	fi
+	@echo ""
+	@echo "── Database ──"
+	@if pg_isready -h $(PG_HOST) -p $(PG_PORT) >/dev/null 2>&1; then \
+		echo "  postgresql     $(PG_HOST):$(PG_PORT)  UP"; \
+	elif [ "$(PG_HOST)" = "host.containers.internal" ] && pg_isready -h localhost -p $(PG_PORT) >/dev/null 2>&1; then \
+		echo "  postgresql     localhost:$(PG_PORT)  UP"; \
+	else \
+		echo "  postgresql     $(PG_HOST):$(PG_PORT)  DOWN"; \
+	fi
+	@echo ""
+	@echo "── Containers ──"
+	@$(BINARY) --config $(CONFIG) status 2>/dev/null || echo "  (stack not running)"
 
 logs: $(BINARY) ## Tail logs (COMPONENT= to filter)
 	$(BINARY) --config $(CONFIG) logs $(COMPONENT)
@@ -211,6 +240,11 @@ eval-stability: ## Run evals N times and report pass-rate stats (EVAL_FILE=..., 
 
 # ── Inference servers ────────────────────────────────────────────────────────
 
+stop-inference-servers: ## Stop embedding and reranker background servers
+	@echo "stopping llama-server processes..."
+	@pkill -f 'llama-server.*--embeddings' 2>/dev/null && echo "  embed server stopped" || echo "  embed server not running"
+	@pkill -f 'llama-server.*--reranking' 2>/dev/null && echo "  reranker stopped" || echo "  reranker not running"
+
 run-inference-servers: ## Start embedding and reranker servers in the background
 	@if ! command -v llama-server >/dev/null 2>&1; then \
 		echo ""; \
@@ -248,4 +282,4 @@ run-inference-servers: ## Start embedding and reranker servers in the background
 		> /tmp/llama-reranker.log 2>&1 & \
 	echo "  PID: $$!  log: /tmp/llama-reranker.log"
 
-.PHONY: help build test clean up down restart status logs generate validate ingest ingest-add eval eval-stability run-inference-servers
+.PHONY: help build test clean up down restart status logs generate validate ingest ingest-add eval eval-stability run-inference-servers stop-inference-servers
